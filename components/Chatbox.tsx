@@ -117,7 +117,9 @@ const Chatbox: React.SFC<any> = ({
           placeholder={
             inputDisabled
               ? "Action being executed..."
-              : "What's your next action?"
+              : actionDo
+              ? "Next action?"
+              : "What do you say?"
           }
           placeholderTextColor={colors.chatboxPlaceholder}
           onChangeText={onChangeText}
