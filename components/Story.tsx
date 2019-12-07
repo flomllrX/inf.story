@@ -2,9 +2,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import { View, Text, StyleSheet, FlatList } from "react-native";
 import { colors, fonts } from "../theme";
+import { StoryBit } from "../services/ApiService";
 
 interface Props {
-  items: { message: string; [key: string]: string }[];
+  items: StoryBit[];
   extraData: object;
 }
 
@@ -39,15 +40,17 @@ const Story: React.SFC<Props> = props => {
     return (
       <View style={styles.row}>
         <View style={styles.rowText}>
-          {item.sender == "PLAYER" ? (
+          {item.type === "ACT_SAY" || item.type === "ACT_DO" ? (
             <>
               <Text style={[styles.prompt, styles.semiBold]}>&gt; </Text>
               <Text style={[styles.message, styles.semiBold]}>
-                {item.message}
+                {item.payload}
               </Text>
             </>
+          ) : item.type === "IMAGE" ? (
+            <Text style={styles.message}>{item.payload}</Text>
           ) : (
-            <Text style={styles.message}>{item.message}</Text>
+            <Text style={styles.message}>{item.payload}</Text>
           )}
         </View>
       </View>
@@ -59,7 +62,7 @@ const Story: React.SFC<Props> = props => {
       data={props.items}
       renderItem={renderItem}
       extraData={props.extraData}
-      keyExtractor={item => item.id}
+      keyExtractor={() => "" + Math.random()}
     />
   );
 };

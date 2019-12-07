@@ -77,6 +77,7 @@ const Chatbox: React.SFC<Props> = ({
         }
         placeholderTextColor={colors.chatboxPlaceholder}
         onChangeText={onChangeText}
+        blurOnSubmit={false}
       />
       <TouchableOpacity
         style={[

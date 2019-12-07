@@ -2,14 +2,25 @@ import React from "react";
 import Welcome from "./screens/Welcome";
 import Story from "./screens/Story";
 import Loading from "./screens/Loading";
+import LoadingStory from "./screens/LoadingStory";
+import ErrorScreen from "./screens/Error";
 import * as Font from "expo-font";
 import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import { View, StyleSheet } from "react-native";
+import { Provider } from "mobx-react";
+import MainStore from "./mobx/mainStore";
+import NavigationService from "./services/NavigationService";
+import ApiService from "./services/ApiService";
+
+const mainStore = new MainStore();
+ApiService.setMainStore(mainStore);
 
 const AppNavigator = createStackNavigator({
   Welcome: { screen: Welcome },
-  Story: { screen: Story }
+  LoadingStory: { screen: LoadingStory },
+  Story: { screen: Story },
+  Error: { screen: ErrorScreen }
 });
 
 const AppContainer = createAppContainer(AppNavigator);
@@ -23,8 +34,10 @@ const styles = StyleSheet.create({
 export default class App extends React.Component {
   state: {
     fontLoaded: boolean;
+    activeStoryId: string | undefined;
   } = {
-    fontLoaded: false
+    fontLoaded: false,
+    activeStoryId: undefined
   };
 
   async componentDidMount() {
@@ -38,9 +51,19 @@ export default class App extends React.Component {
   render() {
     const { fontLoaded } = this.state;
     return (
-      <View style={styles.container}>
-        {fontLoaded ? <AppContainer /> : <Loading />}
-      </View>
+      <Provider mainStore={mainStore}>
+        <View style={styles.container}>
+          {fontLoaded ? (
+            <AppContainer
+              ref={navigatorRef => {
+                NavigationService.setTopLevelNavigator(navigatorRef);
+              }}
+            />
+          ) : (
+            <Loading />
+          )}
+        </View>
+      </Provider>
     );
   }
 }

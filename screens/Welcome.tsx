@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { colors, fonts } from "../theme";
 import PickerSelect from "react-native-picker-select";
+import ApiService from "../services/ApiService";
 
 const styles = StyleSheet.create({
   container: {
@@ -46,19 +47,22 @@ const styles = StyleSheet.create({
 });
 
 interface WelcomeState {
-  playerClass: string;
+  playerClass: number;
+  name: string;
 }
 
 class Welcome extends Component<any, WelcomeState> {
   static navigationOptions = { header: null };
 
   state = {
-    playerClass: "human"
+    playerClass: 0,
+    name: ""
   };
 
   onStart = () => {
-    const { navigate } = this.props.navigation;
-    navigate("Story");
+    const { playerClass, name } = this.state;
+    // TODO: verify that a name is given. (maybe generate one if none is given)
+    ApiService.startStory(playerClass, name);
   };
 
   render() {
@@ -77,18 +81,26 @@ class Welcome extends Component<any, WelcomeState> {
               inputIOS: [styles.text, styles.underline],
               inputAndroid: [styles.text, styles.underline]
             }}
-            onValueChange={value => console.log(value)}
+            onValueChange={playerClass => this.setState({ playerClass })}
             value={playerClass}
             items={[
-              { label: "Human", value: "human" },
-              { label: "Wizard", value: "wizard" },
-              { label: "Royal", value: "royal" }
+              { label: "Noble", value: 0 },
+              { label: "Knight", value: 1 },
+              { label: "Squire", value: 2 },
+              { label: "Wizard", value: 3 },
+              { label: "Ranger", value: 4 },
+              { label: "Peasant", value: 5 },
+              { label: "Rogue", value: 6 }
             ]}
           />
         </View>
         <View style={styles.setupRow}>
           <Text style={styles.text}>Choose your name: </Text>
-          <TextInput style={[styles.text, styles.textInput]} />
+          <TextInput
+            value={this.state.name}
+            style={[styles.text, styles.textInput]}
+            onChangeText={name => this.setState({ name })}
+          />
         </View>
         <View>
           <TouchableOpacity style={styles.startButton} onPress={this.onStart}>
