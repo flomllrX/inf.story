@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
 const Story: React.SFC<Props> = props => {
   const renderItem = element => {
     const { item } = element;
+    console.log("item type", item.type);
     return (
       <View style={styles.row}>
         <View style={styles.rowText}>

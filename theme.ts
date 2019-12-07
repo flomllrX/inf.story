@@ -10,7 +10,7 @@ export const colors = {
   chatboxSendIcon: "#fff",
   buttonDisabled: "#444",
   actDo: "#F06868",
-  actSay: "green"
+  actSay: "#94CE86"
 };
 export const fonts = {
   regular: "SourceCodePro-Regular",
