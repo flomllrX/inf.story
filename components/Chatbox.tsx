@@ -10,6 +10,7 @@ import {
   TextInput,
   TouchableOpacity
 } from "react-native";
+import { inject, observer } from "mobx-react";
 
 interface Props {
   value: string;
@@ -30,7 +31,8 @@ const styles = StyleSheet.create({
     marginTop: 20
   },
   input: {
-    paddingHorizontal: 20,
+    paddingRight: 20,
+    paddingLeft: 10,
     fontSize: 15,
     flex: 1,
     color: colors.chatboxText,
@@ -54,50 +56,95 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: fonts.semiBold,
     paddingLeft: 3
+  },
+  actDo: {
+    color: colors.actDo
+  },
+  actSay: {
+    color: colors.actSay
+  },
+  toggleButton: {
+    borderRadius: 50,
+    alignSelf: "center",
+    padding: 20,
+    margin: 5,
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  toggleButtonText: {
+    position: "absolute",
+    color: colors.chatboxSendIcon,
+    fontSize: 15,
+    fontFamily: fonts.semiBold,
+    paddingLeft: 35
+  },
+  sendButtonSay: {
+    backgroundColor: colors.actSay
   }
 });
 
-const Chatbox: React.SFC<Props> = ({
+const Chatbox: React.SFC<any> = ({
   value,
   onChangeText,
   sendMessage,
-  inputDisabled
-}) => (
-  <KeyboardAvoidingView behavior="padding">
-    <View style={styles.footer}>
-      <TextInput
-        editable={!inputDisabled}
-        value={value}
-        style={styles.input}
-        underlineColorAndroid="transparent"
-        placeholder={
-          inputDisabled
-            ? "Action being executed..."
-            : "What's your next action?"
-        }
-        placeholderTextColor={colors.chatboxPlaceholder}
-        onChangeText={onChangeText}
-        blurOnSubmit={false}
-      />
-      <TouchableOpacity
-        style={[
-          styles.sendButton,
-          inputDisabled ? styles.buttonDisabled : undefined
-        ]}
-        onPress={sendMessage}
-        disabled={inputDisabled}
-      >
-        <Text style={styles.sendIcon}>&gt;</Text>
-      </TouchableOpacity>
-    </View>
-  </KeyboardAvoidingView>
-);
+  inputDisabled,
+  mainStore
+}) => {
+  const actionDo = mainStore.actionType === "ACT_DO";
+  return (
+    <KeyboardAvoidingView behavior="padding">
+      <View style={styles.footer}>
+        <TouchableOpacity
+          style={[styles.toggleButton]}
+          onPress={() => mainStore.toggleActionType()}
+          disabled={inputDisabled}
+        >
+          <Text
+            style={[
+              styles.input,
+              styles.toggleButtonText,
+              actionDo ? styles.actDo : styles.actSay
+            ]}
+          >
+            {actionDo ? "Do:" : "Say:"}
+          </Text>
+        </TouchableOpacity>
+        <TextInput
+          editable={!inputDisabled}
+          value={value}
+          style={styles.input}
+          underlineColorAndroid="transparent"
+          placeholder={
+            inputDisabled
+              ? "Action being executed..."
+              : "What's your next action?"
+          }
+          placeholderTextColor={colors.chatboxPlaceholder}
+          onChangeText={onChangeText}
+          blurOnSubmit={false}
+        />
+        <TouchableOpacity
+          style={[
+            styles.sendButton,
+            actionDo ? undefined : styles.sendButtonSay,
+            inputDisabled ? styles.buttonDisabled : undefined
+          ]}
+          onPress={sendMessage}
+          disabled={inputDisabled}
+        >
+          <Text style={styles.sendIcon}>&gt;</Text>
+        </TouchableOpacity>
+      </View>
+    </KeyboardAvoidingView>
+  );
+};
 
 Chatbox.propTypes = {
   value: PropTypes.string,
   sendMessage: PropTypes.func,
   onChangeText: PropTypes.func,
-  inputDisabled: PropTypes.bool
+  inputDisabled: PropTypes.bool,
+  mainStore: PropTypes.any
 };
 
-export default Chatbox;
+export default inject("mainStore")(observer(Chatbox));

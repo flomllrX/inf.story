@@ -8,7 +8,9 @@ export const colors = {
   chatboxBorder: "#444",
   chatboxPlaceholder: "#999",
   chatboxSendIcon: "#fff",
-  buttonDisabled: "#444"
+  buttonDisabled: "#444",
+  actDo: "#F06868",
+  actSay: "green"
 };
 export const fonts = {
   regular: "SourceCodePro-Regular",

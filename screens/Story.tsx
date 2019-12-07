@@ -25,7 +25,7 @@ class Story extends Component<any, any> {
 
   sendMessage = async () => {
     const { typing } = this.state;
-    ApiService.act("ACT_DO", typing);
+    ApiService.act(typing);
     this.setState({
       typing: ""
     });

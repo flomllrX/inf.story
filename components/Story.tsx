@@ -31,6 +31,9 @@ const styles = StyleSheet.create({
   },
   semiBold: {
     fontFamily: fonts.semiBold
+  },
+  sayPrompt: {
+    color: colors.actSay
   }
 });
 
@@ -42,7 +45,15 @@ const Story: React.SFC<Props> = props => {
         <View style={styles.rowText}>
           {item.type === "ACT_SAY" || item.type === "ACT_DO" ? (
             <>
-              <Text style={[styles.prompt, styles.semiBold]}>&gt; </Text>
+              <Text
+                style={[
+                  styles.prompt,
+                  styles.semiBold,
+                  item.type === "ACT_SAY" && styles.sayPrompt
+                ]}
+              >
+                &gt;{" "}
+              </Text>
               <Text style={[styles.message, styles.semiBold]}>
                 {item.payload}
               </Text>

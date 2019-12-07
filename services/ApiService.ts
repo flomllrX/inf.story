@@ -62,10 +62,11 @@ const startStory: (
 };
 
 const act: (
-  type: "ACT_SAY" | "ACT_DO",
   payload: string
-) => Promise<{ newStoryBits: StoryBit[] }> = async (type, payload) => {
+) => Promise<{ newStoryBits: StoryBit[] }> = async payload => {
   _mainStore.setInfering(true);
+  const type = _mainStore.actionType;
+  console.log("Action Type:", type);
   const response = (await post("/act", {
     uid: _mainStore.storyId,
     type,

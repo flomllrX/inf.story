@@ -8,6 +8,7 @@ export default class MainStore {
   @observable error = undefined;
   @observable story: StoryBit[];
   @observable infering = false;
+  @observable actionType: "ACT_SAY" | "ACT_DO" = "ACT_DO";
 
   @action setStoryId(storyId: string) {
     this.storyId = storyId;
@@ -35,6 +36,10 @@ export default class MainStore {
 
   @action setInfering(status: boolean) {
     this.infering = status;
+  }
+
+  @action toggleActionType() {
+    this.actionType = this.actionType === "ACT_DO" ? "ACT_SAY" : "ACT_DO";
   }
 
   constructor() {
