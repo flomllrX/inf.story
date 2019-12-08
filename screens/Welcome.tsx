@@ -43,6 +43,10 @@ const styles = StyleSheet.create({
   },
   primaryColor: {
     color: colors.primary
+  },
+  android: {
+    width: 50,
+    height: 20
   }
 });
 
@@ -65,6 +69,11 @@ class Welcome extends Component<any, WelcomeState> {
     ApiService.startStory(playerClass, name);
   };
 
+  startFake = () => {
+    const { navigation } = this.props;
+    navigation.navigate("Story");
+  };
+
   render() {
     const { playerClass } = this.state;
     return (
@@ -79,7 +88,7 @@ class Welcome extends Component<any, WelcomeState> {
           <PickerSelect
             style={{
               inputIOS: [styles.text, styles.underline],
-              inputAndroid: [styles.text, styles.underline]
+              inputAndroid: [styles.text, styles.underline, styles.android]
             }}
             onValueChange={playerClass => this.setState({ playerClass })}
             value={playerClass}

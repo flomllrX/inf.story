@@ -1,5 +1,7 @@
+import MainStore from "../mobx/mainStore";
+
 const address = "http://infinite.glibert.io:3000";
-let _mainStore;
+let _mainStore: MainStore;
 
 const post: (
   endpoint: string,
@@ -66,7 +68,6 @@ const act: (
 ) => Promise<{ newStoryBits: StoryBit[] }> = async payload => {
   _mainStore.setInfering(true);
   const type = _mainStore.actionType;
-  console.log("Action Type:", type);
   const response = (await post("/act", {
     uid: _mainStore.storyId,
     type,

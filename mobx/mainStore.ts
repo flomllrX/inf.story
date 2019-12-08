@@ -1,6 +1,23 @@
 import { action, observable, autorun } from "mobx";
 import NavigationService from "../services/NavigationService";
 import { StoryBit } from "../services/ApiService";
+//import AsyncStorage from "@react-native-community/async-storage";
+
+// const storeData = async (key: string, value: any) => {
+//   try {
+//     await AsyncStorage.setItem(key, value);
+//   } catch (e) {
+//     // saving error
+//   }
+// };
+
+// const getData = async (key: string) => {
+//   try {
+//     return await AsyncStorage.getItem("@storage_Key");
+//   } catch (e) {
+//     // error reading value
+//   }
+// };
 
 export default class MainStore {
   @observable storyId = "";
@@ -13,6 +30,7 @@ export default class MainStore {
   @action setStoryId(storyId: string) {
     this.storyId = storyId;
     this.loadingStory = false;
+    //storeData("storyId", storyId);
   }
 
   @action activateLoadingStory() {
@@ -28,6 +46,9 @@ export default class MainStore {
   }
 
   @action addStoryBits(storyBits: StoryBit[]) {
+    if (!storyBits) {
+      return;
+    }
     console.log("Adding story bits", storyBits);
     const newStoryBits = storyBits.reverse();
     this.story = newStoryBits.concat(this.story);
@@ -43,6 +64,13 @@ export default class MainStore {
   }
 
   constructor() {
+    // Load story ID from local storage
+    // getData("storyId").then(storyId => {
+    //   if (storyId) {
+    //     this.storyId = storyId;
+    //   }
+    // });
+
     // Loading story
     autorun(() => {
       if (this.loadingStory && !this.storyId) {

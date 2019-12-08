@@ -9,6 +9,9 @@ const styles = StyleSheet.create({
     color: colors.defaultText,
     justifyContent: "center",
     alignItems: "center"
+  },
+  text: {
+    color: colors.defaultText
   }
 });
 
@@ -19,7 +22,7 @@ class Error extends Component<{}, any> {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Error</Text>
+        <Text style={styles.text}>Error</Text>
       </View>
     );
   }
