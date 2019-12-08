@@ -2,10 +2,11 @@ import React, { Component } from "react";
 import { View, Text, StyleSheet, SafeAreaView } from "react-native";
 import Chatbox from "../components/Chatbox";
 import StoryComponent from "../components/Story";
-import { colors } from "../theme";
+import { colors, fonts } from "../theme";
 import { inject, observer } from "mobx-react";
 import ControlService from "../services/ControlService";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import Header from "../components/Header";
 
 const styles = StyleSheet.create({
   container: {
@@ -13,7 +14,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background
   },
   button: {
-    color: colors.defaultText
+    color: colors.defaultText,
+    fontFamily: fonts.regular,
+    fontSize: 30,
+    paddingHorizontal: 10
   }
 });
 
@@ -52,6 +56,13 @@ class Story extends Component<any, any> {
     const { mainStore } = this.props;
     return (
       <SafeAreaView style={styles.container}>
+        <Header
+          leftButton={
+            <TouchableOpacity onPress={ControlService.hideStory}>
+              <Text style={styles.button}>&lt;</Text>
+            </TouchableOpacity>
+          }
+        />
         <StoryComponent items={mainStore.story} extraData={this.state} />
         <Chatbox
           value={typing}

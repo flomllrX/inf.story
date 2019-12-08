@@ -46,7 +46,6 @@ const startStory: (
     name,
     deviceId: userId
   })) as any;
-  const { uid, storyBits, error } = response;
   return response;
 };
 

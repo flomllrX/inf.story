@@ -10,6 +10,7 @@ import {
 import { colors, fonts } from "../theme";
 import PickerSelect from "react-native-picker-select";
 import ControlService from "../services/ControlService";
+import { inject, observer } from "mobx-react";
 
 const styles = StyleSheet.create({
   container: {
@@ -76,6 +77,7 @@ class Welcome extends Component<any, WelcomeState> {
 
   render() {
     const { playerClass } = this.state;
+    const { mainStore } = this.props;
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding">
         <Text style={[styles.text, styles.headLine]}>The</Text>
@@ -116,9 +118,17 @@ class Welcome extends Component<any, WelcomeState> {
             <Text style={styles.text}>Start</Text>
           </TouchableOpacity>
         </View>
+        {mainStore.storyId ? (
+          <TouchableOpacity
+            style={styles.startButton}
+            onPress={() => ControlService.resumeStory()}
+          >
+            <Text style={styles.text}>Resume</Text>
+          </TouchableOpacity>
+        ) : null}
       </KeyboardAvoidingView>
     );
   }
 }
 
-export default Welcome;
+export default inject("mainStore")(observer(Welcome));

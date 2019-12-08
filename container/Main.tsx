@@ -3,6 +3,8 @@ import { View, Text, StyleSheet } from "react-native";
 import Welcome from "../screens/Welcome";
 import Story from "../screens/Story";
 import { inject, observer } from "mobx-react";
+import Loading from "../screens/LoadingStory";
+import Error from "../screens/Error";
 
 const styles = StyleSheet.create({
   container: {
@@ -15,7 +17,17 @@ class Main extends Component<any, any> {
   render() {
     const mainStore = this.props.mainStore;
 
-    return mainStore.storyActive ? <Story /> : <Welcome />;
+    return mainStore.storyActive ? (
+      mainStore.loadingStory ? (
+        <Loading />
+      ) : mainStore.error ? (
+        <Error />
+      ) : (
+        <Story />
+      )
+    ) : (
+      <Welcome />
+    );
   }
 }
 

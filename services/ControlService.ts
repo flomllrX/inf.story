@@ -11,6 +11,8 @@ const startStory: (playerClass: string, name: string) => void = async (
   playerClass,
   name
 ) => {
+  _mainStore.setStoryLoadingState(true);
+  _mainStore.setStoryState(true);
   const userId = _mainStore.userId;
   const { error, uid, storyBits } = await ApiService.startStory(
     userId,
@@ -23,8 +25,8 @@ const startStory: (playerClass: string, name: string) => void = async (
   } else {
     _mainStore.setStoryId(uid);
     _mainStore.setStory(storyBits);
-    _mainStore.setStoryState(true);
   }
+  _mainStore.setStoryLoadingState(false);
 };
 
 const act: (payload: string) => void = async payload => {
@@ -49,10 +51,19 @@ const loadStory: (storyId: string) => void = async storyId => {
   }
 };
 
+const resumeStory: () => void = async () => {
+  _mainStore.setStoryLoadingState(true);
+  _mainStore.setStoryState(true);
+  const storyId = _mainStore.storyId;
+  await loadStory(storyId);
+  _mainStore.setStoryLoadingState(false);
+};
+
 export default {
   setMainStore,
   startStory,
   act,
   hideStory,
-  loadStory
+  loadStory,
+  resumeStory
 };

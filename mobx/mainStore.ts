@@ -36,7 +36,6 @@ export default class MainStore {
 
   @action setStoryId(storyId: string) {
     this.storyId = storyId;
-    this.loadingStory = false;
     storeData("storyId", storyId);
   }
 
@@ -49,8 +48,8 @@ export default class MainStore {
     this.storyActive = state;
   }
 
-  @action activateLoadingStory() {
-    this.loadingStory = true;
+  @action setStoryLoadingState(state: boolean) {
+    this.loadingStory = state;
   }
 
   @action setError(error: any) {

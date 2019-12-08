@@ -1,11 +1,9 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { colors } from "../theme";
+import { View, StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: colors.background
+    flex: 1
   }
 });
 
