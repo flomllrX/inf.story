@@ -1,8 +1,9 @@
 import React from "react";
 import Loading from "./screens/Loading";
+import ErrorScreen from "./screens/Error";
 import * as Font from "expo-font";
 import { View, StyleSheet } from "react-native";
-import { Provider } from "mobx-react";
+import { Provider, observer } from "mobx-react";
 import MainStore from "./mobx/mainStore";
 import ControlService from "./services/ControlService";
 import Navigation from "./container/Navigation";
@@ -16,7 +17,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class App extends React.Component {
+class App extends React.Component {
   state: {
     fontLoaded: boolean;
     activeStoryId: string | undefined;
@@ -35,12 +36,23 @@ export default class App extends React.Component {
 
   render() {
     const { fontLoaded } = this.state;
+    console.log("Error:", mainStore.error);
     return (
       <Provider mainStore={mainStore}>
         <View style={styles.container}>
-          {fontLoaded ? <Navigation /> : <Loading />}
+          {fontLoaded ? (
+            mainStore.error ? (
+              <ErrorScreen />
+            ) : (
+              <Navigation />
+            )
+          ) : (
+            <Loading />
+          )}
         </View>
       </Provider>
     );
   }
 }
+
+export default observer(App);

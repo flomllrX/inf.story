@@ -1,9 +1,10 @@
-import { action, observable, autorun } from "mobx";
+import { action, observable, autorun, reaction } from "mobx";
 import NavigationService from "../services/NavigationService";
 import { StoryBit } from "../types";
 import { AsyncStorage } from "react-native";
 import uuid from "uuid/v4";
 import ControlService from "../services/ControlService";
+import ApiService from "../services/ApiService";
 
 const storeData = async (key: string, value: any) => {
   console.log(key, value);
@@ -56,6 +57,10 @@ export default class MainStore {
     this.error = error;
   }
 
+  @action clearError() {
+    this.error = undefined;
+  }
+
   @action setStory(story: StoryBit[]) {
     this.story = story.reverse();
   }
@@ -77,14 +82,38 @@ export default class MainStore {
   }
 
   constructor() {
+    const signup = async () => {
+      const userId = uuid();
+      const signupError = () => {
+        this.setError("Please make sure you're connected to the internet.");
+        reaction(
+          () => this.error,
+          (data, r) => {
+            signup();
+            r.dispose();
+          }
+        );
+      };
+      try {
+        const success = await ApiService.signup(userId);
+        if (success) {
+          this.userId = userId;
+          storeData("userId", this.userId);
+        } else {
+          signupError();
+        }
+      } catch (e) {
+        signupError();
+      }
+    };
+
     // Load userId from device
-    getData("userId").then(userId => {
+    getData("userId").then(async userId => {
       if (userId) {
         this.userId = userId;
       } else {
+        await signup();
         // Generate user id
-        this.userId = uuid();
-        storeData("userId", this.userId);
       }
     });
 

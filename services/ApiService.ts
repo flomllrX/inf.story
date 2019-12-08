@@ -15,8 +15,15 @@ const post: (
       },
       body: JSON.stringify(body)
     });
-    return response.json();
+    if (response.status === 500) {
+      return { error: "500" };
+    } else {
+      const res = await response.json();
+      console.log(res);
+      return res;
+    }
   } catch (e) {
+    console.log("Error catched", e);
     return { error: e };
   }
 };
@@ -69,8 +76,15 @@ const getStory: (
   return response;
 };
 
+const signup: (deviceId: string) => Promise<boolean> = async deviceId => {
+  const { error } = await post("/signup", { deviceId });
+  console.log("RESULT", error);
+  return !error;
+};
+
 export default {
   startStory,
   act,
-  getStory
+  getStory,
+  signup
 };
