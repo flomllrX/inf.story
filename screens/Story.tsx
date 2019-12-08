@@ -5,16 +5,32 @@ import StoryComponent from "../components/Story";
 import { colors } from "../theme";
 import { inject, observer } from "mobx-react";
 import ApiService from "../services/ApiService";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background
+  },
+  button: {
+    color: colors.defaultText
   }
 });
 
 class Story extends Component<any, any> {
-  static navigationOptions = { header: null };
+  static navigationOptions = {
+    headerStyle: {
+      backgroundColor: colors.background,
+      elevation: 0,
+      shadowOpacity: 0,
+      borderBottomWidth: 0
+    },
+    headerLeft: () => (
+      <TouchableOpacity onPress={ApiService.resetStory}>
+        <Text style={styles.button}>&lt;</Text>
+      </TouchableOpacity>
+    )
+  };
   state: {
     typing: string;
   } = {

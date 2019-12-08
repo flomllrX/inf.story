@@ -1,28 +1,33 @@
 import { action, observable, autorun } from "mobx";
 import NavigationService from "../services/NavigationService";
-import { StoryBit } from "../services/ApiService";
-//import AsyncStorage from "@react-native-community/async-storage";
+import { StoryBit } from "../types";
+import { AsyncStorage } from "react-native";
+import uuid from "uuid/v4";
 
-// const storeData = async (key: string, value: any) => {
-//   try {
-//     await AsyncStorage.setItem(key, value);
-//   } catch (e) {
-//     // saving error
-//   }
-// };
+const storeData = async (key: string, value: any) => {
+  console.log(key, value);
+  try {
+    await AsyncStorage.setItem("@" + key, "" + value);
+  } catch (e) {
+    // saving error
+  }
+};
 
-// const getData = async (key: string) => {
-//   try {
-//     return await AsyncStorage.getItem("@storage_Key");
-//   } catch (e) {
-//     // error reading value
-//   }
-// };
+const getData = async (key: string) => {
+  try {
+    return await AsyncStorage.getItem("@" + key);
+  } catch (e) {
+    // error reading value
+  }
+};
 
 export default class MainStore {
-  @observable storyId = "";
+  @observable storyId: string;
+  @observable userId: string;
+  @observable error;
+
+  @observable navigatorAvailable = false;
   @observable loadingStory = false;
-  @observable error = undefined;
   @observable story: StoryBit[];
   @observable infering = false;
   @observable actionType: "ACT_SAY" | "ACT_DO" = "ACT_DO";
@@ -30,7 +35,16 @@ export default class MainStore {
   @action setStoryId(storyId: string) {
     this.storyId = storyId;
     this.loadingStory = false;
-    //storeData("storyId", storyId);
+    storeData("storyId", storyId);
+  }
+
+  @action setNavigatorAvailable() {
+    this.navigatorAvailable = true;
+  }
+
+  @action setUserId(userId: string) {
+    this.userId = userId;
+    storeData("userId", userId);
   }
 
   @action activateLoadingStory() {
@@ -42,17 +56,15 @@ export default class MainStore {
   }
 
   @action createNewStory(story: StoryBit[]) {
-    this.story = story;
+    this.story = story.reverse();
   }
 
   @action addStoryBits(storyBits: StoryBit[]) {
     if (!storyBits) {
       return;
     }
-    console.log("Adding story bits", storyBits);
     const newStoryBits = storyBits.reverse();
     this.story = newStoryBits.concat(this.story);
-    console.log("New story", this.story);
   }
 
   @action setInfering(status: boolean) {
@@ -64,7 +76,18 @@ export default class MainStore {
   }
 
   constructor() {
-    // Load story ID from local storage
+    // Load userId from device
+    getData("userId").then(userId => {
+      if (userId) {
+        this.userId = userId;
+      } else {
+        // Generate user id
+        this.userId = uuid();
+        storeData("userId", this.userId);
+      }
+    });
+
+    // Load storyId from device
     // getData("storyId").then(storyId => {
     //   if (storyId) {
     //     this.storyId = storyId;
@@ -73,21 +96,21 @@ export default class MainStore {
 
     // Loading story
     autorun(() => {
-      if (this.loadingStory && !this.storyId) {
+      if (this.navigatorAvailable && this.loadingStory && !this.storyId) {
         NavigationService.replace("LoadingStory");
       }
     });
 
     // Display story
     autorun(() => {
-      if (!this.loadingStory && this.storyId) {
+      if (this.navigatorAvailable && !this.loadingStory && this.storyId) {
         NavigationService.replace("Story");
       }
     });
 
     // Display error
     autorun(() => {
-      if (this.error !== undefined) {
+      if (this.navigatorAvailable && this.error !== undefined) {
         NavigationService.replace("Error");
       }
     });

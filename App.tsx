@@ -57,6 +57,7 @@ export default class App extends React.Component {
             <AppContainer
               ref={navigatorRef => {
                 NavigationService.setTopLevelNavigator(navigatorRef);
+                mainStore.setNavigatorAvailable();
               }}
             />
           ) : (

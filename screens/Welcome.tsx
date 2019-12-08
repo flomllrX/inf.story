@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
 });
 
 interface WelcomeState {
-  playerClass: number;
+  playerClass: string;
   name: string;
 }
 
@@ -59,7 +59,7 @@ class Welcome extends Component<any, WelcomeState> {
   static navigationOptions = { header: null };
 
   state = {
-    playerClass: 0,
+    playerClass: "noble",
     name: ""
   };
 
@@ -93,13 +93,13 @@ class Welcome extends Component<any, WelcomeState> {
             onValueChange={playerClass => this.setState({ playerClass })}
             value={playerClass}
             items={[
-              { label: "Noble", value: 0 },
-              { label: "Knight", value: 1 },
-              { label: "Squire", value: 2 },
-              { label: "Wizard", value: 3 },
-              { label: "Ranger", value: 4 },
-              { label: "Peasant", value: 5 },
-              { label: "Rogue", value: 6 }
+              { label: "Noble", value: "noble" },
+              { label: "Knight", value: "knight" },
+              { label: "Squire", value: "squire" },
+              { label: "Wizard", value: "wizard" },
+              { label: "Ranger", value: "ranger" },
+              { label: "Peasant", value: "peasant" },
+              { label: "Rogue", value: "rouge" }
             ]}
           />
         </View>

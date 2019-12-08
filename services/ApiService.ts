@@ -1,4 +1,5 @@
 import MainStore from "../mobx/mainStore";
+import { StoryBit } from "../types";
 
 const address = "http://infinite.glibert.io:3000";
 let _mainStore: MainStore;
@@ -33,25 +34,25 @@ const get: (
   }
 };
 
-export interface StoryBit {
-  type: "TEXT" | "ACT_SAY" | "ACT_DO" | "IMAGE";
-  payload: string;
-}
-
 const setMainStore = store => {
   _mainStore = store;
 };
 
 const startStory: (
-  playerClass: number,
+  playerClass: string,
   name: string
 ) => Promise<{ uid: string; storyBits: StoryBit[] }> = async (
   playerClass,
   name
 ) => {
   _mainStore.activateLoadingStory();
-  const response = (await post("/start_story", { playerClass, name })) as any;
-  console.log(response);
+  const userId = _mainStore.userId;
+  const response = (await post("/start_story", {
+    playerClass,
+    name,
+    deviceId: userId
+  })) as any;
+  console.log("Create story: ", response);
   const { uid, storyBits, error } = response;
   if (error) {
     console.log("Error", error);
@@ -85,9 +86,14 @@ const getStory: (uid: string) => Promise<{ story: StoryBit[] }> = async uid => {
   return response;
 };
 
+const resetStory: () => void = async () => {
+  _mainStore.setStoryId(undefined);
+};
+
 export default {
   setMainStore,
   startStory,
   act,
-  getStory
+  getStory,
+  resetStory
 };
