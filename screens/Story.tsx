@@ -4,7 +4,7 @@ import Chatbox from "../components/Chatbox";
 import StoryComponent from "../components/Story";
 import { colors } from "../theme";
 import { inject, observer } from "mobx-react";
-import ApiService from "../services/ApiService";
+import ControlService from "../services/ControlService";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 const styles = StyleSheet.create({
@@ -20,13 +20,13 @@ const styles = StyleSheet.create({
 class Story extends Component<any, any> {
   static navigationOptions = {
     headerStyle: {
-      backgroundColor: colors.background,
+      backgroundColor: "green",
       elevation: 0,
       shadowOpacity: 0,
       borderBottomWidth: 0
     },
     headerLeft: () => (
-      <TouchableOpacity onPress={ApiService.resetStory}>
+      <TouchableOpacity onPress={ControlService.hideStory}>
         <Text style={styles.button}>&lt;</Text>
       </TouchableOpacity>
     )
@@ -41,7 +41,7 @@ class Story extends Component<any, any> {
 
   sendMessage = async () => {
     const { typing } = this.state;
-    ApiService.act(typing);
+    ControlService.act(typing);
     this.setState({
       typing: ""
     });

@@ -3,6 +3,7 @@ import NavigationService from "../services/NavigationService";
 import { StoryBit } from "../types";
 import { AsyncStorage } from "react-native";
 import uuid from "uuid/v4";
+import ControlService from "../services/ControlService";
 
 const storeData = async (key: string, value: any) => {
   console.log(key, value);
@@ -22,15 +23,16 @@ const getData = async (key: string) => {
 };
 
 export default class MainStore {
-  @observable storyId: string;
   @observable userId: string;
-  @observable error;
 
-  @observable navigatorAvailable = false;
-  @observable loadingStory = false;
+  @observable storyId: string;
+  @observable storyActive = false;
   @observable story: StoryBit[];
+  @observable loadingStory = false;
+
+  @observable error;
   @observable infering = false;
-  @observable actionType: "ACT_SAY" | "ACT_DO" = "ACT_DO";
+  @observable actionType: "ACT_SAY" | "ACT_DO" = "ACT_DO"; // Move to chatbox
 
   @action setStoryId(storyId: string) {
     this.storyId = storyId;
@@ -38,13 +40,13 @@ export default class MainStore {
     storeData("storyId", storyId);
   }
 
-  @action setNavigatorAvailable() {
-    this.navigatorAvailable = true;
-  }
-
   @action setUserId(userId: string) {
     this.userId = userId;
     storeData("userId", userId);
+  }
+
+  @action setStoryState(state: boolean) {
+    this.storyActive = state;
   }
 
   @action activateLoadingStory() {
@@ -55,7 +57,7 @@ export default class MainStore {
     this.error = error;
   }
 
-  @action createNewStory(story: StoryBit[]) {
+  @action setStory(story: StoryBit[]) {
     this.story = story.reverse();
   }
 
@@ -88,31 +90,32 @@ export default class MainStore {
     });
 
     // Load storyId from device
-    // getData("storyId").then(storyId => {
-    //   if (storyId) {
-    //     this.storyId = storyId;
+    getData("storyId").then(storyId => {
+      if (storyId) {
+        this.storyId = storyId;
+        ControlService.loadStory(storyId);
+      }
+    });
+
+    // Loading story
+    // autorun(() => {
+    //   if (this.loadingStory && !this.storyId) {
+    //     NavigationService.replace("LoadingStory");
     //   }
     // });
 
-    // Loading story
-    autorun(() => {
-      if (this.navigatorAvailable && this.loadingStory && !this.storyId) {
-        NavigationService.replace("LoadingStory");
-      }
-    });
+    // // Display story
+    // autorun(() => {
+    //   if (this.navigatorAvailable && !this.loadingStory && this.storyId) {
+    //     NavigationService.replace("Story");
+    //   }
+    // });
 
-    // Display story
-    autorun(() => {
-      if (this.navigatorAvailable && !this.loadingStory && this.storyId) {
-        NavigationService.replace("Story");
-      }
-    });
-
-    // Display error
-    autorun(() => {
-      if (this.navigatorAvailable && this.error !== undefined) {
-        NavigationService.replace("Error");
-      }
-    });
+    // // Display error
+    // autorun(() => {
+    //   if (this.navigatorAvailable && this.error !== undefined) {
+    //     NavigationService.replace("Error");
+    //   }
+    // });
   }
 }

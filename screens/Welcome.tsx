@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { colors, fonts } from "../theme";
 import PickerSelect from "react-native-picker-select";
-import ApiService from "../services/ApiService";
+import ControlService from "../services/ControlService";
 
 const styles = StyleSheet.create({
   container: {
@@ -66,7 +66,7 @@ class Welcome extends Component<any, WelcomeState> {
   onStart = () => {
     const { playerClass, name } = this.state;
     // TODO: verify that a name is given. (maybe generate one if none is given)
-    ApiService.startStory(playerClass, name);
+    ControlService.startStory(playerClass, name);
   };
 
   startFake = () => {

@@ -1,8 +1,6 @@
-import MainStore from "../mobx/mainStore";
 import { StoryBit } from "../types";
 
 const address = "http://infinite.glibert.io:3000";
-let _mainStore: MainStore;
 
 const post: (
   endpoint: string,
@@ -34,66 +32,46 @@ const get: (
   }
 };
 
-const setMainStore = store => {
-  _mainStore = store;
-};
-
 const startStory: (
+  userId: string,
   playerClass: string,
   name: string
-) => Promise<{ uid: string; storyBits: StoryBit[] }> = async (
+) => Promise<{ uid?: string; storyBits?: StoryBit[]; error?: any }> = async (
+  userId,
   playerClass,
   name
 ) => {
-  _mainStore.activateLoadingStory();
-  const userId = _mainStore.userId;
   const response = (await post("/start_story", {
     playerClass,
     name,
     deviceId: userId
   })) as any;
-  console.log("Create story: ", response);
   const { uid, storyBits, error } = response;
-  if (error) {
-    console.log("Error", error);
-    _mainStore.setError(error);
-  } else {
-    _mainStore.setStoryId(uid);
-    _mainStore.createNewStory(storyBits);
-  }
   return response;
 };
 
 const act: (
-  payload: string
-) => Promise<{ newStoryBits: StoryBit[] }> = async payload => {
-  _mainStore.setInfering(true);
-  const type = _mainStore.actionType;
+  payload: string,
+  type: string,
+  storyId: string
+) => Promise<{ newStoryBits: StoryBit[] }> = async (payload, type, storyId) => {
   const response = (await post("/act", {
-    uid: _mainStore.storyId,
+    uid: storyId,
     type,
     payload
   })) as any;
-  const { newStoryBits } = response;
-  console.log("Acting response", newStoryBits);
-  _mainStore.addStoryBits(newStoryBits);
-  _mainStore.setInfering(false);
   return response;
 };
 
-const getStory: (uid: string) => Promise<{ story: StoryBit[] }> = async uid => {
+const getStory: (
+  uid: string
+) => Promise<{ storyBits: StoryBit[]; error: any }> = async uid => {
   const response = (await get("/story/" + uid)) as any;
   return response;
 };
 
-const resetStory: () => void = async () => {
-  _mainStore.setStoryId(undefined);
-};
-
 export default {
-  setMainStore,
   startStory,
   act,
-  getStory,
-  resetStory
+  getStory
 };
