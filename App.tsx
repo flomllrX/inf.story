@@ -36,7 +36,6 @@ class App extends React.Component {
 
   render() {
     const { fontLoaded } = this.state;
-    console.log("Error:", mainStore.error);
     return (
       <Provider mainStore={mainStore}>
         <View style={styles.container}>

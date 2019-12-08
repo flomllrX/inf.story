@@ -1,4 +1,4 @@
-import { StoryBit } from "../types";
+import { StoryBit, StorySmall } from "../types";
 
 const address = "http://infinite.glibert.io:3000";
 
@@ -15,15 +15,12 @@ const post: (
       },
       body: JSON.stringify(body)
     });
-    if (response.status === 500) {
-      return { error: "500" };
+    if (response.status >= 300) {
+      return { error: "Error" + response.status };
     } else {
-      const res = await response.json();
-      console.log(res);
-      return res;
+      return await response.json();
     }
   } catch (e) {
-    console.log("Error catched", e);
     return { error: e };
   }
 };
@@ -76,9 +73,15 @@ const getStory: (
   return response;
 };
 
+const getStories: (
+  deviceId: string
+) => Promise<{ stories: StorySmall[]; error: any }> = async deviceId => {
+  const response = (await get("/stories/" + deviceId)) as any;
+  return response;
+};
+
 const signup: (deviceId: string) => Promise<boolean> = async deviceId => {
   const { error } = await post("/signup", { deviceId });
-  console.log("RESULT", error);
   return !error;
 };
 
@@ -86,5 +89,6 @@ export default {
   startStory,
   act,
   getStory,
+  getStories,
   signup
 };

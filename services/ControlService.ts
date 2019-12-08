@@ -63,11 +63,24 @@ const resumeStory: () => void = async () => {
   _mainStore.setStoryLoadingState(false);
 };
 
+const loadStories: () => void = async () => {
+  const deviceId = _mainStore.userId;
+  console.log("deviceid", deviceId);
+  const { stories, error } = await ApiService.getStories(deviceId);
+  if (error) {
+    console.log(error);
+    _mainStore.setError("Could not load stories.");
+  } else {
+    _mainStore.setStories(stories);
+  }
+};
+
 export default {
   setMainStore,
   startStory,
   act,
   hideStory,
   loadStory,
+  loadStories,
   resumeStory
 };

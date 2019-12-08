@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import Swiper from "react-native-swiper";
 import MainScreen from "./Main";
+import History from "../screens/History";
+import ControlService from "../services/ControlService";
 
 const styles = StyleSheet.create({
   container: {
@@ -33,10 +35,13 @@ class Navigation extends Component<{}, any> {
 
   render() {
     return (
-      <Swiper loop={false} showsPagination={false} index={1}>
-        <View style={[styles.viewStyle, styles.left]}>
-          <Text>History</Text>
-        </View>
+      <Swiper
+        loop={false}
+        showsPagination={false}
+        index={1}
+        onIndexChanged={() => ControlService.loadStories()}
+      >
+        <History />
         <MainScreen />
         <View style={[styles.viewStyle, styles.right]}>
           <Text>Community</Text>
