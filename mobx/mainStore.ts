@@ -28,6 +28,7 @@ export default class MainStore {
 
   @observable storyId: string;
   @observable storyActive = false;
+  @observable creatingStory = false;
   @observable story: StoryBit[];
   @observable loadingStory = false;
 
@@ -47,6 +48,10 @@ export default class MainStore {
 
   @action setStoryState(state: boolean) {
     this.storyActive = state;
+  }
+
+  @action setCreatingStoryState(state: boolean) {
+    this.creatingStory = state;
   }
 
   @action setStoryLoadingState(state: boolean) {
