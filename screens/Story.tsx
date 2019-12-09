@@ -15,12 +15,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background
-  },
-  button: {
-    color: colors.defaultText,
-    fontFamily: fonts.regular,
-    fontSize: 30,
-    paddingHorizontal: 10
   }
 });
 
@@ -55,13 +49,6 @@ class Story extends Component<Props, any> {
     }
   }
 
-  closeStory = () => {
-    const { navigation } = this.props;
-    const storyId = navigation.getParam("storyId");
-    console.log("Closign story", storyId);
-    storyId ? navigation.goBack() : ControlService.hideStory();
-  };
-
   render() {
     const { typing } = this.state;
     const { mainStore } = this.props;
@@ -69,13 +56,7 @@ class Story extends Component<Props, any> {
       <LoadingStory />
     ) : (
       <SafeAreaView style={styles.container}>
-        <Header
-          leftButton={
-            <TouchableOpacity onPress={this.closeStory}>
-              <Text style={styles.button}>&lt;</Text>
-            </TouchableOpacity>
-          }
-        />
+        <Header />
         <StoryComponent items={mainStore.story} extraData={this.state} />
         <Chatbox
           value={typing}

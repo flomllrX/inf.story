@@ -8,13 +8,15 @@ import MainStore from "./mobx/mainStore";
 import ControlService from "./services/ControlService";
 import Navigation from "./container/Navigation";
 import Story from "./screens/Story";
+import MainStory from "./container/MainStory";
 import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 
 const MainNavigator = createStackNavigator(
   {
     Navigation: { screen: Navigation },
-    StoryView: { screen: Story }
+    StoryModal: { screen: Story },
+    MainStoryModal: { screen: MainStory }
   },
   {
     mode: "modal",

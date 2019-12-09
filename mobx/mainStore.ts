@@ -6,13 +6,17 @@ import uuid from "uuid/v4";
 import ControlService from "../services/ControlService";
 import ApiService from "../services/ApiService";
 
-const storeData = async (key: string, value: any) => {
+const storeData = async (key: string, value: string) => {
   console.log(key, value);
   try {
     await AsyncStorage.setItem("@" + key, "" + value);
   } catch (e) {
     // saving error
   }
+};
+
+const storeObjectData = async (key: string, value: any) => {
+  return storeData(key, JSON.stringify(value));
 };
 
 const getData = async (key: string) => {
@@ -23,11 +27,17 @@ const getData = async (key: string) => {
   }
 };
 
+const getObjectData = async (key: string) => {
+  try {
+    const obj = await getData(key);
+    return JSON.parse(obj);
+  } catch (e) {}
+};
+
 export default class MainStore {
   @observable userId: string;
 
   @observable storyId: string;
-  @observable storyActive = false;
   @observable creatingStory = false;
   @observable story: StoryBit[];
   @observable loadingStory = false;
@@ -45,10 +55,6 @@ export default class MainStore {
   @action setUserId(userId: string) {
     this.userId = userId;
     storeData("userId", userId);
-  }
-
-  @action setStoryState(state: boolean) {
-    this.storyActive = state;
   }
 
   @action setCreatingStoryState(state: boolean) {
@@ -69,6 +75,7 @@ export default class MainStore {
 
   @action setStory(story: StoryBit[]) {
     this.story = story.reverse();
+    storeObjectData("story", story);
   }
 
   @action setStories(stories: StorySmall[]) {
@@ -95,6 +102,7 @@ export default class MainStore {
   constructor() {
     const signup = async () => {
       const userId = uuid();
+      console.log("USERID", userId);
       const signupError = () => {
         this.setError("Please make sure you're connected to the internet.");
         reaction(
@@ -133,6 +141,13 @@ export default class MainStore {
       if (storyId) {
         this.storyId = storyId;
         ControlService.loadStory(storyId);
+      }
+    });
+
+    // Load past story from device
+    getObjectData("story").then(story => {
+      if (story) {
+        this.story = story;
       }
     });
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { Text, StyleSheet, View } from "react-native";
-import { StoryBit, Origin } from "../types";
+import { StoryBit, Origin, Location } from "../types";
 import { colors, fonts } from "../theme";
 import PropTypes from "prop-types";
 
@@ -39,39 +39,37 @@ const styles = StyleSheet.create({
 const Bit: React.SFC<Props> = ({ bit }) => {
   const { type, payload } = bit;
   let content;
-  switch (type) {
-    case "ACT_SAY":
-    case "ACT_DO":
-      content = (
-        <>
-          <Text
-            style={[
-              styles.prompt,
-              styles.semiBold,
-              type === "ACT_SAY" && styles.sayPrompt
-            ]}
-          >
-            &gt;{" "}
-          </Text>
-          <Text style={[styles.message, styles.semiBold]}>{payload}</Text>
-        </>
-      );
-      break;
-    case "IMAGE": // TODO
-      content = <Text style={styles.message}>{payload}</Text>;
-      break;
-    case "ORIGIN":
-      const { name, class: playerClass, location } = payload as Origin;
-      content = (
-        <View>
-          <Text style={styles.message}>{name}</Text>
-          <Text style={styles.message}>{playerClass}</Text>
-          <Text style={styles.message}>{location}</Text>
-        </View>
-      );
-      break;
-    default:
-      content = <Text style={styles.message}>{bit.payload}</Text>;
+  if (type === "ACT_SAY" || type === "ACT_DO") {
+    content = (
+      <>
+        <Text
+          style={[
+            styles.prompt,
+            styles.semiBold,
+            type === "ACT_SAY" && styles.sayPrompt
+          ]}
+        >
+          &gt;{" "}
+        </Text>
+        <Text style={[styles.message, styles.semiBold]}>{payload}</Text>
+      </>
+    );
+  } else if (type === "IMAGE") {
+    content = <Text style={styles.message}>{payload}</Text>;
+  } else if (type === "ORIGIN") {
+    const { name, class: playerClass, location } = payload as Origin;
+    content = (
+      <View>
+        <Text style={styles.message}>{name}</Text>
+        <Text style={styles.message}>{playerClass}</Text>
+        <Text style={styles.message}>{location}</Text>
+      </View>
+    );
+  } else if (type === "LOCATION") {
+    const { location, firstVisit, seed } = payload as Location;
+    content = <Text>{location}</Text>;
+  } else {
+    content = <Text style={styles.message}>{bit.payload}</Text>;
   }
 
   return (

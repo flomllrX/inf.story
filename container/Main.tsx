@@ -3,9 +3,6 @@ import { View, Text, StyleSheet } from "react-native";
 import Welcome from "../screens/Welcome";
 import Story from "../screens/Story";
 import { inject, observer } from "mobx-react";
-import Loading from "../screens/LoadingStory";
-import Error from "../screens/Error";
-import CreateStory from "../screens/CreateStory";
 
 const styles = StyleSheet.create({
   container: {
@@ -16,16 +13,7 @@ const styles = StyleSheet.create({
 class Main extends Component<any, any> {
   static defaultProps = {};
   render() {
-    const mainStore = this.props.mainStore;
-    if (mainStore.creatingStory) {
-      return <CreateStory />;
-    }
-    return mainStore.storyActive ? (
-        <Story />
-      )
-    : (
-      <Welcome />
-    );
+    return <Welcome />;
   }
 }
 

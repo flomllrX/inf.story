@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { Component, useState } from "react";
 import {
   View,
   Text,
@@ -12,18 +12,20 @@ import {
   Animated
 } from "react-native";
 import { colors, fonts } from "../theme";
-import Svg, { Image as ImageSvg } from "react-native-svg";
 import ControlService from "../services/ControlService";
 import { inject, observer } from "mobx-react";
-import { element } from "prop-types";
-import { selectAssetSource } from "expo-asset/build/AssetSources";
+import PropTypes from "prop-types";
+import Header from "../components/Header";
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.background,
+    flex: 1
+  },
+  center: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    justifyContent: "center"
   },
   text: {
     color: colors.defaultText,
@@ -116,6 +118,9 @@ const styles = StyleSheet.create({
     left: -20,
     top: 22,
     zIndex: 999
+  },
+  nextButton: {
+    paddingBottom: 20
   }
 });
 
@@ -216,6 +221,11 @@ const MovingCursor = props => {
   );
 };
 
+MovingCursor.propTypes = {
+  style: PropTypes.any,
+  children: PropTypes.any
+};
+
 class CreateStory extends Component<any, CreateStoryState> {
   static navigationOptions = { header: null };
 
@@ -231,14 +241,8 @@ class CreateStory extends Component<any, CreateStoryState> {
     ControlService.startStory(playerClass, name);
   };
 
-  startFake = () => {
-    const { navigation } = this.props;
-    navigation.navigate("Story");
-  };
-
   render() {
     const { playerClass, name, step } = this.state;
-    const { mainStore } = this.props;
     const renderItem = element => {
       const { item } = element;
       const c: PlayerClass = item;
@@ -272,62 +276,75 @@ class CreateStory extends Component<any, CreateStoryState> {
     };
     return (
       <SafeAreaView style={styles.container}>
-        {step === 0 ? (
-          <SafeAreaView style={styles.playerClassContainer}>
-            <View style={styles.header}>
-              <Text style={styles.headerText}>Choose your class: </Text>
-            </View>
-            <FlatList
-              style={styles.list}
-              data={CLASSES}
-              renderItem={renderItem}
-              keyExtractor={() => "" + Math.random()}
-              extraData={{ playerClass }}
-            />
-          </SafeAreaView>
-        ) : (
-          undefined
-        )}
-        {step === 1 ? (
-          <KeyboardAvoidingView behavior="padding">
-            <View style={styles.name}>
-              <Image style={{ width: 80, height: 80 }} source={CLASSES.find(c => c.value === playerClass).portrait} />
-              <View style={styles.setupRow}>
-                <Text style={styles.text}>Choose your name: </Text>
-                <TextInput
-                  value={this.state.name}
-                  style={[styles.text, styles.textInput]}
-                  onChangeText={name => this.setState({ name })}
-                />
+        <Header />
+        <KeyboardAvoidingView behavior="padding" style={styles.center}>
+          {step === 0 ? (
+            <SafeAreaView style={styles.playerClassContainer}>
+              <View style={styles.header}>
+                <Text style={styles.headerText}>Choose your class: </Text>
               </View>
-            </View>
-          </KeyboardAvoidingView>
-        ) : (
-          undefined
-        )}
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.startButton}
-            onPress={() => {
-              // Final state
-              if (!playerClass && step === 0) {
-                return;
-              }
-              if (name.length === 0 && step === 1) {
-                return;
-              }
-              if (step === 1) {
-                ControlService.startStory(playerClass, name);
-              } else {
-                this.setState({
-                  step: step + 1
-                });
-              }
-            }}
-          >
-            <Text style={playerClass ? styles.text : styles.textGreyedOut}>{step === 1 ? "Start" : "Next"}</Text>
-          </TouchableOpacity>
-        </View>
+              <FlatList
+                style={styles.list}
+                data={CLASSES}
+                renderItem={renderItem}
+                keyExtractor={() => "" + Math.random()}
+                extraData={{ playerClass }}
+              />
+            </SafeAreaView>
+          ) : (
+            undefined
+          )}
+          {step === 1 ? (
+            <KeyboardAvoidingView behavior="padding">
+              <View style={styles.name}>
+                <Image
+                  style={{ width: 80, height: 80 }}
+                  source={CLASSES.find(c => c.value === playerClass).portrait}
+                />
+                <View style={styles.setupRow}>
+                  <Text style={styles.text}>Choose your name: </Text>
+                  <TextInput
+                    value={this.state.name}
+                    style={[styles.text, styles.textInput]}
+                    onChangeText={name => this.setState({ name })}
+                  />
+                </View>
+              </View>
+            </KeyboardAvoidingView>
+          ) : (
+            undefined
+          )}
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.startButton}
+              onPress={() => {
+                // Final state
+                if (!playerClass && step === 0) {
+                  return;
+                }
+                if (name.length === 0 && step === 1) {
+                  return;
+                }
+                if (step === 1) {
+                  ControlService.startStory(playerClass, name);
+                } else {
+                  this.setState({
+                    step: step + 1
+                  });
+                }
+              }}
+            >
+              <Text
+                style={[
+                  playerClass ? styles.text : styles.textGreyedOut,
+                  styles.nextButton
+                ]}
+              >
+                {step === 1 ? "Start" : "Next"}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
       </SafeAreaView>
     );
   }

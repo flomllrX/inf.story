@@ -11,6 +11,7 @@ import { colors, fonts } from "../theme";
 import PickerSelect from "react-native-picker-select";
 import ControlService from "../services/ControlService";
 import { inject, observer } from "mobx-react";
+import { withNavigation } from "react-navigation";
 
 const styles = StyleSheet.create({
   container: {
@@ -65,16 +66,18 @@ class Welcome extends Component<any, WelcomeState> {
   };
 
   onStart = () => {
+    const { navigation } = this.props;
     ControlService.createStory();
+    navigation.navigate("MainStoryModal");
   };
 
-  startFake = () => {
+  onResume = () => {
     const { navigation } = this.props;
-    navigation.navigate("Story");
+    ControlService.resumeStory();
+    navigation.navigate("MainStoryModal");
   };
 
   render() {
-    const { playerClass } = this.state;
     const { mainStore } = this.props;
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding">
@@ -89,10 +92,7 @@ class Welcome extends Component<any, WelcomeState> {
           </TouchableOpacity>
         </View>
         {mainStore.storyId ? (
-          <TouchableOpacity
-            style={styles.startButton}
-            onPress={() => ControlService.resumeStory()}
-          >
+          <TouchableOpacity style={styles.startButton} onPress={this.onResume}>
             <Text style={styles.text}>Resume</Text>
           </TouchableOpacity>
         ) : null}
@@ -101,4 +101,4 @@ class Welcome extends Component<any, WelcomeState> {
   }
 }
 
-export default inject("mainStore")(observer(Welcome));
+export default inject("mainStore")(withNavigation(observer(Welcome)));

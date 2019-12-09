@@ -16,7 +16,6 @@ const startStory: (playerClass: string, name: string) => void = async (
   name
 ) => {
   _mainStore.setStoryLoadingState(true);
-  _mainStore.setStoryState(true);
   _mainStore.setCreatingStoryState(false);
   const userId = _mainStore.userId;
   const { error, uid, storyBits } = await ApiService.startStory(
@@ -45,10 +44,6 @@ const act: (payload: string) => void = async payload => {
   _mainStore.setInfering(false);
 };
 
-const hideStory: () => void = async () => {
-  _mainStore.setStoryState(false);
-};
-
 const loadStory: (storyId: string) => void = async storyId => {
   const { storyBits, error } = await ApiService.getStory(storyId);
   if (error) {
@@ -69,7 +64,6 @@ const setStory: (storyId: string) => void = async storyId => {
 
 const resumeStory: () => void = async () => {
   _mainStore.setStoryLoadingState(true);
-  _mainStore.setStoryState(true);
   const storyId = _mainStore.storyId;
   await loadStory(storyId);
   _mainStore.setStoryLoadingState(false);
@@ -91,7 +85,6 @@ export default {
   setMainStore,
   startStory,
   act,
-  hideStory,
   loadStory,
   createStory,
   loadStories,

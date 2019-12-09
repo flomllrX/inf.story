@@ -36,7 +36,7 @@ const StorySmall: React.SFC<Props> = ({
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={() => navigation.navigate("StoryView", { storyId: uid })}
+      onPress={() => navigation.navigate("StoryModal", { storyId: uid })}
     >
       <Text style={styles.text}>{title}</Text>
       <Text style={styles.text}>{new Date(createdAt).toDateString()}</Text>

@@ -1,6 +1,6 @@
 export interface StoryBit {
-  type: "TEXT" | "ACT_SAY" | "ACT_DO" | "IMAGE" | "ORIGIN";
-  payload: string | Origin;
+  type: "TEXT" | "ACT_SAY" | "ACT_DO" | "IMAGE" | "ORIGIN" | "LOCATION";
+  payload: string | Origin | Location;
 }
 
 export interface Origin {
@@ -14,6 +14,20 @@ export interface Origin {
     | "peasant"
     | "rogue";
   location: string;
+}
+
+export interface Location {
+  location:
+    | "forest"
+    | "jail"
+    | "castle"
+    | "keep"
+    | "lake"
+    | "mountain"
+    | "town"
+    | "village";
+  firstVisit: boolean;
+  seed: number;
 }
 
 export interface StorySmall {
