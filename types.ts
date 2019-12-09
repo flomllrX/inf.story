@@ -15,3 +15,10 @@ export interface Origin {
     | "rogue";
   location: string;
 }
+
+export interface StorySmall {
+  title: string;
+  createdAt: string;
+  origin: Origin;
+  uid: string;
+}

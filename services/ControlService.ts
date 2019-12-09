@@ -60,6 +60,13 @@ const loadStory: (storyId: string) => void = async storyId => {
   }
 };
 
+const setStory: (storyId: string) => void = async storyId => {
+  _mainStore.setStoryLoadingState(true);
+  await loadStory(storyId);
+  _mainStore.setStoryId(storyId);
+  _mainStore.setStoryLoadingState(false);
+};
+
 const resumeStory: () => void = async () => {
   _mainStore.setStoryLoadingState(true);
   _mainStore.setStoryState(true);
@@ -68,12 +75,26 @@ const resumeStory: () => void = async () => {
   _mainStore.setStoryLoadingState(false);
 };
 
+const loadStories: () => void = async () => {
+  const deviceId = _mainStore.userId;
+  console.log("deviceid", deviceId);
+  const { stories, error } = await ApiService.getStories(deviceId);
+  if (error) {
+    console.log(error);
+    _mainStore.setError("Could not load stories.");
+  } else {
+    _mainStore.setStories(stories);
+  }
+};
+
 export default {
   setMainStore,
   startStory,
   act,
   hideStory,
   loadStory,
+  createStory,
+  loadStories,
   resumeStory,
-  createStory
+  setStory
 };

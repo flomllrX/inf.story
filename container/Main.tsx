@@ -21,14 +21,9 @@ class Main extends Component<any, any> {
       return <CreateStory />;
     }
     return mainStore.storyActive ? (
-      mainStore.loadingStory ? (
-        <Loading />
-      ) : mainStore.error ? (
-        <Error />
-      ) : (
         <Story />
       )
-    ) : (
+    : (
       <Welcome />
     );
   }

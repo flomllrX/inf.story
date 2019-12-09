@@ -7,6 +7,22 @@ import { Provider, observer } from "mobx-react";
 import MainStore from "./mobx/mainStore";
 import ControlService from "./services/ControlService";
 import Navigation from "./container/Navigation";
+import Story from "./screens/Story";
+import { createAppContainer } from "react-navigation";
+import { createStackNavigator } from "react-navigation-stack";
+
+const MainNavigator = createStackNavigator(
+  {
+    Navigation: { screen: Navigation },
+    StoryView: { screen: Story }
+  },
+  {
+    mode: "modal",
+    headerMode: "none"
+  }
+);
+
+const AppContainer = createAppContainer(MainNavigator);
 
 const mainStore = new MainStore();
 ControlService.setMainStore(mainStore);
@@ -36,7 +52,6 @@ class App extends React.Component {
 
   render() {
     const { fontLoaded } = this.state;
-    console.log("Error:", mainStore.error);
     return (
       <Provider mainStore={mainStore}>
         <View style={styles.container}>
@@ -44,7 +59,7 @@ class App extends React.Component {
             mainStore.error ? (
               <ErrorScreen />
             ) : (
-              <Navigation />
+              <AppContainer />
             )
           ) : (
             <Loading />

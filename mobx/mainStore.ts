@@ -1,6 +1,6 @@
 import { action, observable, autorun, reaction } from "mobx";
 import NavigationService from "../services/NavigationService";
-import { StoryBit } from "../types";
+import { StoryBit, StorySmall } from "../types";
 import { AsyncStorage } from "react-native";
 import uuid from "uuid/v4";
 import ControlService from "../services/ControlService";
@@ -31,6 +31,7 @@ export default class MainStore {
   @observable creatingStory = true;
   @observable story: StoryBit[];
   @observable loadingStory = false;
+  @observable stories: StorySmall[];
 
   @observable error;
   @observable infering = false;
@@ -68,6 +69,11 @@ export default class MainStore {
 
   @action setStory(story: StoryBit[]) {
     this.story = story.reverse();
+  }
+
+  @action setStories(stories: StorySmall[]) {
+    console.log("Stories", stories);
+    this.stories = stories;
   }
 
   @action addStoryBits(storyBits: StoryBit[]) {
