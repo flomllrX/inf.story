@@ -45,6 +45,7 @@ const hideStory: () => void = async () => {
 };
 
 const loadStory: (storyId: string) => void = async storyId => {
+  _mainStore.setStoryLoadingState(true);
   const { storyBits, error } = await ApiService.getStory(storyId);
   if (error) {
     _mainStore.setError(
@@ -53,6 +54,7 @@ const loadStory: (storyId: string) => void = async storyId => {
   } else {
     _mainStore.setStory(storyBits);
   }
+  _mainStore.setStoryLoadingState(false);
 };
 
 const resumeStory: () => void = async () => {

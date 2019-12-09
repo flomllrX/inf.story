@@ -7,6 +7,9 @@ import { inject, observer } from "mobx-react";
 import ControlService from "../services/ControlService";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Header from "../components/Header";
+import MainStore from "../mobx/mainStore";
+import { withNavigation } from "react-navigation";
+import LoadingStory from "./LoadingStory";
 
 const styles = StyleSheet.create({
   container: {
@@ -21,20 +24,13 @@ const styles = StyleSheet.create({
   }
 });
 
-class Story extends Component<any, any> {
-  static navigationOptions = {
-    headerStyle: {
-      backgroundColor: "green",
-      elevation: 0,
-      shadowOpacity: 0,
-      borderBottomWidth: 0
-    },
-    headerLeft: () => (
-      <TouchableOpacity onPress={ControlService.hideStory}>
-        <Text style={styles.button}>&lt;</Text>
-      </TouchableOpacity>
-    )
-  };
+interface Props {
+  mainStore?: MainStore;
+  storyId?: string;
+  navigation: any;
+}
+
+class Story extends Component<Props, any> {
   state: {
     typing: string;
   } = {
@@ -51,14 +47,31 @@ class Story extends Component<any, any> {
     });
   };
 
+  componentDidMount() {
+    const { navigation } = this.props;
+    const storyId = navigation.getParam("storyId");
+    if (storyId) {
+      ControlService.loadStory(storyId);
+    }
+  }
+
+  closeStory = () => {
+    const { navigation } = this.props;
+    const storyId = navigation.getParam("storyId");
+    console.log("Closign story", storyId);
+    storyId ? navigation.goBack() : ControlService.hideStory();
+  };
+
   render() {
     const { typing } = this.state;
     const { mainStore } = this.props;
-    return (
+    return mainStore.loadingStory ? (
+      <LoadingStory />
+    ) : (
       <SafeAreaView style={styles.container}>
         <Header
           leftButton={
-            <TouchableOpacity onPress={ControlService.hideStory}>
+            <TouchableOpacity onPress={this.closeStory}>
               <Text style={styles.button}>&lt;</Text>
             </TouchableOpacity>
           }
@@ -75,4 +88,4 @@ class Story extends Component<any, any> {
   }
 }
 
-export default inject("mainStore")(observer(Story));
+export default withNavigation(inject("mainStore")(observer(Story)));

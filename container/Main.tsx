@@ -17,17 +17,7 @@ class Main extends Component<any, any> {
   render() {
     const mainStore = this.props.mainStore;
 
-    return mainStore.storyActive ? (
-      mainStore.loadingStory ? (
-        <Loading />
-      ) : mainStore.error ? (
-        <Error />
-      ) : (
-        <Story />
-      )
-    ) : (
-      <Welcome />
-    );
+    return mainStore.storyActive ? <Story /> : <Welcome />;
   }
 }
 
