@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Image,
-  FlatList
+  FlatList,
+  SafeAreaView
 } from "react-native";
 import { colors, fonts } from "../theme";
 import Svg, { Image as ImageSvg } from "react-native-svg";
@@ -53,10 +54,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between"
   },
   playerClassContainer: {
+    flex: 1
   },
   android: {
     width: 50,
     height: 20
+  },
+  list: {
+    flex: 1
   }
 });
 
@@ -157,12 +162,17 @@ class CreateStory extends Component<any, CreateStoryState> {
       );
     };
     return (
-      <KeyboardAvoidingView style={styles.container} behavior="padding">
+      <SafeAreaView style={styles.container}>
         {step === 0 ? (
-          <View style={styles.playerClassContainer}>
+          <SafeAreaView style={styles.playerClassContainer}>
             <Text style={styles.text}>Choose your class: </Text>
-            <FlatList data={CLASSES} renderItem={renderItem} keyExtractor={() => "" + Math.random()} />
-          </View>
+            <FlatList
+              style={styles.list}
+              data={CLASSES}
+              renderItem={renderItem}
+              keyExtractor={() => "" + Math.random()}
+            />
+          </SafeAreaView>
         ) : (
           undefined
         )}
@@ -195,7 +205,7 @@ class CreateStory extends Component<any, CreateStoryState> {
             <Text style={styles.text}>{step === 1 ? "Start" : "Next"}</Text>
           </TouchableOpacity>
         </View>
-      </KeyboardAvoidingView>
+      </SafeAreaView>
     );
   }
 }

@@ -17,10 +17,8 @@ class Main extends Component<any, any> {
   static defaultProps = {};
   render() {
     const mainStore = this.props.mainStore;
-    if(mainStore.creatingStory){
-      return(
-        <CreateStory/>
-      )
+    if (mainStore.creatingStory) {
+      return <CreateStory />;
     }
     return mainStore.storyActive ? (
       mainStore.loadingStory ? (

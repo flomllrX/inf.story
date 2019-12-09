@@ -8,8 +8,8 @@ const setMainStore = store => {
 };
 
 const createStory: () => void = () => {
-  _mainStore.setCreatingStoryState(true)
-}
+  _mainStore.setCreatingStoryState(true);
+};
 
 const startStory: (playerClass: string, name: string) => void = async (
   playerClass,

@@ -65,7 +65,7 @@ class Welcome extends Component<any, WelcomeState> {
   };
 
   onStart = () => {
-    ControlService.createStory()
+    ControlService.createStory();
   };
 
   startFake = () => {
