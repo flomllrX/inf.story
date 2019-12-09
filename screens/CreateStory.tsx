@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,13 +8,15 @@ import {
   KeyboardAvoidingView,
   Image,
   FlatList,
-  SafeAreaView
+  SafeAreaView,
+  Animated
 } from "react-native";
 import { colors, fonts } from "../theme";
 import Svg, { Image as ImageSvg } from "react-native-svg";
 import ControlService from "../services/ControlService";
 import { inject, observer } from "mobx-react";
 import { element } from "prop-types";
+import { selectAssetSource } from "expo-asset/build/AssetSources";
 
 const styles = StyleSheet.create({
   container: {
@@ -25,6 +27,11 @@ const styles = StyleSheet.create({
   },
   text: {
     color: colors.defaultText,
+    fontFamily: fonts.regular,
+    fontSize: 18
+  },
+  textGreyedOut: {
+    color: colors.greyed,
     fontFamily: fonts.regular,
     fontSize: 18
   },
@@ -49,12 +56,53 @@ const styles = StyleSheet.create({
   primaryColor: {
     color: colors.primary
   },
+  name: {
+    marginBottom: 30,
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center"
+  },
   playerClass: {
+    margin: 5,
+    marginLeft: "10%",
+    marginRight: "10%",
     flexDirection: "row",
     justifyContent: "space-between"
   },
+  playerClassTextContainer: {
+    flex: 1,
+    marginLeft: 10,
+    flexDirection: "column"
+    // justifyContent: "space-between"
+  },
+  playerClassName: {
+    color: colors.defaultText,
+    fontFamily: fonts.regular,
+    fontSize: 19
+  },
+  playerClassDescription: {
+    color: colors.greyed,
+    fontFamily: fonts.regular,
+    fontSize: 13
+  },
   playerClassContainer: {
-    flex: 1
+    flex: 1,
+    width: "100%",
+    paddingLeft: 80,
+    paddingRight: 80
+  },
+  header: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 15
+  },
+  headerText: {
+    color: colors.defaultText,
+    fontFamily: fonts.regular,
+    fontSize: 23
+  },
+  buttonContainer: {
+    marginTop: -40
   },
   android: {
     width: 50,
@@ -62,6 +110,12 @@ const styles = StyleSheet.create({
   },
   list: {
     flex: 1
+  },
+  selectIcon: {
+    position: "absolute",
+    left: -20,
+    top: 22,
+    zIndex: 999
   }
 });
 
@@ -76,64 +130,98 @@ interface PlayerClass {
   portrait: any;
   description: string;
   value: string;
+  locked?: boolean;
 }
 const CLASSES: PlayerClass[] = [
   {
     name: "Squire",
     portrait: require("../assets/portraits/squire.png"),
-    description: "A noble dude",
+    description: "You are the shield bearer of a well respected knight.",
     value: "squire"
   },
   {
     name: "Thief",
     portrait: require("../assets/portraits/thief.png"),
-    description: "A noble dude",
+    description: "You live from stealing rare artifacts.",
     value: "thief"
   },
   {
     name: "Knight",
     portrait: require("../assets/portraits/knight.png"),
-    description: "A knight",
+    description: "You are brave and strong. Life is dangerous for you.",
     value: "knight"
   },
   {
-    name: "Noble",
+    name: "King",
     portrait: require("../assets/portraits/noble.png"),
-    description: "A noble dude",
+    description: "You must balance a life of luxury and reign.",
     value: "noble"
   },
   {
     name: "Peasant",
     portrait: require("../assets/portraits/peasant.png"),
-    description: "A noble dude",
+    description: "You started from nothing and you still have nothing.",
     value: "peasant"
   },
   {
     name: "Rogue",
     portrait: require("../assets/portraits/rogue.png"),
-    description: "A noble dude",
+    description: "You live in the forest and hunt your own food.",
     value: "rogue"
   },
   {
     name: "???",
     portrait: require("../assets/portraits/orc.png"),
-    description: "This class is locked",
-    value: "orc"
+    description: "🔒 This class is locked",
+    value: "orc",
+    locked: true
   },
   {
     name: "???",
     portrait: require("../assets/portraits/shadow.png"),
-    description: "This class is locked",
-    value: "shadow"
+    description: "🔒 This class is locked",
+    value: "shadow",
+    locked: true
   }
 ];
+
+const MovingCursor = props => {
+  const [left] = useState(new Animated.Value(3)); // Initial value for opacity: 0
+
+  React.useEffect(() => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(left, {
+          toValue: -3,
+          duration: 500
+        }),
+        Animated.timing(left, {
+          toValue: 3,
+          duration: 500
+        })
+      ]),
+      {}
+    ).start();
+  }, []);
+
+  return (
+    <Animated.View // Special animatable View
+      style={{
+        ...props.style,
+        left: left // Bind opacity to animated value
+      }}
+    >
+      {props.children}
+    </Animated.View>
+  );
+};
 
 class CreateStory extends Component<any, CreateStoryState> {
   static navigationOptions = { header: null };
 
   state = {
     step: 0,
-    playerClass: "noble",
+    playerClass: "",
     name: ""
   };
 
@@ -153,47 +241,82 @@ class CreateStory extends Component<any, CreateStoryState> {
     const { mainStore } = this.props;
     const renderItem = element => {
       const { item } = element;
-      const c = item;
+      const c: PlayerClass = item;
+      const isSelected = playerClass == c.value;
       return (
-        <View style={styles.playerClass} key={c.name}>
-          <Image style={{ width: 70, height: 70 }} source={c.portrait} />
-          <Text style={styles.text}>{c.name}</Text>
-        </View>
+        <TouchableOpacity
+          onPress={() => {
+            if (!c.locked) {
+              this.setState({ playerClass: c.value });
+            }
+          }}
+        >
+          <View style={styles.playerClass} key={c.name}>
+            {isSelected ? (
+              <View style={{ ...styles.selectIcon }}>
+                <MovingCursor>
+                  <Text style={styles.text}>&gt;</Text>
+                </MovingCursor>
+              </View>
+            ) : (
+              undefined
+            )}
+            <Image style={{ width: 70, height: 70 }} source={c.portrait} />
+            <View style={styles.playerClassTextContainer}>
+              <Text style={styles.playerClassName}>{c.name}</Text>
+              <Text style={styles.playerClassDescription}>{c.description}</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
       );
     };
     return (
       <SafeAreaView style={styles.container}>
         {step === 0 ? (
           <SafeAreaView style={styles.playerClassContainer}>
-            <Text style={styles.text}>Choose your class: </Text>
+            <View style={styles.header}>
+              <Text style={styles.headerText}>Choose your class: </Text>
+            </View>
             <FlatList
               style={styles.list}
               data={CLASSES}
               renderItem={renderItem}
               keyExtractor={() => "" + Math.random()}
+              extraData={{ playerClass }}
             />
           </SafeAreaView>
         ) : (
           undefined
         )}
         {step === 1 ? (
-          <View style={styles.setupRow}>
-            <Text style={styles.text}>Choose your name: </Text>
-            <TextInput
-              value={this.state.name}
-              style={[styles.text, styles.textInput]}
-              onChangeText={name => this.setState({ name })}
-            />
-          </View>
+          <KeyboardAvoidingView behavior="padding">
+            <View style={styles.name}>
+              <Image style={{ width: 80, height: 80 }} source={CLASSES.find(c => c.value === playerClass).portrait} />
+              <View style={styles.setupRow}>
+                <Text style={styles.text}>Choose your name: </Text>
+                <TextInput
+                  value={this.state.name}
+                  style={[styles.text, styles.textInput]}
+                  onChangeText={name => this.setState({ name })}
+                />
+              </View>
+            </View>
+          </KeyboardAvoidingView>
         ) : (
           undefined
         )}
-        <View>
+        <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.startButton}
             onPress={() => {
               // Final state
-              if (this.state.step === 1) {
+              if (!playerClass && step === 0) {
+                return;
+              }
+              if (name.length === 0 && step === 1) {
+                return;
+              }
+              if (step === 1) {
                 ControlService.startStory(playerClass, name);
               } else {
                 this.setState({
@@ -202,7 +325,7 @@ class CreateStory extends Component<any, CreateStoryState> {
               }
             }}
           >
-            <Text style={styles.text}>{step === 1 ? "Start" : "Next"}</Text>
+            <Text style={playerClass ? styles.text : styles.textGreyedOut}>{step === 1 ? "Start" : "Next"}</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>

@@ -28,7 +28,7 @@ export default class MainStore {
 
   @observable storyId: string;
   @observable storyActive = false;
-  @observable creatingStory = false;
+  @observable creatingStory = true;
   @observable story: StoryBit[];
   @observable loadingStory = false;
 
