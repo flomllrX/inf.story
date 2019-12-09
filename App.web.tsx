@@ -7,7 +7,8 @@ import { Linking } from "expo";
 import { Provider, observer } from "mobx-react";
 import MainStore from "./mobx/mainStore";
 import ControlService from "./services/ControlService";
-import Navigation from "./container/Navigation";
+import MainScreen from "./container/Main";
+import Histroy from "./screens/History";
 import Story from "./screens/Story";
 import MainStory from "./container/MainStory";
 import { createAppContainer } from "react-navigation";
@@ -15,7 +16,8 @@ import { createStackNavigator } from "react-navigation-stack";
 
 const MainNavigator = createStackNavigator(
   {
-    Navigation: { screen: Navigation, path: "" },
+    Main: { screen: MainScreen, path: "" },
+    History: { screen: Histroy, path: "history" },
     StoryModal: { screen: Story, path: "story/:storyId" },
     MainStoryModal: { screen: MainStory }
   },
@@ -53,6 +55,7 @@ class App extends React.Component {
       "SourceCodePro-SemiBold": require("./assets/fonts/SourceCodePro-SemiBold.ttf")
     });
     this.setState({ fontLoaded: true });
+    console.log(window.location.href);
   }
 
   render() {

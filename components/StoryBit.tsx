@@ -62,28 +62,26 @@ const styles = StyleSheet.create({
   }
 });
 
-const bg = "../assets/locations/";
 const locations = {
-  forest: [require(bg + "jail.png")],
-  jail: [require(bg + "jail.png")],
-  castle: [require(bg + "jail.png")],
-  keep: [require(bg + "jail.png")],
-  lake: [require(bg + "jail.png")],
-  mountain: [require(bg + "jail.png")],
-  town: [require(bg + "jail.png")],
-  village: [require(bg + "jail.png")]
+  forest: [require("../assets/locations/jail.png")],
+  jail: [require("../assets/locations/jail.png")],
+  castle: [require("../assets/locations/jail.png")],
+  keep: [require("../assets/locations/jail.png")],
+  lake: [require("../assets/locations/jail.png")],
+  mountain: [require("../assets/locations/jail.png")],
+  town: [require("../assets/locations/jail.png")],
+  village: [require("../assets/locations/jail.png")]
 };
 
-const pt = "../assets/portraits/";
 const portraits = {
-  knight: require(pt + "knight.png"),
-  noble: require(pt + "noble.png"),
-  orc: require(pt + "orc.png"),
-  peasant: require(pt + "peasant.png"),
-  shadow: require(pt + "shadow.png"),
-  squire: require(pt + "squire.png"),
-  thief: require(pt + "thief.png"),
-  rogue: require(pt + "rogue.png")
+  knight: require("../assets/portraits/knight.png"),
+  noble: require("../assets/portraits/noble.png"),
+  orc: require("../assets/portraits/orc.png"),
+  peasant: require("../assets/portraits/peasant.png"),
+  shadow: require("../assets/portraits/shadow.png"),
+  squire: require("../assets/portraits/squire.png"),
+  thief: require("../assets/portraits/thief.png"),
+  rogue: require("../assets/portraits/rogue.png")
 };
 const uppercase = (s: string) => {
   return s[0].toUpperCase() + s.substr(1).toLowerCase();
