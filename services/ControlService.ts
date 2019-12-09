@@ -7,12 +7,17 @@ const setMainStore = store => {
   _mainStore = store;
 };
 
+const createStory: () => void = () => {
+  _mainStore.setCreatingStoryState(true);
+};
+
 const startStory: (playerClass: string, name: string) => void = async (
   playerClass,
   name
 ) => {
   _mainStore.setStoryLoadingState(true);
   _mainStore.setStoryState(true);
+  _mainStore.setCreatingStoryState(false);
   const userId = _mainStore.userId;
   const { error, uid, storyBits } = await ApiService.startStory(
     userId,
@@ -88,6 +93,7 @@ export default {
   act,
   hideStory,
   loadStory,
+  createStory,
   loadStories,
   resumeStory,
   setStory

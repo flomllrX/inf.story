@@ -65,9 +65,7 @@ class Welcome extends Component<any, WelcomeState> {
   };
 
   onStart = () => {
-    const { playerClass, name } = this.state;
-    // TODO: verify that a name is given. (maybe generate one if none is given)
-    ControlService.startStory(playerClass, name);
+    ControlService.createStory();
   };
 
   startFake = () => {
@@ -85,34 +83,6 @@ class Welcome extends Component<any, WelcomeState> {
           Infinite
         </Text>
         <Text style={[styles.text, styles.headLine]}>Story</Text>
-        <View style={styles.setupRow}>
-          <Text style={styles.text}>Choose your class: </Text>
-          <PickerSelect
-            style={{
-              inputIOS: [styles.text, styles.underline],
-              inputAndroid: [styles.text, styles.underline, styles.android]
-            }}
-            onValueChange={playerClass => this.setState({ playerClass })}
-            value={playerClass}
-            items={[
-              { label: "Noble", value: "noble" },
-              { label: "Knight", value: "knight" },
-              { label: "Squire", value: "squire" },
-              { label: "Wizard", value: "wizard" },
-              { label: "Ranger", value: "ranger" },
-              { label: "Peasant", value: "peasant" },
-              { label: "Rogue", value: "rouge" }
-            ]}
-          />
-        </View>
-        <View style={styles.setupRow}>
-          <Text style={styles.text}>Choose your name: </Text>
-          <TextInput
-            value={this.state.name}
-            style={[styles.text, styles.textInput]}
-            onChangeText={name => this.setState({ name })}
-          />
-        </View>
         <View>
           <TouchableOpacity style={styles.startButton} onPress={this.onStart}>
             <Text style={styles.text}>Start</Text>
