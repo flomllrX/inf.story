@@ -51,7 +51,7 @@ class Story extends Component<Props, any> {
     const { navigation } = this.props;
     const storyId = navigation.getParam("storyId");
     if (storyId) {
-      ControlService.loadStory(storyId);
+      ControlService.setStory(storyId);
     }
   }
 
