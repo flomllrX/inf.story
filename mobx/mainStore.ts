@@ -1,5 +1,4 @@
 import { action, observable, autorun, reaction } from "mobx";
-import NavigationService from "../services/NavigationService";
 import { StoryBit, StorySmall } from "../types";
 import { AsyncStorage } from "react-native";
 import uuid from "uuid/v4";
