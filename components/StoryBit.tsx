@@ -178,7 +178,7 @@ export const locations = {
     require("../assets/locations/volcano/volcano5.png")
   ],
   tower: [require("../assets/locations/tower/tower1.png")],
-  fortress: [require("../assets/locations/forest/fortress1.png"), require("../assets/locations/fortress/fortress2.png")]
+  fortress: [require("../assets/locations/fortress/fortress1.png"), require("../assets/locations/fortress/fortress2.png")]
 };
 
 export const portraits = {
