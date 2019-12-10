@@ -32,7 +32,6 @@ const StorySmall: React.SFC<Props> = ({
   uid,
   navigation
 }) => {
-  console.log("Nav", navigation);
   return (
     <TouchableOpacity
       style={styles.container}

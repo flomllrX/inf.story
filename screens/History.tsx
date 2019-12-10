@@ -25,7 +25,6 @@ class History extends Component<any, any> {
   render() {
     const mainStore: MainStore = this.props.mainStore;
     const stories = mainStore.stories;
-    console.log("Stories", stories);
     return (
       <SafeAreaView style={styles.container}>
         <FlatList

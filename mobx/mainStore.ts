@@ -6,7 +6,6 @@ import ControlService from "../services/ControlService";
 import ApiService from "../services/ApiService";
 
 const storeData = async (key: string, value: string) => {
-  console.log(key, value);
   try {
     await AsyncStorage.setItem("@" + key, "" + value);
   } catch (e) {
@@ -78,7 +77,6 @@ export default class MainStore {
   }
 
   @action setStories(stories: StorySmall[]) {
-    console.log("Stories", stories);
     this.stories = stories;
   }
 
@@ -101,7 +99,6 @@ export default class MainStore {
   constructor() {
     const signup = async () => {
       const userId = uuid();
-      console.log("USERID", userId);
       const signupError = () => {
         this.setError("Please make sure you're connected to the internet.");
         reaction(

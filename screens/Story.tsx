@@ -47,6 +47,7 @@ class Story extends Component<Props, any> {
   };
 
   componentDidMount() {
+    console.log("moutned");
     const { navigation } = this.props;
     const storyId = navigation.getParam("storyId");
     if (storyId) {

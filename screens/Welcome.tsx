@@ -83,7 +83,7 @@ class Welcome extends Component<any, WelcomeState> {
       <KeyboardAvoidingView style={styles.container} behavior="padding">
         <Text style={[styles.text, styles.headLine]}>The</Text>
         <Text style={[styles.text, styles.headLine, styles.primaryColor]}>
-          Infinite
+          Infinites
         </Text>
         <Text style={[styles.text, styles.headLine]}>Story</Text>
         <View>
