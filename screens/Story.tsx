@@ -51,19 +51,25 @@ class Story extends Component<Props, any> {
 
   render() {
     const { typing } = this.state;
-    const { mainStore } = this.props;
+    const { mainStore, navigation } = this.props;
+    const storyId = navigation.getParam("storyId");
+    const ownStory =
+      !storyId ||
+      (mainStore.stories && mainStore.stories.find(e => e.uid === storyId));
     return mainStore.loadingStory ? (
       <LoadingStory />
     ) : (
       <SafeAreaView style={styles.container}>
         <Header />
         <StoryComponent items={mainStore.story} extraData={this.state} />
-        <Chatbox
-          value={typing}
-          sendMessage={this.sendMessage}
-          onChangeText={typing => this.setState({ typing })}
-          inputDisabled={mainStore.infering}
-        />
+        {ownStory && (
+          <Chatbox
+            value={typing}
+            sendMessage={this.sendMessage}
+            onChangeText={typing => this.setState({ typing })}
+            inputDisabled={mainStore.infering}
+          />
+        )}
       </SafeAreaView>
     );
   }

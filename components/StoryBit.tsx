@@ -63,14 +63,14 @@ const styles = StyleSheet.create({
 });
 
 const locations = {
-  forest: [require("../assets/locations/jail.png")],
-  jail: [require("../assets/locations/jail.png")],
-  castle: [require("../assets/locations/jail.png")],
-  keep: [require("../assets/locations/jail.png")],
-  lake: [require("../assets/locations/jail.png")],
-  mountain: [require("../assets/locations/jail.png")],
-  town: [require("../assets/locations/jail.png")],
-  village: [require("../assets/locations/jail.png")]
+  forest: [require("../assets/locations/castle/castle1.png")],
+  jail: [require("../assets/locations/castle/castle1.png")],
+  castle: [require("../assets/locations/castle/castle1.png")],
+  keep: [require("../assets/locations/castle/castle1.png")],
+  lake: [require("../assets/locations/castle/castle1.png")],
+  mountain: [require("../assets/locations/castle/castle1.png")],
+  town: [require("../assets/locations/castle/castle1.png")],
+  village: [require("../assets/locations/castle/castle1.png")]
 };
 
 const portraits = {
