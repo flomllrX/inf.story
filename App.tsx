@@ -2,8 +2,9 @@ import React from "react";
 import Loading from "./screens/Loading";
 import ErrorScreen from "./screens/Error";
 import * as Font from "expo-font";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Image } from "react-native";
 import { Linking } from "expo";
+import { Asset } from "expo-asset";
 import { Provider, observer } from "mobx-react";
 import MainStore from "./mobx/mainStore";
 import ControlService from "./services/ControlService";
@@ -12,6 +13,7 @@ import Story from "./screens/Story";
 import MainStory from "./container/MainStory";
 import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
+import { portraits, locations } from "./components/StoryBit";
 
 const MainNavigator = createStackNavigator(
   {
@@ -36,6 +38,16 @@ const styles = StyleSheet.create({
   }
 });
 
+function cacheImages(images) {
+  return images.map(image => {
+    if (typeof image === "string") {
+      return Image.prefetch(image);
+    } else {
+      return Asset.fromModule(image).downloadAsync();
+    }
+  });
+}
+
 const prefix = Linking.makeUrl("/");
 
 class App extends React.Component {
@@ -48,10 +60,17 @@ class App extends React.Component {
   };
 
   async componentDidMount() {
-    await Font.loadAsync({
+    const fontLoaders = Font.loadAsync({
       "SourceCodePro-Regular": require("./assets/fonts/SourceCodePro-Regular.ttf"),
       "SourceCodePro-SemiBold": require("./assets/fonts/SourceCodePro-SemiBold.ttf")
     });
+    const p = Object.keys(portraits).map(k => portraits[k]);
+    const l = Object.keys(locations)
+      .map(k => portraits[k])
+      .reduce((prev, curr) => [...prev, ...curr], []);
+    const imageLoaders = cacheImages([...p, ...l]);
+    await Promise.all([...imageLoaders, fontLoaders]);
+
     this.setState({ fontLoaded: true });
   }
 
@@ -60,15 +79,7 @@ class App extends React.Component {
     return (
       <Provider mainStore={mainStore}>
         <View style={styles.container}>
-          {fontLoaded ? (
-            mainStore.error ? (
-              <ErrorScreen />
-            ) : (
-              <AppContainer uriPrefix={prefix} />
-            )
-          ) : (
-            <Loading />
-          )}
+          {fontLoaded ? mainStore.error ? <ErrorScreen /> : <AppContainer uriPrefix={prefix} /> : <Loading />}
         </View>
       </Provider>
     );

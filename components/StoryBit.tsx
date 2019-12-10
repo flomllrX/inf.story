@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   }
 });
 
-const locations = {
+export const locations = {
   dungeon: [
     require("../assets/locations/dungeon/dungeon1.png"),
     require("../assets/locations/dungeon/dungeon2.png"),
@@ -78,9 +78,9 @@ const locations = {
     require("../assets/locations/forest/forest4.png")
   ],
   graveyard: [
-    require("../assets/locations/graveyeard/graveyeard1.png"),
-    require("../assets/locations/graveyeard/graveyeard2.png"),
-    require("../assets/locations/graveyeard/graveyeard3.png")
+    require("../assets/locations/graveyard/graveyard1.png"),
+    require("../assets/locations/graveyard/graveyard2.png"),
+    require("../assets/locations/graveyard/graveyard3.png")
   ],
   mountain: [
     require("../assets/locations/mountain/mountain1.png"),
@@ -181,7 +181,7 @@ const locations = {
   fortress: [require("../assets/locations/forest/fortress1.png"), require("../assets/locations/fortress/fortress2.png")]
 };
 
-const portraits = {
+export const portraits = {
   knight: require("../assets/portraits/knight.png"),
   noble: require("../assets/portraits/noble.png"),
   orc: require("../assets/portraits/orc.png"),
