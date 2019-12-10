@@ -146,7 +146,7 @@ const CLASSES: PlayerClass[] = [
   },
   {
     name: "Rogue",
-    portrait: require("../assets/portraits/thief.png"),
+    portrait: require("../assets/portraits/rogue.png"),
     description: "You live from stealing rare artifacts.",
     value: "rogue"
   },
@@ -170,7 +170,7 @@ const CLASSES: PlayerClass[] = [
   },
   {
     name: "Ranger",
-    portrait: require("../assets/portraits/rogue.png"),
+    portrait: require("../assets/portraits/ranger.png"),
     description: "You live in the forest and hunt your own food.",
     value: "ranger"
   },

@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   }
 });
 
-const locations = {
+export const locations = {
   dungeon: [
     require("../assets/locations/dungeon/dungeon1.png"),
     require("../assets/locations/dungeon/dungeon2.png"),
@@ -190,14 +190,14 @@ const locations = {
   ]
 };
 
-const portraits = {
+export const portraits = {
   knight: require("../assets/portraits/knight.png"),
   noble: require("../assets/portraits/noble.png"),
   orc: require("../assets/portraits/orc.png"),
   peasant: require("../assets/portraits/peasant.png"),
   shadow: require("../assets/portraits/shadow.png"),
   squire: require("../assets/portraits/squire.png"),
-  thief: require("../assets/portraits/thief.png"),
+  ranger: require("../assets/portraits/ranger.png"),
   rogue: require("../assets/portraits/rogue.png")
 };
 const uppercase = (s: string) => {
