@@ -30,6 +30,14 @@ export interface Location {
   seed: number;
 }
 
+export interface PlayerClass {
+  name: string;
+  portrait: any;
+  description: string;
+  value: string;
+  locked?: boolean;
+}
+
 export interface StorySmall {
   title: string;
   createdAt: string;
