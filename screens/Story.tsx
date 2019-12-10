@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, SafeAreaView } from "react-native";
+import { View, Text, StyleSheet, SafeAreaView, Share } from "react-native";
 import Chatbox from "../components/Chatbox";
 import StoryComponent from "../components/Story";
 import { colors, fonts } from "../theme";
@@ -10,11 +10,16 @@ import Header from "../components/Header";
 import MainStore from "../mobx/mainStore";
 import { withNavigation } from "react-navigation";
 import LoadingStory from "./LoadingStory";
+import { Platform } from "@unimodules/core";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background
+  },
+  text: {
+    fontFamily: fonts.regular,
+    color: colors.defaultText
   }
 });
 
@@ -60,7 +65,28 @@ class Story extends Component<Props, any> {
       <LoadingStory />
     ) : (
       <SafeAreaView style={styles.container}>
-        <Header />
+        <Header
+          rightButtons={[
+            <TouchableOpacity
+              key={0}
+              onPress={() => {
+                Platform.OS === "ios"
+                  ? Share.share({
+                      url:
+                        "https://infinitestory.app/story/" +
+                        (storyId || mainStore.storyId)
+                    })
+                  : Share.share({
+                      message:
+                        "Check out my story: https://infinitestory.app/story/" +
+                        (storyId || mainStore.storyId)
+                    });
+              }}
+            >
+              <Text style={styles.text}>Share</Text>
+            </TouchableOpacity>
+          ]}
+        />
         <StoryComponent items={mainStore.story} extraData={this.state} />
         {ownStory && (
           <Chatbox

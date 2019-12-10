@@ -21,13 +21,16 @@ const styles = StyleSheet.create({
   },
   right: {
     flex: 4,
-    flexDirection: "row"
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    paddingRight: 20
   },
   button: {
     color: colors.defaultText,
     fontFamily: fonts.regular,
     fontSize: 30,
-    paddingHorizontal: 10
+    paddingHorizontal: 20
   }
 });
 
