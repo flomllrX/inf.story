@@ -63,14 +63,131 @@ const styles = StyleSheet.create({
 });
 
 const locations = {
-  forest: [require("../assets/locations/castle/castle1.png")],
-  jail: [require("../assets/locations/castle/castle1.png")],
-  castle: [require("../assets/locations/castle/castle1.png")],
-  keep: [require("../assets/locations/castle/castle1.png")],
-  lake: [require("../assets/locations/castle/castle1.png")],
-  mountain: [require("../assets/locations/castle/castle1.png")],
-  town: [require("../assets/locations/castle/castle1.png")],
-  village: [require("../assets/locations/castle/castle1.png")]
+  dungeon: [
+    require("../assets/locations/dungeon/dungeon1.png"),
+    require("../assets/locations/dungeon/dungeon2.png"),
+    require("../assets/locations/dungeon/dungeon3.png"),
+    require("../assets/locations/dungeon/dungeon4.png"),
+    require("../assets/locations/dungeon/dungeon5.png")
+  ],
+  jail: [require("../assets/locations/jail/jail1.png")],
+  forest: [
+    require("../assets/locations/forest/forest1.png"),
+    require("../assets/locations/forest/forest2.png"),
+    require("../assets/locations/forest/forest3.png"),
+    require("../assets/locations/forest/forest4.png")
+  ],
+  graveyard: [
+    require("../assets/locations/graveyard/graveyard1.png"),
+    require("../assets/locations/graveyard/graveyard2.png"),
+    require("../assets/locations/graveyard/graveyard3.png")
+  ],
+  mountain: [
+    require("../assets/locations/mountain/mountain1.png"),
+    require("../assets/locations/mountain/mountain2.png"),
+    require("../assets/locations/mountain/mountain3.png")
+  ],
+  observatory: [
+    require("../assets/locations/observatory/observatory1.png"),
+    require("../assets/locations/observatory/observatory2.png"),
+    require("../assets/locations/observatory/observatory3.png"),
+    require("../assets/locations/observatory/observatory4.png"),
+    require("../assets/locations/observatory/observatory5.png")
+  ],
+  orchard: [
+    require("../assets/locations/orchard/orchard1.png"),
+    require("../assets/locations/orchard/orchard2.png"),
+    require("../assets/locations/orchard/orchard3.png"),
+    require("../assets/locations/orchard/orchard4.png")
+  ],
+  ruin: [
+    require("../assets/locations/ruin/ruin1.png"),
+    require("../assets/locations/ruin/ruin2.png"),
+    require("../assets/locations/ruin/ruin3.png"),
+    require("../assets/locations/ruin/ruin4.png"),
+    require("../assets/locations/ruin/ruin5.png")
+  ],
+  plain: [require("../assets/locations/plain/plain1.png")],
+  sanctuary: [
+    require("../assets/locations/sanctuary/sanctuary1.png"),
+    require("../assets/locations/sanctuary/sanctuary2.png"),
+    require("../assets/locations/sanctuary/sanctuary3.png"),
+    require("../assets/locations/sanctuary/sanctuary4.png")
+  ],
+  sewer: [
+    require("../assets/locations/sewer/sewer1.png"),
+    require("../assets/locations/sewer/sewer2.png"),
+    require("../assets/locations/sewer/sewer3.png"),
+    require("../assets/locations/sewer/sewer4.png"),
+    require("../assets/locations/sewer/sewer5.png")
+  ],
+  moon: [require("../assets/locations/moon/moon1.png")],
+  mars: [require("../assets/locations/mars/mars1.png")],
+  star: [require("../assets/locations/star/star1.png")],
+  swamp: [
+    require("../assets/locations/swamp/swamp1.png"),
+    require("../assets/locations/swamp/swamp2.png"),
+    require("../assets/locations/swamp/swamp3.png"),
+    require("../assets/locations/swamp/swamp4.png")
+  ],
+  valley: [require("../assets/locations/valley/valley1.png")],
+  temple: [
+    require("../assets/locations/temple/temple1.png"),
+    require("../assets/locations/temple/temple2.png"),
+    require("../assets/locations/temple/temple3.png"),
+    require("../assets/locations/temple/temple4.png"),
+    require("../assets/locations/temple/temple5.png")
+  ],
+  desert: [
+    require("../assets/locations/desert/desert1.png"),
+    require("../assets/locations/desert/desert2.png"),
+    require("../assets/locations/desert/desert3.png"),
+    require("../assets/locations/desert/desert4.png"),
+    require("../assets/locations/desert/desert5.png")
+  ],
+  city: [
+    require("../assets/locations/city/city1.png"),
+    require("../assets/locations/city/city2.png")
+  ],
+  village: [require("../assets/locations/village/village1.png")],
+  town: [require("../assets/locations/town/town1.png")],
+  port: [
+    require("../assets/locations/port/port1.png"),
+    require("../assets/locations/port/port2.png")
+  ],
+  cave: [
+    require("../assets/locations/cave/cave1.png"),
+    require("../assets/locations/cave/cave2.png"),
+    require("../assets/locations/cave/cave3.png"),
+    require("../assets/locations/cave/cave4.png")
+  ],
+  catacomb: [
+    require("../assets/locations/catacomb/catacomb1.png"),
+    require("../assets/locations/catacomb/catacomb2.png"),
+    require("../assets/locations/catacomb/catacomb3.png"),
+    require("../assets/locations/catacomb/catacomb4.png"),
+    require("../assets/locations/catacomb/catacomb5.png"),
+    require("../assets/locations/catacomb/catacomb6.png")
+  ],
+  castle: [
+    require("../assets/locations/castle/castle1.png"),
+    require("../assets/locations/castle/castle2.png"),
+    require("../assets/locations/castle/castle3.png"),
+    require("../assets/locations/castle/castle4.png"),
+    require("../assets/locations/castle/castle5.png")
+  ],
+  volcano: [
+    require("../assets/locations/volcano/volcano1.png"),
+    require("../assets/locations/volcano/volcano2.png"),
+    require("../assets/locations/volcano/volcano3.png"),
+    require("../assets/locations/volcano/volcano4.png"),
+    require("../assets/locations/volcano/volcano5.png")
+  ],
+  tower: [require("../assets/locations/tower/tower1.png")],
+  fortress: [
+    require("../assets/locations/fortress/fortress1.png"),
+    require("../assets/locations/fortress/fortress2.png")
+  ]
 };
 
 const portraits = {
