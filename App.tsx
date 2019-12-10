@@ -66,7 +66,7 @@ class App extends React.Component {
     });
     const p = Object.keys(portraits).map(k => portraits[k]);
     const l = Object.keys(locations)
-      .map(k => portraits[k])
+      .map(k => locations[k])
       .reduce((prev, curr) => [...prev, ...curr], []);
     const imageLoaders = cacheImages([...p, ...l]);
     await Promise.all([...imageLoaders, fontLoaders]);
