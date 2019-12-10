@@ -188,7 +188,7 @@ export const portraits = {
   peasant: require("../assets/portraits/peasant.png"),
   shadow: require("../assets/portraits/shadow.png"),
   squire: require("../assets/portraits/squire.png"),
-  thief: require("../assets/portraits/thief.png"),
+  ranger: require("../assets/portraits/ranger.png"),
   rogue: require("../assets/portraits/rogue.png")
 };
 const uppercase = (s: string) => {
