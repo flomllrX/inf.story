@@ -71,7 +71,6 @@ const resumeStory: () => void = async () => {
 
 const loadStories: () => void = async () => {
   const deviceId = _mainStore.userId;
-  console.log("deviceid", deviceId);
   const { stories, error } = await ApiService.getStories(deviceId);
   if (error) {
     console.log(error);
