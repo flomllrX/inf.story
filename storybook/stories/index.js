@@ -1,8 +1,8 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react-native';
-import LoadingStories from '../../screens/LoadingStory'
+import LoadingStory from '../../screens/LoadingStory'
 
 
-storiesOf('LoadingStories', module).add('default view', () => (
-  <LoadingStories />
-));
+storiesOf('Basic Views', module).add('loading screen', () => (
+  <LoadingStory />
+))
