@@ -75,6 +75,10 @@ const StorySmall: React.SFC<Props> = ({
   uid,
   navigation
 }) => {
+  const day = new Date(createdAt).toDateString().substring(4);
+  const rawTime = new Date(createdAt).toLocaleTimeString("en-US");
+  const time = rawTime.substring(0, 5) + rawTime.substring(9);
+  const date = day + " " + time.toLocaleLowerCase();
   return (
     <TouchableOpacity
       style={styles.container}
@@ -88,9 +92,7 @@ const StorySmall: React.SFC<Props> = ({
         <Text style={styles.text}>
           {origin.name}, the {origin.class}
         </Text>
-        <Text style={[styles.text, styles.subText]}>
-          {new Date(createdAt).toDateString()}
-        </Text>
+        <Text style={[styles.text, styles.subText]}>{date}</Text>
       </View>
     </TouchableOpacity>
   );
