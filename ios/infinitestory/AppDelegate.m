@@ -49,7 +49,7 @@
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge {
 #ifdef DEBUG
-  return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
+  return jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #else
   return [CodePush bundleURL];
 #endif
