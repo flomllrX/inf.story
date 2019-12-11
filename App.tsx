@@ -62,7 +62,8 @@ class App extends React.Component {
   async componentDidMount() {
     const fontLoaders = Font.loadAsync({
       "SourceCodePro-Regular": require("./assets/fonts/SourceCodePro-Regular.ttf"),
-      "SourceCodePro-SemiBold": require("./assets/fonts/SourceCodePro-SemiBold.ttf")
+      "SourceCodePro-SemiBold": require("./assets/fonts/SourceCodePro-SemiBold.ttf"),
+      "SourceCodePro-Bold": require("./assets/fonts/SourceCodePro-Bold.otf")
     });
     const p = Object.keys(portraits).map(k => portraits[k]);
     const l = Object.keys(locations)
@@ -94,4 +95,5 @@ class App extends React.Component {
   }
 }
 
+//export default from './storybook';
 export default observer(App);
