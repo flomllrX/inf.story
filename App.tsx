@@ -67,7 +67,7 @@ class App extends React.Component {
     const fontLoaders = Font.loadAsync({
       "SourceCodePro-Regular": require("./assets/fonts/SourceCodePro-Regular.ttf"),
       "SourceCodePro-SemiBold": require("./assets/fonts/SourceCodePro-SemiBold.ttf"),
-      "SourceCodePro-Bold": require("./assets/fonts/SourceCodePro-Bold.otf")
+      "SourceCodePro-Bold": require("./assets/fonts/SourceCodePro-Bold.ttf")
     });
     const p = Object.keys(portraits).map(k => portraits[k]);
     const l = Object.keys(locations)
