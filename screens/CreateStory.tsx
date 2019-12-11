@@ -16,6 +16,7 @@ import ControlService from "../services/ControlService";
 import { inject, observer } from "mobx-react";
 import PropTypes from "prop-types";
 import Header from "../components/Header";
+import { PlayerClass } from "../types";
 
 const styles = StyleSheet.create({
   container: {
@@ -130,13 +131,6 @@ interface CreateStoryState {
   step: number;
 }
 
-interface PlayerClass {
-  name: string;
-  portrait: any;
-  description: string;
-  value: string;
-  locked?: boolean;
-}
 const CLASSES: PlayerClass[] = [
   {
     name: "Squire",
