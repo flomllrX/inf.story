@@ -2,7 +2,7 @@ import React from "react";
 import Loading from "./screens/Loading";
 import ErrorScreen from "./screens/Error";
 import * as Font from "expo-font";
-import { View, StyleSheet, Image, Linking } from "react-native";
+import { View, StyleSheet, Image } from "react-native";
 import { Asset } from "expo-asset";
 import { Provider, observer } from "mobx-react";
 import MainStore from "./mobx/mainStore";
@@ -61,7 +61,8 @@ class App extends React.Component {
   async componentDidMount() {
     const fontLoaders = Font.loadAsync({
       "SourceCodePro-Regular": require("./assets/fonts/SourceCodePro-Regular.ttf"),
-      "SourceCodePro-SemiBold": require("./assets/fonts/SourceCodePro-SemiBold.ttf")
+      "SourceCodePro-SemiBold": require("./assets/fonts/SourceCodePro-SemiBold.ttf"),
+      "SourceCodePro-Bold": require("./assets/fonts/SourceCodePro-Bold.otf")
     });
     const p = Object.keys(portraits).map(k => portraits[k]);
     const l = Object.keys(locations)
@@ -93,4 +94,5 @@ class App extends React.Component {
   }
 }
 
+//export default from './storybook';
 export default observer(App);
