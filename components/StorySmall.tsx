@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import { colors, fonts } from "../theme";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { withNavigation } from "react-navigation";
+import PORTRAITS from "../assets/portraits/PATHS.js";
 
 interface Props {
   createdAt: string;
@@ -33,41 +34,6 @@ const styles = StyleSheet.create({
     fontSize: 14
   }
 });
-
-const PORTRAITS = [
-  {
-    portrait: require("../assets/portraits/squire.png"),
-    value: "squire"
-  },
-  {
-    portrait: require("../assets/portraits/rogue.png"),
-    value: "rogue"
-  },
-  {
-    portrait: require("../assets/portraits/knight.png"),
-    value: "knight"
-  },
-  {
-    portrait: require("../assets/portraits/noble.png"),
-    value: "noble"
-  },
-  {
-    portrait: require("../assets/portraits/peasant.png"),
-    value: "peasant"
-  },
-  {
-    portrait: require("../assets/portraits/ranger.png"),
-    value: "ranger"
-  },
-  {
-    portrait: require("../assets/portraits/orc.png"),
-    value: "orc"
-  },
-  {
-    portrait: require("../assets/portraits/shadow.png"),
-    value: "shadow"
-  }
-];
 
 const StorySmall: React.SFC<Props> = ({
   createdAt,
