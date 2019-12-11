@@ -1,12 +1,11 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, SafeAreaView } from "react-native";
+import { StyleSheet, SafeAreaView } from "react-native";
 import ControlService from "../services/ControlService";
 import { inject, observer } from "mobx-react";
 import MainStore from "../mobx/mainStore";
 import StorySmallComponent from "../components/StorySmall";
 import { colors } from "../theme";
 import { FlatList } from "react-native-gesture-handler";
-import { StorySmall /* only for dev*/, Origin } from "../types";
 
 const styles = StyleSheet.create({
   container: {
