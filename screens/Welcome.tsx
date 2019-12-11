@@ -3,15 +3,15 @@ import {
   View,
   Text,
   StyleSheet,
-  TextInput,
+  Image,
   TouchableOpacity,
   KeyboardAvoidingView
 } from "react-native";
 import { colors, fonts } from "../theme";
-import PickerSelect from "react-native-picker-select";
 import ControlService from "../services/ControlService";
 import { inject, observer } from "mobx-react";
 import { withNavigation } from "react-navigation";
+import MainTitle from "../components/MainTitle";
 
 const styles = StyleSheet.create({
   container: {
@@ -24,9 +24,6 @@ const styles = StyleSheet.create({
     color: colors.defaultText,
     fontFamily: fonts.regular,
     fontSize: 18
-  },
-  headLine: {
-    fontSize: 30
   },
   setupRow: {
     flexDirection: "row",
@@ -43,8 +40,8 @@ const styles = StyleSheet.create({
   startButton: {
     marginTop: 50
   },
-  primaryColor: {
-    color: colors.primary
+  img: {
+    // TODO: center svg img
   },
   android: {
     width: 50,
@@ -79,21 +76,20 @@ class Welcome extends Component<any, WelcomeState> {
 
   render() {
     const { mainStore } = this.props;
+
+    console.log("heeeeeeere", mainStore);
+
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding">
-        <Text style={[styles.text, styles.headLine]}>The</Text>
-        <Text style={[styles.text, styles.headLine, styles.primaryColor]}>
-          Infinite
-        </Text>
-        <Text style={[styles.text, styles.headLine]}>Story</Text>
+        <MainTitle style={styles.img} />
         <View>
           <TouchableOpacity style={styles.startButton} onPress={this.onStart}>
-            <Text style={styles.text}>Start</Text>
+            <Text style={styles.text}>> Start an Adventure</Text>
           </TouchableOpacity>
         </View>
         {mainStore.storyId ? (
           <TouchableOpacity style={styles.startButton} onPress={this.onResume}>
-            <Text style={styles.text}>Resume</Text>
+            <Text style={styles.text}>Resume your adventure with</Text>
           </TouchableOpacity>
         ) : null}
       </KeyboardAvoidingView>
