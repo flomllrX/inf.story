@@ -3,7 +3,6 @@ import Loading from "./screens/Loading";
 import ErrorScreen from "./screens/Error";
 import * as Font from "expo-font";
 import { View, StyleSheet, Platform } from "react-native";
-import { Linking } from "expo";
 import { Provider, observer } from "mobx-react";
 import MainStore from "./mobx/mainStore";
 import ControlService from "./services/ControlService";
@@ -47,8 +46,6 @@ const styles = StyleSheet.create({
     alignSelf: "center"
   }
 });
-
-const prefix = Linking.makeUrl("/");
 
 const getPathAtIndex = index => {
   const path = window.location.pathname;
@@ -95,7 +92,6 @@ class App extends React.Component {
                 <ErrorScreen />
               ) : (
                 <AppContainer
-                  uriPrefix={prefix}
                   ref={navigatorRef => {
                     NavigationService.setTopLevelNavigator(navigatorRef);
                   }}
