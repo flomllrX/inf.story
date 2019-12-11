@@ -115,7 +115,7 @@ class Welcome extends Component<any, WelcomeState> {
         <Image source={require("../assets/title.png")} style={styles.img} />
         <View>
           <TouchableOpacity style={styles.startButton} onPress={this.onStart}>
-            <Text style={styles.text}>> Start an Adventure</Text>
+            <Text style={styles.text}>&gt; Start an Adventure</Text>
           </TouchableOpacity>
         </View>
         {mainStore.storyId ? (

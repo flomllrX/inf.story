@@ -44,7 +44,7 @@ const StorySmall: React.SFC<Props> = ({
 }) => {
   const dateJs = new Date(createdAt);
   const dateLuxon = DateTime.fromJSDate(dateJs);
-  let template = DateTime.DATETIME_MED;
+  const template = DateTime.DATETIME_MED;
   delete template.year;
   const displayDate = dateLuxon.toLocaleString(template);
   return (

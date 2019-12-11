@@ -24,7 +24,6 @@ const startStory: (playerClass: string, name: string) => void = async (
     name
   );
   if (error) {
-    console.log("Error", error);
     _mainStore.setError(
       "Creating your adventure failed. Please make sure you're connected to the internet"
     );
@@ -71,12 +70,13 @@ const resumeStory: () => void = async () => {
 
 const loadStories: () => void = async () => {
   const deviceId = _mainStore.userId;
-  const { stories, error } = await ApiService.getStories(deviceId);
-  if (error) {
-    console.log(error);
-    _mainStore.setError("Could not load stories.");
-  } else {
-    _mainStore.setStories(stories);
+  if (deviceId) {
+    const { stories, error } = await ApiService.getStories(deviceId);
+    if (error) {
+      _mainStore.setError("Could not load stories.");
+    } else {
+      _mainStore.setStories(stories);
+    }
   }
 };
 

@@ -3,7 +3,6 @@ import Loading from "./screens/Loading";
 import ErrorScreen from "./screens/Error";
 import * as Font from "expo-font";
 import { View, StyleSheet, Image } from "react-native";
-import { Linking } from "expo";
 import { Asset } from "expo-asset";
 import { Provider, observer } from "mobx-react";
 import MainStore from "./mobx/mainStore";
@@ -14,6 +13,13 @@ import MainStory from "./container/MainStory";
 import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import { portraits, locations } from "./components/StoryBit";
+
+import codePush from "react-native-code-push";
+const codePushOptions = {
+  checkFrequency: codePush.CheckFrequency.ON_APP_RESUME
+};
+
+const prefix = "infinitestory://";
 
 const MainNavigator = createStackNavigator(
   {
@@ -47,8 +53,6 @@ function cacheImages(images) {
     }
   });
 }
-
-const prefix = Linking.makeUrl("/");
 
 class App extends React.Component {
   state: {
@@ -96,4 +100,4 @@ class App extends React.Component {
 }
 
 //export default from './storybook';
-export default observer(App);
+export default codePush(codePushOptions)(observer(App));
