@@ -49,7 +49,6 @@ const styles = StyleSheet.create({
 
 const getPathAtIndex = index => {
   const path = window.location.pathname;
-  console.log(path.split("/"));
   return path.split("/")[index];
 };
 
