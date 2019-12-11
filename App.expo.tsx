@@ -14,11 +14,6 @@ import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import { portraits, locations } from "./components/StoryBit";
 
-import codePush from "react-native-code-push";
-const codePushOptions = {
-  checkFrequency: codePush.CheckFrequency.ON_APP_RESUME
-};
-
 const prefix = "infinitestory://";
 
 const MainNavigator = createStackNavigator(
@@ -98,4 +93,4 @@ class App extends React.Component {
   }
 }
 
-export default codePush(codePushOptions)(observer(App));
+export default observer(App);
