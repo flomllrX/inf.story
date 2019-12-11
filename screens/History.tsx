@@ -24,29 +24,8 @@ class History extends Component<any, any> {
   };
 
   render() {
-    // TODO: integrate real data flow
-    //const mainStore: MainStore = this.props.mainStore;
-    // const stories = mainStore.stories;
-    const origin: Origin = {
-      name: "Victor",
-      class: "noble",
-      location: "location"
-    };
-    const stories: StorySmall[] = [
-      {
-        title: "Test story 1",
-        createdAt: "December 19, 1995 03:24:00",
-        origin,
-        uid: "uid1"
-      },
-      {
-        title: "Test story 2",
-        createdAt: "1995-12-17T03:24:00",
-        origin,
-        uid: "uid2"
-      }
-    ];
-    console.log("Stories", stories);
+    const mainStore: MainStore = this.props.mainStore;
+    const stories = mainStore.stories;
     return (
       <SafeAreaView style={styles.container}>
         <FlatList
