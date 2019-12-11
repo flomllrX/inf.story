@@ -54,7 +54,7 @@ const StorySmall: React.SFC<Props> = ({
         style={{ width: 70, height: 70 }}
         source={PORTRAITS.find(c => c.value === origin.class).portrait}
       />
-      <View>
+      <View style={{ flex: 1, marginLeft: 10 }}>
         <Text style={styles.text}>
           {origin.name}, the {origin.class}
         </Text>
