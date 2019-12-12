@@ -82,7 +82,11 @@ class Welcome extends Component<any, any> {
   render() {
     const { mainStore } = this.props;
     const { stories, lastActStoryId: storyId } = mainStore;
-    const { origin, title } = (storyId && stories && stories[storyId]) || {};
+    const {
+      origin: { name, class: playerClass, location }
+    } = (storyId && stories && stories[storyId]) || {
+      origin: {}
+    };
 
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding">
@@ -92,7 +96,7 @@ class Welcome extends Component<any, any> {
             <Text style={styles.text}>&gt; Start an Adventure</Text>
           </TouchableOpacity>
         </View>
-        {origin && title ? (
+        {name && playerClass && location ? (
           <TouchableOpacity
             style={[styles.startButton, styles.resumeButton]}
             onPress={this.onResume}
@@ -100,13 +104,13 @@ class Welcome extends Component<any, any> {
             <View style={styles.resumeView}>
               <Image
                 style={{ width: 70, height: 70 }}
-                source={PORTRAITS.find(c => c.value === origin.class).portrait}
+                source={PORTRAITS.find(c => c.value === playerClass).portrait}
               />
               <Text style={[styles.text, { paddingLeft: 30, width: "80%" }]}>
                 Resume your adventure with{" "}
-                <Text style={styles.bold}>{title}</Text> the{" "}
-                <Text style={styles.bold}>{origin.class}</Text> from{" "}
-                <Text style={styles.bold}>{origin.location}</Text>.
+                <Text style={styles.bold}>{name}</Text> the{" "}
+                <Text style={styles.bold}>{playerClass}</Text> from{" "}
+                <Text style={styles.bold}>{location}</Text>.
               </Text>
             </View>
           </TouchableOpacity>
