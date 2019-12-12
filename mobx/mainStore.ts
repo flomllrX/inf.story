@@ -39,7 +39,7 @@ export default class MainStore {
   @observable creatingStory = false;
   @observable story: StoryBit[];
   @observable loadingStory = false;
-  @observable stories: StorySmall[];
+  @observable stories: { [uid: string]: StorySmall };
 
   @observable error;
   @observable infering = false;
@@ -76,7 +76,7 @@ export default class MainStore {
     storeObjectData("story", story);
   }
 
-  @action setStories(stories: StorySmall[]) {
+  @action setStories(stories: { [uid: string]: StorySmall }) {
     this.stories = stories;
   }
 

@@ -75,7 +75,11 @@ const loadStories: () => void = async () => {
     if (error) {
       _mainStore.setError("Could not load stories.");
     } else {
-      _mainStore.setStories(stories);
+      const storiesDict = {};
+      stories.forEach(s => {
+        storiesDict[s.uid] = s;
+      });
+      _mainStore.setStories(storiesDict);
     }
   }
 };

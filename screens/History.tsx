@@ -28,7 +28,7 @@ class History extends Component<any, any> {
     return (
       <SafeAreaView style={styles.container}>
         <FlatList
-          data={stories}
+          data={Object.values(stories || {})}
           renderItem={({ item }) => <StorySmallComponent {...item} />}
           keyExtractor={() => "" + Math.random()}
         />

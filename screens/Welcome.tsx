@@ -64,22 +64,8 @@ const styles = StyleSheet.create({
   }
 });
 
-interface WelcomeState {
-  playerClass: string;
-  name: string;
-  location: string;
-  storyId: string;
-}
-
-class Welcome extends Component<any, WelcomeState> {
+class Welcome extends Component<any, any> {
   static navigationOptions = { header: null };
-
-  state = {
-    playerClass: "noble",
-    name: "",
-    location: "",
-    storyId: ""
-  };
 
   onStart = () => {
     const { navigation } = this.props;
@@ -95,20 +81,8 @@ class Welcome extends Component<any, WelcomeState> {
 
   render() {
     const { mainStore } = this.props;
-    let { playerClass, name, location } = this.state;
     const { stories, storyId } = mainStore;
-
-    // TODO: solve re-rendering issue with values of past story
-    if (storyId && stories) {
-      const resumedStory = stories.find(e => {
-        return e.uid.toString() === storyId;
-      });
-      if (resumedStory) {
-        playerClass = resumedStory.origin.class;
-        name = resumedStory.origin.name;
-        location = resumedStory.origin.location;
-      }
-    }
+    console.log(storyId);
 
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding">
@@ -118,7 +92,9 @@ class Welcome extends Component<any, WelcomeState> {
             <Text style={styles.text}>&gt; Start an Adventure</Text>
           </TouchableOpacity>
         </View>
-        {mainStore.storyId ? (
+        {mainStore.storyId &&
+        mainStore.stories &&
+        mainStore.stories[mainStore.storyId] ? (
           <TouchableOpacity
             style={[styles.startButton, styles.resumeButton]}
             onPress={this.onResume}
@@ -126,13 +102,28 @@ class Welcome extends Component<any, WelcomeState> {
             <View style={styles.resumeView}>
               <Image
                 style={{ width: 70, height: 70 }}
-                source={PORTRAITS.find(c => c.value === playerClass).portrait}
+                source={
+                  PORTRAITS.find(
+                    c =>
+                      c.value ===
+                      mainStore.stories[mainStore.storyId].origin.class
+                  ).portrait
+                }
               />
               <Text style={[styles.text, { paddingLeft: 30, width: "80%" }]}>
                 Resume your adventure with{" "}
-                <Text style={styles.bold}>{name}</Text> the{" "}
-                <Text style={styles.bold}>{playerClass}</Text> from{" "}
-                <Text style={styles.bold}>{location}</Text>.
+                <Text style={styles.bold}>
+                  {mainStore.stories[mainStore.storyId].title}
+                </Text>{" "}
+                the{" "}
+                <Text style={styles.bold}>
+                  {mainStore.stories[mainStore.storyId].origin.class}
+                </Text>{" "}
+                from{" "}
+                <Text style={styles.bold}>
+                  {mainStore.stories[mainStore.storyId].origin.location}
+                </Text>
+                .
               </Text>
             </View>
           </TouchableOpacity>
