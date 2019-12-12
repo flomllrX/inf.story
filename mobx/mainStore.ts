@@ -40,6 +40,7 @@ export default class MainStore {
   @observable story: StoryBit[];
   @observable loadingStory = false;
   @observable stories: { [uid: string]: StorySmall };
+  @observable lastActStoryId: string;
 
   @observable error;
   @observable infering = false;
@@ -61,6 +62,10 @@ export default class MainStore {
 
   @action setStoryLoadingState(state: boolean) {
     this.loadingStory = state;
+  }
+
+  @action setLastActStory(storyId: string) {
+    this.lastActStoryId = storyId;
   }
 
   @action setError(error: any) {

@@ -38,6 +38,7 @@ const act: (payload: string) => void = async payload => {
   _mainStore.setInfering(true);
   const type = _mainStore.actionType;
   const storyId = _mainStore.storyId;
+  _mainStore.setLastActStory(storyId);
   const { newStoryBits } = await ApiService.act(payload, type, storyId);
   _mainStore.addStoryBits(newStoryBits);
   _mainStore.setInfering(false);

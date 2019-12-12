@@ -81,7 +81,7 @@ class Welcome extends Component<any, any> {
 
   render() {
     const { mainStore } = this.props;
-    const { stories, storyId } = mainStore;
+    const { stories, lastActStoryId: storyId } = mainStore;
     const { origin, title } = (storyId && stories && stories[storyId]) || {};
 
     return (
