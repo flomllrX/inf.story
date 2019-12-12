@@ -30,6 +30,7 @@ const startStory: (playerClass: string, name: string) => void = async (
   } else {
     _mainStore.setStoryId(uid);
     _mainStore.setStory(storyBits);
+    _mainStore.setLastActStory(uid);
   }
   _mainStore.setStoryLoadingState(false);
 };

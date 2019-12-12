@@ -1,4 +1,5 @@
 import { StoryBit, StorySmall } from "../types";
+import { Platform } from "react-native";
 
 const address = "http://infinite.glibert.io:3000";
 
@@ -81,7 +82,7 @@ const getStories: (
 };
 
 const signup: (deviceId: string) => Promise<boolean> = async deviceId => {
-  const { error } = await post("/signup", { deviceId });
+  const { error } = await post("/signup", { deviceId, platform: Platform.OS });
   return !error;
 };
 
