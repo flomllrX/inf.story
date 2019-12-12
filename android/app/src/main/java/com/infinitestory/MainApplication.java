@@ -3,6 +3,7 @@ package com.infinitestory;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import io.branch.rnbranch.RNBranchPackage;
 import com.microsoft.codepush.react.CodePush;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -25,6 +26,10 @@ import expo.modules.filesystem.FileSystemPackage;
 import java.util.Arrays;
 import java.util.List;
 
+// import Branch and RNBranch
+import io.branch.rnbranch.RNBranchPackage;
+import io.branch.referral.Branch;
+
 public class MainApplication extends Application implements ReactApplication {
   private final ReactModuleRegistryProvider mModuleRegistryProvider = new ReactModuleRegistryProvider(
     new BasePackageList().getPackageList(),
@@ -46,6 +51,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNBranchPackage(),
             new CodePush(getResources().getString(R.string.reactNativeCodePush_androidDeploymentKey), getApplicationContext(), BuildConfig.DEBUG),
           new ReanimatedPackage(),
           new RNGestureHandlerPackage(),
@@ -68,6 +74,7 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     super.onCreate();
+    Branch.getAutoInstance(this);
     SoLoader.init(this, /* native exopackage */ false);
   }
 }
