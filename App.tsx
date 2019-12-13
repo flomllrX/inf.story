@@ -21,6 +21,7 @@ const codePushOptions = {
 
 const prefix = "infinitestory://";
 
+/** Navigation */
 const MainNavigator = createStackNavigator(
   {
     Navigation: { screen: Navigation, path: "" },
@@ -32,18 +33,13 @@ const MainNavigator = createStackNavigator(
     headerMode: "none"
   }
 );
-
 const AppContainer = createAppContainer(MainNavigator);
 
+/** Initialize mainStore */
 const mainStore = new MainStore();
 ControlService.setMainStore(mainStore);
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  }
-});
-
+/** Prefetch images */
 function cacheImages(images) {
   return images.map(image => {
     if (typeof image === "string") {
@@ -54,6 +50,12 @@ function cacheImages(images) {
   });
 }
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  }
+});
+
 class App extends React.Component {
   state: {
     fontLoaded: boolean;
@@ -63,6 +65,7 @@ class App extends React.Component {
     activeStoryId: undefined
   };
 
+  /** Fetch custom fonts */
   async componentDidMount() {
     const fontLoaders = Font.loadAsync({
       "SourceCodePro-Regular": require("./assets/fonts/SourceCodePro-Regular.ttf"),

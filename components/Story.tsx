@@ -8,7 +8,7 @@ import { Platform } from "@unimodules/core";
 
 interface Props {
   items: StoryBit[];
-  extraData: object;
+  extraData?: object;
 }
 
 const Story: React.SFC<Props> = props => {

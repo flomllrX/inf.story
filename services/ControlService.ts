@@ -45,21 +45,24 @@ const act: (payload: string) => void = async payload => {
   _mainStore.setInfering(false);
 };
 
-const loadStory: (storyId: string) => void = async storyId => {
+const loadStory: (
+  storyId: string
+) => Promise<{ error: any }> = async storyId => {
   const { storyBits, error } = await ApiService.getStory(storyId);
   if (error) {
-    _mainStore.setError(
-      "Loading your adventure failed. Please make sure you're connected to the internet"
-    );
+    _mainStore.setError("ControlService.loadStory: " + JSON.stringify(error));
   } else {
     _mainStore.setStory(storyBits);
   }
+  return { error };
 };
 
 const setStory: (storyId: string) => void = async storyId => {
   _mainStore.setStoryLoadingState(true);
-  await loadStory(storyId);
-  _mainStore.setStoryId(storyId);
+  const { error } = await loadStory(storyId);
+  if (!error) {
+    _mainStore.setStoryId(storyId);
+  }
   _mainStore.setStoryLoadingState(false);
 };
 
