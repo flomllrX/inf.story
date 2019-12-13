@@ -2,6 +2,12 @@ import { StoryBit } from "../types";
 import MainStore from "../mobx/mainStore";
 import ApiService from "./ApiService";
 let _mainStore: MainStore;
+import Constants from "expo-constants";
+
+let CodePush;
+if (Constants.appOwnership !== "expo") {
+  CodePush = require("react-native-code-push");
+}
 
 const setMainStore = store => {
   _mainStore = store;
@@ -90,15 +96,11 @@ const loadStories: () => void = async () => {
   }
 };
 
-const clearAllData: () => void = async () => {
-  _mainStore.setStories(undefined);
-  _mainStore.setStory(undefined);
-  _mainStore.setUserId(undefined);
-  _mainStore.setError(undefined);
-  _mainStore.setInfering(undefined);
-  _mainStore.setLastActStory(undefined);
-  _mainStore.setStoryLoadingState(undefined);
+const wipeData: () => void = async () => {
   _mainStore.clearAsyncStorage();
+  if (Constants.appOwnership !== "expo") {
+    CodePush.restartApp();
+  }
 };
 
 export default {
@@ -110,5 +112,5 @@ export default {
   loadStories,
   resumeStory,
   setStory,
-  clearAllData
+  wipeData
 };
