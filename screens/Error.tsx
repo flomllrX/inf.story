@@ -28,7 +28,7 @@ class Error extends Component<any, any> {
         <TouchableOpacity onPress={() => mainStore.clearError()}>
           <Text style={styles.text}>Go back</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => ControlService.clearAllData()}>
+        <TouchableOpacity onPress={() => ControlService.wipeData()}>
           <Text style={styles.text}>Clear data</Text>
         </TouchableOpacity>
       </View>

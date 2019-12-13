@@ -84,6 +84,7 @@ const loadStories: () => void = async () => {
   const deviceId = _mainStore.userId;
   if (deviceId) {
     const { stories, error } = await ApiService.getStories(deviceId);
+    console.log("Error", error);
     if (error) {
       _mainStore.setError("Could not load stories.");
     } else {
@@ -97,7 +98,7 @@ const loadStories: () => void = async () => {
 };
 
 const wipeData: () => void = async () => {
-  _mainStore.clearAsyncStorage();
+  await _mainStore.clearAsyncStorage();
   if (Constants.appOwnership !== "expo") {
     CodePush.restartApp();
   }

@@ -101,9 +101,12 @@ export default class MainStore {
     this.actionType = this.actionType === "ACT_DO" ? "ACT_SAY" : "ACT_DO";
   }
 
-  clearAsyncStorage() {
-    AsyncStorage.clear();
-  }
+  clearAsyncStorage = async () => {
+    const asyncStorageKeys = await AsyncStorage.getAllKeys();
+    if (asyncStorageKeys.length > 0) {
+      AsyncStorage.clear();
+    }
+  };
 
   constructor() {
     const signup = async () => {
