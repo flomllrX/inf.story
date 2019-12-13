@@ -3,11 +3,7 @@ import MainStore from "../mobx/mainStore";
 import ApiService from "./ApiService";
 let _mainStore: MainStore;
 import Constants from "expo-constants";
-
-let CodePush;
-if (Constants.appOwnership !== "expo") {
-  CodePush = require("react-native-code-push");
-}
+import CodePush from "react-native-code-push";
 
 const setMainStore = store => {
   _mainStore = store;
