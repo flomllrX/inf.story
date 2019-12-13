@@ -24,13 +24,13 @@ const startStory: (playerClass: string, name: string) => void = async (
     name
   );
   if (error) {
-    console.log("Error", error);
     _mainStore.setError(
       "Creating your adventure failed. Please make sure you're connected to the internet"
     );
   } else {
     _mainStore.setStoryId(uid);
     _mainStore.setStory(storyBits);
+    _mainStore.setLastActStory(uid);
   }
   _mainStore.setStoryLoadingState(false);
 };
@@ -39,26 +39,30 @@ const act: (payload: string) => void = async payload => {
   _mainStore.setInfering(true);
   const type = _mainStore.actionType;
   const storyId = _mainStore.storyId;
+  _mainStore.setLastActStory(storyId);
   const { newStoryBits } = await ApiService.act(payload, type, storyId);
   _mainStore.addStoryBits(newStoryBits);
   _mainStore.setInfering(false);
 };
 
-const loadStory: (storyId: string) => void = async storyId => {
+const loadStory: (
+  storyId: string
+) => Promise<{ error: any }> = async storyId => {
   const { storyBits, error } = await ApiService.getStory(storyId);
   if (error) {
-    _mainStore.setError(
-      "Loading your adventure failed. Please make sure you're connected to the internet"
-    );
+    _mainStore.setError("ControlService.loadStory: " + JSON.stringify(error));
   } else {
     _mainStore.setStory(storyBits);
   }
+  return { error };
 };
 
 const setStory: (storyId: string) => void = async storyId => {
   _mainStore.setStoryLoadingState(true);
-  await loadStory(storyId);
-  _mainStore.setStoryId(storyId);
+  const { error } = await loadStory(storyId);
+  if (!error) {
+    _mainStore.setStoryId(storyId);
+  }
   _mainStore.setStoryLoadingState(false);
 };
 
@@ -70,15 +74,31 @@ const resumeStory: () => void = async () => {
 };
 
 const loadStories: () => void = async () => {
+  if (!_mainStore) return;
   const deviceId = _mainStore.userId;
-  console.log("deviceid", deviceId);
-  const { stories, error } = await ApiService.getStories(deviceId);
-  if (error) {
-    console.log(error);
-    _mainStore.setError("Could not load stories.");
-  } else {
-    _mainStore.setStories(stories);
+  if (deviceId) {
+    const { stories, error } = await ApiService.getStories(deviceId);
+    if (error) {
+      _mainStore.setError("Could not load stories.");
+    } else {
+      const storiesDict = {};
+      stories.forEach(s => {
+        storiesDict[s.uid] = s;
+      });
+      _mainStore.setStories(storiesDict);
+    }
   }
+};
+
+const clearAllData: () => void = async () => {
+  _mainStore.setStories(undefined);
+  _mainStore.setStory(undefined);
+  _mainStore.setUserId(undefined);
+  _mainStore.setError(undefined);
+  _mainStore.setInfering(undefined);
+  _mainStore.setLastActStory(undefined);
+  _mainStore.setStoryLoadingState(undefined);
+  _mainStore.clearAsyncStorage();
 };
 
 export default {
@@ -89,5 +109,6 @@ export default {
   createStory,
   loadStories,
   resumeStory,
-  setStory
+  setStory,
+  clearAllData
 };

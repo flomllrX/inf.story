@@ -3,7 +3,6 @@ import Loading from "./screens/Loading";
 import ErrorScreen from "./screens/Error";
 import * as Font from "expo-font";
 import { View, StyleSheet, Image } from "react-native";
-import { Linking } from "expo";
 import { Asset } from "expo-asset";
 import { Provider, observer } from "mobx-react";
 import MainStore from "./mobx/mainStore";
@@ -15,6 +14,14 @@ import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import { portraits, locations } from "./components/StoryBit";
 
+import codePush from "react-native-code-push";
+const codePushOptions = {
+  checkFrequency: codePush.CheckFrequency.ON_APP_RESUME
+};
+
+const prefix = "infinitestory://";
+
+/** Navigation */
 const MainNavigator = createStackNavigator(
   {
     Navigation: { screen: Navigation, path: "" },
@@ -26,18 +33,13 @@ const MainNavigator = createStackNavigator(
     headerMode: "none"
   }
 );
-
 const AppContainer = createAppContainer(MainNavigator);
 
+/** Initialize mainStore */
 const mainStore = new MainStore();
 ControlService.setMainStore(mainStore);
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  }
-});
-
+/** Prefetch images */
 function cacheImages(images) {
   return images.map(image => {
     if (typeof image === "string") {
@@ -48,7 +50,11 @@ function cacheImages(images) {
   });
 }
 
-const prefix = Linking.makeUrl("/");
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  }
+});
 
 class App extends React.Component {
   state: {
@@ -59,10 +65,12 @@ class App extends React.Component {
     activeStoryId: undefined
   };
 
+  /** Fetch custom fonts */
   async componentDidMount() {
     const fontLoaders = Font.loadAsync({
       "SourceCodePro-Regular": require("./assets/fonts/SourceCodePro-Regular.ttf"),
-      "SourceCodePro-SemiBold": require("./assets/fonts/SourceCodePro-SemiBold.ttf")
+      "SourceCodePro-SemiBold": require("./assets/fonts/SourceCodePro-SemiBold.ttf"),
+      "SourceCodePro-Bold": require("./assets/fonts/SourceCodePro-Bold.ttf")
     });
     const p = Object.keys(portraits).map(k => portraits[k]);
     const l = Object.keys(locations)
@@ -94,4 +102,5 @@ class App extends React.Component {
   }
 }
 
-export default observer(App);
+//export default from './storybook';
+export default codePush(codePushOptions)(observer(App));

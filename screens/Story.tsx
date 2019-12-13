@@ -47,6 +47,7 @@ class Story extends Component<Props, any> {
   };
 
   componentDidMount() {
+    console.log("moutned");
     const { navigation } = this.props;
     const storyId = navigation.getParam("storyId");
     if (storyId) {
@@ -59,8 +60,7 @@ class Story extends Component<Props, any> {
     const { mainStore, navigation } = this.props;
     const storyId = navigation.getParam("storyId");
     const ownStory =
-      !storyId ||
-      (mainStore.stories && mainStore.stories.find(e => e.uid === storyId));
+      !storyId || (mainStore.stories && mainStore.stories[storyId]);
     return mainStore.loadingStory ? (
       <LoadingStory />
     ) : (

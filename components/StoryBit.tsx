@@ -1,8 +1,11 @@
 import React from "react";
-import { Text, StyleSheet, View, Image } from "react-native";
+import { Text, StyleSheet, View, Image, Dimensions } from "react-native";
 import { StoryBit, Origin, Location } from "../types";
 import { colors, fonts } from "../theme";
 import PropTypes from "prop-types";
+import AutoHeightImage from "react-native-auto-height-image";
+
+const screenWidth = Math.round(Dimensions.get("window").width);
 
 interface Props {
   bit: StoryBit;
@@ -12,7 +15,8 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     paddingHorizontal: 20,
-    paddingVertical: 10
+    paddingVertical: 10,
+    flex: 1
   },
   rowText: {
     flex: 1,
@@ -39,7 +43,8 @@ const styles = StyleSheet.create({
   },
   location: {
     color: colors.lightgray,
-    marginVertical: 10
+    marginVertical: 10,
+    fontSize: 15
   },
   origin: {
     flexDirection: "row",
@@ -59,6 +64,12 @@ const styles = StyleSheet.create({
   },
   originSubtitle: {
     color: colors.lightgray
+  },
+  image: {
+    flex: 1
+  },
+  box: {
+    flex: 1
   }
 });
 
@@ -223,7 +234,12 @@ const Bit: React.SFC<Props> = ({ bit }) => {
       </>
     );
   } else if (type === "IMAGE") {
-    content = <Text style={styles.message}>{payload}</Text>;
+    content = (
+      <AutoHeightImage
+        width={screenWidth * 0.9}
+        source={{ uri: payload as string }}
+      />
+    );
   } else if (type === "ORIGIN") {
     const { name, class: playerClass, location } = payload as Origin;
     content = (
@@ -245,8 +261,8 @@ const Bit: React.SFC<Props> = ({ bit }) => {
     const backgrounds = locations[location];
     const source = backgrounds[seed % backgrounds.length];
     content = (
-      <View>
-        <Image source={source} />
+      <View style={styles.box}>
+        <AutoHeightImage width={screenWidth * 0.9} source={source} />
         <Text style={[styles.message, styles.location]}>
           {firstVisit ? (
             <Text>

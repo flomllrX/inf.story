@@ -6,7 +6,6 @@ import ControlService from "../services/ControlService";
 import ApiService from "../services/ApiService";
 
 const storeData = async (key: string, value: string) => {
-  console.log(key, value);
   try {
     await AsyncStorage.setItem("@" + key, "" + value);
   } catch (e) {
@@ -40,7 +39,8 @@ export default class MainStore {
   @observable creatingStory = false;
   @observable story: StoryBit[];
   @observable loadingStory = false;
-  @observable stories: StorySmall[];
+  @observable stories: { [uid: string]: StorySmall };
+  @observable lastActStoryId: string;
 
   @observable error;
   @observable infering = false;
@@ -64,6 +64,10 @@ export default class MainStore {
     this.loadingStory = state;
   }
 
+  @action setLastActStory(storyId: string) {
+    this.lastActStoryId = storyId;
+  }
+
   @action setError(error: any) {
     this.error = error;
   }
@@ -77,8 +81,7 @@ export default class MainStore {
     storeObjectData("story", story);
   }
 
-  @action setStories(stories: StorySmall[]) {
-    console.log("Stories", stories);
+  @action setStories(stories: { [uid: string]: StorySmall }) {
     this.stories = stories;
   }
 
@@ -98,12 +101,15 @@ export default class MainStore {
     this.actionType = this.actionType === "ACT_DO" ? "ACT_SAY" : "ACT_DO";
   }
 
+  clearAsyncStorage() {
+    AsyncStorage.clear();
+  }
+
   constructor() {
     const signup = async () => {
       const userId = uuid();
-      console.log("USERID", userId);
-      const signupError = () => {
-        this.setError("Please make sure you're connected to the internet.");
+      const signupError = err => {
+        this.setError(JSON.stringify(err));
         reaction(
           () => this.error,
           (data, r) => {
@@ -113,15 +119,21 @@ export default class MainStore {
         );
       };
       try {
-        const success = await ApiService.signup(userId);
-        if (success) {
+        const err = await ApiService.signup(userId);
+        if (!err) {
           this.userId = userId;
           storeData("userId", this.userId);
         } else {
-          signupError();
+          signupError({
+            ...err,
+            location: "mainStore.constructor signup api error" + err.location
+          });
         }
       } catch (e) {
-        signupError();
+        signupError({
+          ...e,
+          location: "mainStore.constructor signup api exception" + e.location
+        });
       }
     };
 

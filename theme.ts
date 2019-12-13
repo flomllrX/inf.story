@@ -16,5 +16,6 @@ export const colors = {
 };
 export const fonts = {
   regular: "SourceCodePro-Regular",
-  semiBold: "SourceCodePro-SemiBold"
+  semiBold: "SourceCodePro-SemiBold",
+  bold: "SourceCodePro-Bold"
 };

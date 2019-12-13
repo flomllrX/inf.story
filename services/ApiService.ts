@@ -1,4 +1,6 @@
 import { StoryBit, StorySmall } from "../types";
+import { Platform } from "react-native";
+import fetch from "isomorphic-unfetch";
 
 const address = "http://infinite.glibert.io:3000";
 
@@ -21,7 +23,7 @@ const post: (
       return await response.json();
     }
   } catch (e) {
-    return { error: e };
+    return { error: e, location: "ApiService.post exception" };
   }
 };
 
@@ -80,9 +82,10 @@ const getStories: (
   return response;
 };
 
-const signup: (deviceId: string) => Promise<boolean> = async deviceId => {
-  const { error } = await post("/signup", { deviceId });
-  return !error;
+const signup: (deviceId: string) => Promise<any> = async deviceId => {
+  const result = await post("/signup", { deviceId, platform: Platform.OS });
+  console.log(result);
+  return result.error;
 };
 
 export default {

@@ -3,16 +3,15 @@ import {
   View,
   Text,
   StyleSheet,
-  TextInput,
+  Image,
   TouchableOpacity,
   KeyboardAvoidingView
 } from "react-native";
 import { colors, fonts } from "../theme";
-import PickerSelect from "react-native-picker-select";
 import ControlService from "../services/ControlService";
 import { inject, observer } from "mobx-react";
 import { withNavigation } from "react-navigation";
-
+import PORTRAITS from "../assets/portraits/PATHS";
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.background,
@@ -24,9 +23,6 @@ const styles = StyleSheet.create({
     color: colors.defaultText,
     fontFamily: fonts.regular,
     fontSize: 18
-  },
-  headLine: {
-    fontSize: 30
   },
   setupRow: {
     flexDirection: "row",
@@ -43,27 +39,33 @@ const styles = StyleSheet.create({
   startButton: {
     marginTop: 50
   },
-  primaryColor: {
-    color: colors.primary
+  img: {
+    width: 390,
+    height: 120
   },
   android: {
     width: 50,
     height: 20
+  },
+  resumeView: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    width: "90%",
+    marginLeft: "5%"
+  },
+  resumeButton: {
+    position: "absolute",
+    bottom: 50
+  },
+  bold: {
+    fontFamily: fonts.bold
   }
 });
 
-interface WelcomeState {
-  playerClass: string;
-  name: string;
-}
-
-class Welcome extends Component<any, WelcomeState> {
+class Welcome extends Component<any, any> {
   static navigationOptions = { header: null };
-
-  state = {
-    playerClass: "noble",
-    name: ""
-  };
 
   onStart = () => {
     const { navigation } = this.props;
@@ -79,21 +81,38 @@ class Welcome extends Component<any, WelcomeState> {
 
   render() {
     const { mainStore } = this.props;
+    const { stories, lastActStoryId: storyId } = mainStore;
+    const {
+      origin: { name, class: playerClass, location }
+    } = (storyId && stories && stories[storyId]) || {
+      origin: {}
+    };
+
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding">
-        <Text style={[styles.text, styles.headLine]}>The</Text>
-        <Text style={[styles.text, styles.headLine, styles.primaryColor]}>
-          Infinite
-        </Text>
-        <Text style={[styles.text, styles.headLine]}>Story</Text>
+        <Image source={require("../assets/title.png")} style={styles.img} />
         <View>
           <TouchableOpacity style={styles.startButton} onPress={this.onStart}>
-            <Text style={styles.text}>Start</Text>
+            <Text style={styles.text}>&gt; Start an Adventure</Text>
           </TouchableOpacity>
         </View>
-        {mainStore.storyId ? (
-          <TouchableOpacity style={styles.startButton} onPress={this.onResume}>
-            <Text style={styles.text}>Resume</Text>
+        {name && playerClass && location ? (
+          <TouchableOpacity
+            style={[styles.startButton, styles.resumeButton]}
+            onPress={this.onResume}
+          >
+            <View style={styles.resumeView}>
+              <Image
+                style={{ width: 70, height: 70 }}
+                source={PORTRAITS.find(c => c.value === playerClass).portrait}
+              />
+              <Text style={[styles.text, { paddingLeft: 30, width: "80%" }]}>
+                Resume your adventure with{" "}
+                <Text style={styles.bold}>{name}</Text> the{" "}
+                <Text style={styles.bold}>{playerClass}</Text> from{" "}
+                <Text style={styles.bold}>{location}</Text>.
+              </Text>
+            </View>
           </TouchableOpacity>
         ) : null}
       </KeyboardAvoidingView>

@@ -1,0 +1,4 @@
+<resources>
+	<string moduleConfig="true" name="reactNativeCodePush_androidDeploymentKey">IDCg6dZTxsPOeEyUJwtmeSOc9QoV22bYv1Iem</string>
+    <string name="app_name">Infinite Story</string>
+</resources>
