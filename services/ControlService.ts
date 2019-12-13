@@ -71,6 +71,7 @@ const resumeStory: () => void = async () => {
 };
 
 const loadStories: () => void = async () => {
+  if (!_mainStore) return;
   const deviceId = _mainStore.userId;
   if (deviceId) {
     const { stories, error } = await ApiService.getStories(deviceId);
@@ -86,6 +87,17 @@ const loadStories: () => void = async () => {
   }
 };
 
+const clearAllData: () => void = async () => {
+  _mainStore.setStories(undefined);
+  _mainStore.setStory(undefined);
+  _mainStore.setUserId(undefined);
+  _mainStore.setError(undefined);
+  _mainStore.setInfering(undefined);
+  _mainStore.setLastActStory(undefined);
+  _mainStore.setStoryLoadingState(undefined);
+  _mainStore.clearAsyncStorage();
+};
+
 export default {
   setMainStore,
   startStory,
@@ -94,5 +106,6 @@ export default {
   createStory,
   loadStories,
   resumeStory,
-  setStory
+  setStory,
+  clearAllData
 };

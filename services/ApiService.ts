@@ -22,7 +22,7 @@ const post: (
       return await response.json();
     }
   } catch (e) {
-    return { error: e };
+    return { error: e, location: "ApiService.post exception" };
   }
 };
 
@@ -81,9 +81,10 @@ const getStories: (
   return response;
 };
 
-const signup: (deviceId: string) => Promise<boolean> = async deviceId => {
-  const { error } = await post("/signup", { deviceId, platform: Platform.OS });
-  return !error;
+const signup: (deviceId: string) => Promise<any> = async deviceId => {
+  const { error } = await post("/signup", { deviceId });
+  console.log(error);
+  return error;
 };
 
 export default {

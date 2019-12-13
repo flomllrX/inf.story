@@ -101,11 +101,15 @@ export default class MainStore {
     this.actionType = this.actionType === "ACT_DO" ? "ACT_SAY" : "ACT_DO";
   }
 
+  clearAsyncStorage() {
+    AsyncStorage.clear();
+  }
+
   constructor() {
     const signup = async () => {
       const userId = uuid();
-      const signupError = () => {
-        this.setError("Please make sure you're connected to the internet.");
+      const signupError = err => {
+        this.setError(JSON.stringify(err));
         reaction(
           () => this.error,
           (data, r) => {
@@ -115,15 +119,21 @@ export default class MainStore {
         );
       };
       try {
-        const success = await ApiService.signup(userId);
-        if (success) {
+        const err = await ApiService.signup(userId);
+        if (!err) {
           this.userId = userId;
           storeData("userId", this.userId);
         } else {
-          signupError();
+          signupError({
+            ...err,
+            location: "mainStore.constructor signup api error" + err.location
+          });
         }
       } catch (e) {
-        signupError();
+        signupError({
+          ...e,
+          location: "mainStore.constructor signup api exception" + e.location
+        });
       }
     };
 

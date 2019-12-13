@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 import { colors } from "../theme";
 import { inject, observer } from "mobx-react";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import ControlService from "../services/ControlService";
 
 const styles = StyleSheet.create({
   container: {
@@ -27,6 +28,9 @@ class Error extends Component<any, any> {
         <Text style={styles.text}>{error}</Text>
         <TouchableOpacity onPress={() => mainStore.clearError()}>
           <Text style={styles.text}>Go back</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => ControlService.clearAllData()}>
+          <Text style={styles.text}>Clear data</Text>
         </TouchableOpacity>
       </View>
     );
