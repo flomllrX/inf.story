@@ -82,9 +82,9 @@ const getStories: (
 };
 
 const signup: (deviceId: string) => Promise<any> = async deviceId => {
-  const { error } = await post("/signup", { deviceId });
-  console.log(error);
-  return error;
+  const result = await post("/signup", { deviceId });
+  console.log(result);
+  return result.error;
 };
 
 export default {
