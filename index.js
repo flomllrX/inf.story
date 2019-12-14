@@ -1,5 +1,6 @@
 import { AppRegistry, Platform } from "react-native";
 import App from "./App";
+import "react-native-root-siblings";
 
 AppRegistry.registerComponent("infinitestory", () => App);
 

@@ -2,7 +2,7 @@ import React from "react";
 import Loading from "./screens/Loading";
 import ErrorScreen from "./screens/Error";
 import * as Font from "expo-font";
-import { View, StyleSheet, Image } from "react-native";
+import { View, StyleSheet, Image, Text } from "react-native";
 import { Asset } from "expo-asset";
 import { Provider, observer } from "mobx-react";
 import MainStore from "./mobx/mainStore";
@@ -13,8 +13,11 @@ import MainStory from "./container/MainStory";
 import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import { portraits, locations } from "./components/StoryBit";
+import Toast from "react-native-root-toast";
+import ErrorService from "./services/ErrorService";
 
 import codePush from "react-native-code-push";
+import { fonts } from "./theme";
 const codePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME
 };
@@ -38,6 +41,7 @@ const AppContainer = createAppContainer(MainNavigator);
 /** Initialize mainStore */
 const mainStore = new MainStore();
 ControlService.setMainStore(mainStore);
+ErrorService.setMainStore(mainStore);
 
 /** Prefetch images */
 function cacheImages(images) {
@@ -53,6 +57,9 @@ function cacheImages(images) {
 const styles = StyleSheet.create({
   container: {
     flex: 1
+  },
+  toast: {
+    fontFamily: fonts.regular
   }
 });
 
@@ -97,6 +104,11 @@ class App extends React.Component {
             <Loading />
           )}
         </View>
+        {!!mainStore.uncriticalError && (
+          <Toast visible={true} position={Toast.positions.TOP}>
+            <Text style={styles.toast}>{mainStore.uncriticalError}</Text>
+          </Toast>
+        )}
       </Provider>
     );
   }

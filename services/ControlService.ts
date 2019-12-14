@@ -4,6 +4,7 @@ import ApiService from "./ApiService";
 let _mainStore: MainStore;
 import Constants from "expo-constants";
 import CodePush from "react-native-code-push";
+import ErrorService from "./ErrorService";
 
 const setMainStore = store => {
   _mainStore = store;
@@ -26,9 +27,7 @@ const startStory: (playerClass: string, name: string) => void = async (
     name
   );
   if (error) {
-    _mainStore.setError(
-      "Creating your adventure failed. Please make sure you're connected to the internet"
-    );
+    ErrorService.criticalError({ ...error, code: 5000 });
   } else {
     _mainStore.setStoryId(uid);
     _mainStore.setStory(storyBits);
@@ -52,7 +51,7 @@ const loadStory: (
 ) => Promise<{ error: any }> = async storyId => {
   const { storyBits, error } = await ApiService.getStory(storyId);
   if (error) {
-    _mainStore.setError("ControlService.loadStory: " + JSON.stringify(error));
+    ErrorService.criticalError({ ...error, code: 5001 });
   } else {
     _mainStore.setStory(storyBits);
   }
@@ -82,7 +81,7 @@ const loadStories: () => void = async () => {
     const { stories, error } = await ApiService.getStories(deviceId);
     console.log("Error", error);
     if (error) {
-      _mainStore.setError("Could not load stories.");
+      ErrorService.uncriticalError("Could not load storiey");
     } else {
       const storiesDict = {};
       stories.forEach(s => {
@@ -93,11 +92,16 @@ const loadStories: () => void = async () => {
   }
 };
 
-const wipeData: () => void = async () => {
-  await _mainStore.clearAsyncStorage();
+const restartApp: () => void = async () => {
   if (Constants.appOwnership !== "expo") {
     CodePush.restartApp();
   }
+};
+
+const wipeData: () => void = async () => {
+  _mainStore.setError(undefined);
+  await _mainStore.clearUncriticalItems();
+  restartApp();
 };
 
 export default {

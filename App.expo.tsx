@@ -13,9 +13,12 @@ import MainStory from "./container/MainStory";
 import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import { portraits, locations } from "./components/StoryBit";
+import Toast from "react-native-root-toast";
+import ErrorService from "./services/ErrorService";
 
 const prefix = "infinitestory://";
 
+/** Navigation */
 const MainNavigator = createStackNavigator(
   {
     Navigation: { screen: Navigation, path: "" },
@@ -27,18 +30,14 @@ const MainNavigator = createStackNavigator(
     headerMode: "none"
   }
 );
-
 const AppContainer = createAppContainer(MainNavigator);
 
+/** Initialize mainStore */
 const mainStore = new MainStore();
 ControlService.setMainStore(mainStore);
+ErrorService.setMainStore(mainStore);
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  }
-});
-
+/** Prefetch images */
 function cacheImages(images) {
   return images.map(image => {
     if (typeof image === "string") {
@@ -49,6 +48,12 @@ function cacheImages(images) {
   });
 }
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  }
+});
+
 class App extends React.Component {
   state: {
     fontLoaded: boolean;
@@ -58,6 +63,7 @@ class App extends React.Component {
     activeStoryId: undefined
   };
 
+  /** Fetch custom fonts */
   async componentDidMount() {
     const fontLoaders = Font.loadAsync({
       "SourceCodePro-Regular": require("./assets/fonts/SourceCodePro-Regular.ttf"),
@@ -89,6 +95,9 @@ class App extends React.Component {
             <Loading />
           )}
         </View>
+        <Toast visible={true} textColor={"#fff"}>
+          This is a message
+        </Toast>
       </Provider>
     );
   }

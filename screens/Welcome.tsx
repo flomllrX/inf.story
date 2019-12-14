@@ -12,6 +12,7 @@ import ControlService from "../services/ControlService";
 import { inject, observer } from "mobx-react";
 import { withNavigation } from "react-navigation";
 import PORTRAITS from "../assets/portraits/PATHS";
+import ErrorService from "../services/ErrorService";
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.background,

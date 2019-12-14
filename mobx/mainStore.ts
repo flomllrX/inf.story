@@ -42,7 +42,8 @@ export default class MainStore {
   @observable stories: { [uid: string]: StorySmall };
   @observable lastActStoryId: string;
 
-  @observable error;
+  @observable error: any;
+  @observable uncriticalError: string;
   @observable infering = false;
   @observable actionType: "ACT_SAY" | "ACT_DO" = "ACT_DO"; // Move to chatbox
 
@@ -70,6 +71,10 @@ export default class MainStore {
 
   @action setError(error: any) {
     this.error = error;
+  }
+
+  @action setUncriticalError(error: string) {
+    this.uncriticalError = error;
   }
 
   @action clearError() {
@@ -106,6 +111,15 @@ export default class MainStore {
     if (asyncStorageKeys.length > 0) {
       AsyncStorage.clear();
     }
+  };
+
+  clearUncriticalItems = async () => {
+    Promise.all([
+      new Promise(resolve =>
+        AsyncStorage.removeItem("@storyId", () => resolve())
+      ),
+      new Promise(resolve => AsyncStorage.removeItem("@story", () => resolve()))
+    ]);
   };
 
   constructor() {
