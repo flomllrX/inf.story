@@ -10,16 +10,16 @@ const webpack = require("webpack");
 module.exports = withExpo(
   withFonts(
     withImages({
-      projectRoot: __dirname
-      // webpack(config, options) {
-      //   config.plugins.push(
-      //     new webpack.NormalModuleReplacementPlugin(
-      //       /[^@squadette\/]hammerjs/,
-      //       "@squadette/hammerjs"
-      //     )
-      //   );
-      //   return config;
-      // }
+      projectRoot: __dirname,
+      webpack(config, options) {
+        config.plugins.push(
+          new webpack.NormalModuleReplacementPlugin(
+            /react-native-code-push/,
+            "../mock/CodePush.js"
+          )
+        );
+        return config;
+      }
     })
   )
 );

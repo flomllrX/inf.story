@@ -7,18 +7,20 @@ import dynamic from "next/dynamic";
 import MainStore from "../mobx/mainStore";
 import * as Font from "expo-font";
 import { portraits, locations } from "../components/StoryBit";
+import ErrorService from "../services/ErrorService";
 
 const Loading = dynamic(() => import("../screens/Loading"), {
   ssr: false
 });
 
-const ErrorScreen = dynamic(() => import("../screens/Error"), {
+const ErrorScreen = dynamic(() => import("../screens/ErrorWeb"), {
   ssr: false
 });
 
 /** Initialize mainStore */
 const mainStore = new MainStore();
 ControlService.setMainStore(mainStore);
+ErrorService.setMainStore(mainStore);
 
 /** Prefetch images */
 function cacheImages(images) {
