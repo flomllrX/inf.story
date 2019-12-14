@@ -1,16 +1,53 @@
 import React, { Component } from "react";
-import { StyleSheet, SafeAreaView } from "react-native";
+import {
+  StyleSheet,
+  SafeAreaView,
+  View,
+  Text,
+  TouchableOpacity
+} from "react-native";
 import ControlService from "../services/ControlService";
 import { inject, observer } from "mobx-react";
 import MainStore from "../mobx/mainStore";
 import StorySmallComponent from "../components/StorySmall";
-import { colors } from "../theme";
-import { FlatList, ScrollView } from "react-native-gesture-handler";
+import { colors, fonts } from "../theme";
+import { ScrollView } from "react-native-gesture-handler";
+import Header from "../components/Header";
+import Pagetitle from "../components/Pagetitle";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background
+  },
+  textBox: {
+    marginHorizontal: 25,
+    marginTop: 25,
+    color: colors.lightgray
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    width: 75
+  },
+  text: {
+    color: colors.defaultText,
+    fontFamily: fonts.regular
+  },
+  button: {
+    fontSize: 30,
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  buttonText: {
+    fontSize: 13,
+    paddingHorizontal: 10
+  },
+  flex: {
+    display: "flex",
+    justifyContent: "flex-end"
   }
 });
 
@@ -20,6 +57,7 @@ class History extends Component<any, any> {
   state = { id: Math.random() };
 
   render() {
+    const { slideRight } = this.props;
     const mainStore: MainStore = this.props.mainStore;
     const { stories } = mainStore;
     const sortedStories = Object.values(stories || {}).sort((a, b) =>
@@ -27,10 +65,32 @@ class History extends Component<any, any> {
     );
     return (
       <SafeAreaView style={styles.container}>
+        <Header
+          leftButton={<View></View>}
+          rightButtons={[
+            <TouchableOpacity
+              key={0}
+              style={styles.flex}
+              onPress={() => slideRight()}
+            >
+              <View style={styles.buttonContainer}>
+                <Text style={[styles.text, styles.buttonText]}>Start</Text>
+                <Text style={[styles.text, styles.button]}>&gt;</Text>
+              </View>
+            </TouchableOpacity>
+          ]}
+        />
+        <Pagetitle>History</Pagetitle>
         <ScrollView>
-          {sortedStories.map(item => (
-            <StorySmallComponent key={item.uid} {...item} />
-          ))}
+          {sortedStories && sortedStories.length > 0 ? (
+            sortedStories.map(item => (
+              <StorySmallComponent key={item.uid} {...item} />
+            ))
+          ) : (
+            <Text style={[styles.text, styles.textBox]}>
+              Once you started your first adventure, it will show up here
+            </Text>
+          )}
         </ScrollView>
       </SafeAreaView>
     );

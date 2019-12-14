@@ -15,9 +15,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center"
   },
-  left: {
-    backgroundColor: "green"
-  },
   right: {
     backgroundColor: "yellow"
   },
@@ -32,19 +29,28 @@ const styles = StyleSheet.create({
 });
 
 class Navigation extends Component<any, any> {
+  swiper;
+  slideLeft = () => {
+    this.swiper && this.swiper.scrollBy(-1);
+  };
+  slideRight = () => {
+    this.swiper && this.swiper.scrollBy(1);
+  };
   render() {
     const { mainStore } = this.props;
     return (
       <Swiper
+        ref={swiper => (this.swiper = swiper)}
         loop={false}
         showsPagination={false}
-        index={1}
-        onIndexChanged={() =>
-          mainStore.stories || true || ControlService.loadStories()
-        }
+        index={0}
+        onIndexChanged={s => {
+          mainStore.stories || ControlService.loadStories();
+          console.log(s);
+        }}
       >
-        <History />
-        <MainScreen />
+        <History slideRight={() => this.slideRight()} />
+        <MainScreen slideLeft={() => this.slideLeft()} />
         {/*
         <View style={[styles.viewStyle, styles.right]}>
           <Text>Community (coming soon)</Text>
