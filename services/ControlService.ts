@@ -81,7 +81,7 @@ const loadStories: () => void = async () => {
     const { stories, error } = await ApiService.getStories(deviceId);
     console.log("Error", error);
     if (error) {
-      ErrorService.uncriticalError("Could not load storiey");
+      ErrorService.uncriticalError("Could not load stories");
     } else {
       const storiesDict = {};
       stories.forEach(s => {
