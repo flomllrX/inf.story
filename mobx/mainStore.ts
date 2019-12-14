@@ -4,6 +4,7 @@ import { AsyncStorage } from "react-native";
 import uuid from "uuid/v4";
 import ControlService from "../services/ControlService";
 import ApiService from "../services/ApiService";
+import { Origin } from "../types";
 
 const storeData = async (key: string, value: string) => {
   try {
@@ -104,6 +105,25 @@ export default class MainStore {
 
   @action toggleActionType() {
     this.actionType = this.actionType === "ACT_DO" ? "ACT_SAY" : "ACT_DO";
+  }
+
+  @action addStoryToHistory(uid: string, storyBits: StoryBit[]) {
+    const { payload } = storyBits.find(e => e.type === "ORIGIN");
+    const { name, class: playerClass } = payload as Origin;
+    this.stories[uid] = {
+      uid,
+      origin: payload as Origin,
+      createdAt: new Date().toISOString(),
+      title: `${name}, the ${playerClass}`,
+      updatedAt: new Date().toISOString()
+    };
+  }
+
+  @action storyUpdatedAt(storyId: string) {
+    this.stories[storyId] = {
+      ...this.stories[storyId],
+      updatedAt: new Date().toISOString()
+    };
   }
 
   clearAsyncStorage = async () => {

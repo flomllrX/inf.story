@@ -27,11 +27,13 @@ const startStory: (playerClass: string, name: string) => void = async (
     name
   );
   if (error) {
-    ErrorService.criticalError({ ...error, code: 5000 });
+    const errorObj = typeof error === "string" ? { error } : error;
+    ErrorService.criticalError({ ...errorObj, code: 5000 });
   } else {
     _mainStore.setStoryId(uid);
     _mainStore.setStory(storyBits);
     _mainStore.setLastActStory(uid);
+    _mainStore.addStoryToHistory(uid, storyBits);
   }
   _mainStore.setStoryLoadingState(false);
 };
@@ -44,6 +46,7 @@ const act: (payload: string) => void = async payload => {
   const { newStoryBits } = await ApiService.act(payload, type, storyId);
   _mainStore.addStoryBits(newStoryBits);
   _mainStore.setInfering(false);
+  _mainStore.storyUpdatedAt(storyId);
 };
 
 const loadStory: (
@@ -69,8 +72,8 @@ const setStory: (storyId: string) => void = async storyId => {
 
 const resumeStory: () => void = async () => {
   _mainStore.setStoryLoadingState(true);
-  const storyId = _mainStore.storyId;
-  await loadStory(storyId);
+  const { lastActStoryId } = _mainStore;
+  await loadStory(lastActStoryId);
   _mainStore.setStoryLoadingState(false);
 };
 
@@ -79,7 +82,6 @@ const loadStories: () => void = async () => {
   const deviceId = _mainStore.userId;
   if (deviceId) {
     const { stories, error } = await ApiService.getStories(deviceId);
-    console.log("Error", error);
     if (error) {
       ErrorService.uncriticalError("Could not load stories");
     } else {
@@ -88,6 +90,7 @@ const loadStories: () => void = async () => {
         storiesDict[s.uid] = s;
       });
       _mainStore.setStories(storiesDict);
+      stories.length > 0 && _mainStore.setLastActStory(stories[0].uid);
     }
   }
 };

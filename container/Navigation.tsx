@@ -4,6 +4,7 @@ import Swiper from "react-native-swiper";
 import MainScreen from "./Main";
 import History from "../screens/History";
 import ControlService from "../services/ControlService";
+import { inject, observer } from "mobx-react";
 
 const styles = StyleSheet.create({
   container: {
@@ -30,24 +31,27 @@ const styles = StyleSheet.create({
   }
 });
 
-class Navigation extends Component<{}, any> {
-  static defaultProps = {};
-
+class Navigation extends Component<any, any> {
   render() {
+    const { mainStore } = this.props;
     return (
       <Swiper
         loop={false}
         showsPagination={false}
         index={1}
-        onIndexChanged={() => ControlService.loadStories()}
+        onIndexChanged={() =>
+          mainStore.stories || true || ControlService.loadStories()
+        }
       >
         <History />
         <MainScreen />
+        {/*
         <View style={[styles.viewStyle, styles.right]}>
-          <Text>Community</Text>
+          <Text>Community (coming soon)</Text>
         </View>
+        */}
       </Swiper>
     );
   }
 }
-export default Navigation;
+export default inject("mainStore")(observer(Navigation));

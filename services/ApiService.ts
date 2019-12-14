@@ -2,7 +2,7 @@ import { StoryBit, StorySmall } from "../types";
 import { Platform } from "react-native";
 import fetch from "isomorphic-unfetch";
 
-const address = "http://infinite.glibert.io:3000";
+const address = "https://api.infinitestory.app/";
 
 const post: (
   endpoint: string,

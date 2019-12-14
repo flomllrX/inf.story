@@ -85,8 +85,8 @@ class App extends React.Component {
       .reduce((prev, curr) => [...prev, ...curr], []);
     const imageLoaders = cacheImages([...p, ...l]);
     await Promise.all([...imageLoaders, fontLoaders]);
-
     this.setState({ fontLoaded: true });
+    ControlService.loadStories();
   }
 
   render() {

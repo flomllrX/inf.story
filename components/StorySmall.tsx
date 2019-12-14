@@ -10,9 +10,11 @@ import DateTime from "luxon/src/datetime.js";
 
 interface Props {
   createdAt: string;
+  updatedAt: string;
   origin: Origin;
   uid: string | number;
   navigation: any;
+  title?: string;
 }
 
 const styles = StyleSheet.create({
@@ -38,11 +40,13 @@ const styles = StyleSheet.create({
 
 const StorySmall: React.SFC<Props> = ({
   createdAt,
+  updatedAt,
   origin,
   uid,
+  title,
   navigation
 }) => {
-  const dateJs = new Date(createdAt);
+  const dateJs = new Date(updatedAt);
   const dateLuxon = DateTime.fromJSDate(dateJs);
   const template = DateTime.DATETIME_MED;
   delete template.year;
@@ -58,7 +62,7 @@ const StorySmall: React.SFC<Props> = ({
       />
       <View style={{ flex: 1, marginLeft: 10 }}>
         <Text style={styles.text}>
-          {origin.name}, the {origin.class}
+          {title || `${origin.name}, the ${origin.class}`}
         </Text>
         <Text style={[styles.text, styles.subText]}>{displayDate}</Text>
       </View>
@@ -72,7 +76,9 @@ StorySmall.propTypes = {
   createdAt: PropTypes.string,
   origin: PropTypes.any,
   uid: PropTypes.any,
-  navigation: PropTypes.any
+  navigation: PropTypes.any,
+  title: PropTypes.string,
+  updatedAt: PropTypes.string
 };
 
 export default withNavigation(StorySmall);

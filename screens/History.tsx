@@ -5,7 +5,7 @@ import { inject, observer } from "mobx-react";
 import MainStore from "../mobx/mainStore";
 import StorySmallComponent from "../components/StorySmall";
 import { colors } from "../theme";
-import { FlatList } from "react-native-gesture-handler";
+import { FlatList, ScrollView } from "react-native-gesture-handler";
 
 const styles = StyleSheet.create({
   container: {
@@ -17,21 +17,21 @@ const styles = StyleSheet.create({
 class History extends Component<any, any> {
   static defaultProps = {};
 
-  // load list of past stories
-  componentDidMount = () => {
-    ControlService.loadStories();
-  };
+  state = { id: Math.random() };
 
   render() {
     const mainStore: MainStore = this.props.mainStore;
-    const stories = mainStore.stories;
+    const { stories } = mainStore;
+    const sortedStories = Object.values(stories || {}).sort((a, b) =>
+      new Date(a.updatedAt) < new Date(b.updatedAt) ? 1 : -1
+    );
     return (
       <SafeAreaView style={styles.container}>
-        <FlatList
-          data={Object.values(stories || {})}
-          renderItem={({ item }) => <StorySmallComponent {...item} />}
-          keyExtractor={() => "" + Math.random()}
-        />
+        <ScrollView>
+          {sortedStories.map(item => (
+            <StorySmallComponent key={item.uid} {...item} />
+          ))}
+        </ScrollView>
       </SafeAreaView>
     );
   }

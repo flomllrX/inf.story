@@ -43,4 +43,5 @@ export interface StorySmall {
   createdAt: string;
   origin: Origin;
   uid: string;
+  updatedAt: string;
 }

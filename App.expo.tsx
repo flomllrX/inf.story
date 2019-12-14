@@ -2,7 +2,7 @@ import React from "react";
 import Loading from "./screens/Loading";
 import ErrorScreen from "./screens/Error";
 import * as Font from "expo-font";
-import { View, StyleSheet, Image } from "react-native";
+import { View, StyleSheet, Image, Text } from "react-native";
 import { Asset } from "expo-asset";
 import { Provider, observer } from "mobx-react";
 import MainStore from "./mobx/mainStore";
@@ -15,6 +15,7 @@ import { createStackNavigator } from "react-navigation-stack";
 import { portraits, locations } from "./components/StoryBit";
 import Toast from "react-native-root-toast";
 import ErrorService from "./services/ErrorService";
+import { fonts } from "./theme";
 
 const prefix = "infinitestory://";
 
@@ -51,6 +52,9 @@ function cacheImages(images) {
 const styles = StyleSheet.create({
   container: {
     flex: 1
+  },
+  toast: {
+    fontFamily: fonts.regular
   }
 });
 
@@ -76,8 +80,9 @@ class App extends React.Component {
       .reduce((prev, curr) => [...prev, ...curr], []);
     const imageLoaders = cacheImages([...p, ...l]);
     await Promise.all([...imageLoaders, fontLoaders]);
-
     this.setState({ fontLoaded: true });
+    console.log("Calling controll service");
+    ControlService.loadStories();
   }
 
   render() {
@@ -95,9 +100,11 @@ class App extends React.Component {
             <Loading />
           )}
         </View>
-        <Toast visible={true} textColor={"#fff"}>
-          This is a message
-        </Toast>
+        {!!mainStore.uncriticalError && (
+          <Toast visible={true} position={Toast.positions.TOP}>
+            <Text style={styles.toast}>{mainStore.uncriticalError}</Text>
+          </Toast>
+        )}
       </Provider>
     );
   }
