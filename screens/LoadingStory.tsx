@@ -12,13 +12,14 @@ const styles = StyleSheet.create({
   text: {
     color: colors.defaultText,
     fontSize: 20,
-    fontWeight: "bold",
     width: "80%",
-    margin: "0 10%",
-    fontFamily: fonts.regular
+    margin: "0 10%"
+  },
+  bold: {
+    fontFamily: fonts.semiBold
   },
   subText: {
-    fontWeight: "normal"
+    fontFamily: fonts.regular
   },
   fire: {
     width: 350,
@@ -33,10 +34,8 @@ class LoadingStory extends Component<{}, any> {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.text}>We are creating the adventure...</Text>
-        <Text style={[styles.text, styles.subText]}>
-          Meanwhile, rest next to the camp fire.
-        </Text>
+        <Text style={[styles.text, styles.bold]}>We are creating the adventure...</Text>
+        <Text style={[styles.text, styles.subText]}>Meanwhile, rest next to the camp fire.</Text>
         <Image style={styles.fire} source={require("../assets/fire.gif")} />
       </View>
     );

@@ -86,6 +86,13 @@ const styles = StyleSheet.create({
     color: colors.greyed,
     fontFamily: fonts.regular,
     fontSize: 13
+  },
+  questDone: {
+    textDecorationLine: "line-through",
+    textDecorationStyle: "solid",
+    color: colors.greyed,
+    fontFamily: fonts.regular,
+    fontSize: 13
   }
 });
 
@@ -134,7 +141,7 @@ class Welcome extends Component<any, any> {
     navigation.navigate("MainStoryModal");
   };
 
-  onResume = () => {
+  onResume = async () => {
     const { navigation } = this.props;
     ControlService.resumeStory();
     navigation.navigate("MainStoryModal");
@@ -164,6 +171,11 @@ class Welcome extends Component<any, any> {
         </View>
         <View style={styles.quests}>
           <Text style={styles.questTitle}>Quests:</Text>
+          <Text
+            style={mainStore.tutorialDone ? styles.questDone : styles.quest}
+          >
+            {mainStore.tutorialDone ? "▣" : "▢"} Start your first adventure!
+          </Text>
           <Text
             style={styles.quest}
             onPress={() => Linking.openURL("https://discord.gg/yXGmY6y")}
