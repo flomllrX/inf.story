@@ -1,6 +1,6 @@
 import { action, observable, autorun, reaction } from "mobx";
 import { StoryBit, StorySmall } from "../types";
-import { AsyncStorage } from "react-native";
+import { AsyncStorage, Platform } from "react-native";
 import uuid from "uuid/v4";
 import ControlService from "../services/ControlService";
 import ApiService from "../services/ApiService";
@@ -179,7 +179,7 @@ export default class MainStore {
       if (userId) {
         this.userId = userId;
       } else {
-        await signup();
+        Platform.OS !== "web" && (await signup()); // only signup on mobile devices
         // Generate user id
       }
     });
