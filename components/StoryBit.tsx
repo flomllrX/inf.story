@@ -258,6 +258,9 @@ const Bit: React.SFC<Props> = ({ bit, width }) => {
     const { location, firstVisit, seed } = payload as Location;
     const backgrounds = locations[location];
     const source = backgrounds[seed % backgrounds.length];
+    console.log("backgrounds", backgrounds);
+    console.log("seed", seed);
+    console.log("source", source);
     content = (
       <View style={styles.box}>
         <AutoHeightImage width={width || screenWidth * 0.9} uri={source} />
