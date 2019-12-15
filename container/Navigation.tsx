@@ -43,7 +43,7 @@ class Navigation extends Component<any, any> {
         ref={swiper => (this.swiper = swiper)}
         loop={false}
         showsPagination={false}
-        index={0}
+        index={1}
         onIndexChanged={s => {
           mainStore.stories || ControlService.loadStories();
           console.log(s);
