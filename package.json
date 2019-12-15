@@ -5,14 +5,16 @@
     "start": "react-native start",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "web": "expo start --web",
-    "build": "expo build:web",
     "postinstall": "jetify",
     "codepush:ios": "code-push release-react infinite-story-ios ios",
     "codepush:android": "code-push release-react infinite-story-android android",
     "codepush:android:prod": "appcenter codepush release-react -a flomllr/infinite-story-android -d Production",
     "codepush:ios:prod": "appcenter codepush release-react -a flomllr/infinite-story-ios -d Production",
-    "storybook": "start-storybook -p 7007"
+    "storybook": "start-storybook -p 7007",
+    "web": "npx next dev",
+    "next:build": "npx next build",
+    "next:start": "npx next start",
+    "expo": "expo start"
   },
   "dependencies": {
     "@babel/plugin-proposal-decorators": "^7.7.4",
