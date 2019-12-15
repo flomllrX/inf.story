@@ -174,30 +174,32 @@ export default class MainStore {
       }
     };
 
-    // Load userId from device
-    getData("userId").then(async userId => {
-      if (userId) {
-        this.userId = userId;
-      } else {
-        Platform.OS !== "web" && (await signup()); // only signup in app
-        // Generate user id
-      }
-    });
+    if (Platform.OS !== "web") {
+      // Load userId from device
+      getData("userId").then(async userId => {
+        if (userId) {
+          this.userId = userId;
+        } else {
+          await signup(); // only signup in app
+          // Generate user id
+        }
+      });
 
-    // Load storyId from device
-    getData("storyId").then(storyId => {
-      if (storyId) {
-        this.storyId = storyId;
-        ControlService.loadStory(storyId);
-      }
-    });
+      // Load storyId from device
+      getData("storyId").then(storyId => {
+        if (storyId) {
+          this.storyId = storyId;
+          ControlService.loadStory(storyId);
+        }
+      });
 
-    // Load past story from device
-    getObjectData("story").then(story => {
-      if (story) {
-        this.story = story;
-      }
-    });
+      // Load past story from device
+      getObjectData("story").then(story => {
+        if (story) {
+          this.story = story;
+        }
+      });
+    }
 
     // Loading story
     // autorun(() => {
