@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { View, Text, StyleSheet, FlatList } from "react-native";
-import { colors, fonts } from "../theme";
+import { FlatList } from "react-native";
 import { StoryBit } from "../types";
 import StoryBitComponent from "./StoryBit";
 import { Platform } from "@unimodules/core";

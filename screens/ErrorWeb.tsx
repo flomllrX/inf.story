@@ -12,7 +12,7 @@ import { colors, fonts } from "../theme";
 import { inject, observer } from "mobx-react";
 import ControlService from "../services/ControlService";
 import Header from "../components/Header";
-import AutoHeightImage from "react-native-auto-height-image";
+import AutoHeightImage from "react-native-scalable-image";
 import { ScrollView } from "react-native-gesture-handler";
 import {
   Collapse,

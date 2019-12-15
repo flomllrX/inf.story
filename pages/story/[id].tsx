@@ -1,18 +1,10 @@
-import React, { useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { useRouter } from "next/router";
-import dynamic from "next/dynamic";
-import { inject, observer } from "mobx-react";
+import React from "react";
+import { View, StyleSheet } from "react-native";
 import PropTypes from "prop-types";
-import ControlService from "../../services/ControlService";
-
-const StoryComponent = dynamic(() => import("../../components/Story"), {
-  ssr: false
-});
-
-const LoadingStory = dynamic(() => import("../../screens/LoadingStory"), {
-  ssr: false
-});
+import { NextPage, NextPageContext } from "next";
+import ApiService from "../../services/ApiService";
+import ErrorService from "../../services/ErrorService";
+import StoryComponent from "../../components/Story";
 
 const styles = StyleSheet.create({
   container: {
@@ -23,27 +15,23 @@ const styles = StyleSheet.create({
   }
 });
 
-const StoryPage: React.SFC<any> = ({ mainStore }) => {
-  // Load the correct story
-  const router = useRouter();
-  const { id: storyId } = router.query;
-  useEffect(() => {
-    ControlService.setStory(storyId as string);
-  }, []);
+const StoryPage: NextPage<any> = ({ story }) => (
+  <View style={styles.container}>
+    <StoryComponent items={story} />
+  </View>
+);
 
-  return mainStore.loadingStory ? (
-    <LoadingStory />
-  ) : (
-    <View style={styles.container}>
-      <StoryComponent
-        items={mainStore.story ? mainStore.story.reverse() : []}
-      />
-    </View>
-  );
+StoryPage.getInitialProps = async ({ query }) => {
+  const { id } = query;
+  const { storyBits, error } = await ApiService.getStory(id as string);
+  if (error) {
+    ErrorService.criticalError(error);
+  }
+  return { story: storyBits || [] };
 };
 
 StoryPage.propTypes = {
-  mainStore: PropTypes.any
+  story: PropTypes.any
 };
 
-export default inject("mainStore")(observer(StoryPage));
+export default StoryPage;

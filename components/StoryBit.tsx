@@ -3,7 +3,7 @@ import { Text, StyleSheet, View, Image, Dimensions } from "react-native";
 import { StoryBit, Origin, Location } from "../types";
 import { colors, fonts } from "../theme";
 import PropTypes from "prop-types";
-import AutoHeightImage from "react-native-auto-height-image";
+import AutoHeightImage from "react-native-scalable-image";
 
 const screenWidth = Math.round(Dimensions.get("window").width);
 

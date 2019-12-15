@@ -6,7 +6,6 @@ import { Provider, observer } from "mobx-react";
 import dynamic from "next/dynamic";
 import MainStore from "../mobx/mainStore";
 import * as Font from "expo-font";
-import { portraits, locations } from "../components/StoryBit";
 import ErrorService from "../services/ErrorService";
 
 const Loading = dynamic(() => import("../screens/Loading"), {
@@ -43,17 +42,11 @@ const styles = StyleSheet.create({
 class WebApp extends App {
   state = {};
   async componentDidMount() {
-    const fontLoaders = Font.loadAsync({
+    await Font.loadAsync({
       "SourceCodePro-Regular": require("../assets/fonts/SourceCodePro-Regular.ttf"),
       "SourceCodePro-SemiBold": require("../assets/fonts/SourceCodePro-SemiBold.ttf"),
       "SourceCodePro-Bold": require("../assets/fonts/SourceCodePro-Bold.ttf")
     });
-    const p = Object.keys(portraits).map(k => portraits[k]);
-    const l = Object.keys(locations)
-      .map(k => locations[k])
-      .reduce((prev, curr) => [...prev, ...curr], []);
-    const imageLoaders = cacheImages([...p, ...l]);
-    await Promise.all([...imageLoaders, fontLoaders]);
 
     this.setState({ fontLoaded: true });
   }
