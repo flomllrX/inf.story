@@ -151,7 +151,7 @@ const CLASSES: PlayerClass[] = [
     value: "knight"
   },
   {
-    name: "King",
+    name: "Noble",
     portrait: require("../assets/portraits/noble.png"),
     description: "You must balance a life of luxury and reign.",
     value: "noble"
@@ -185,7 +185,7 @@ const CLASSES: PlayerClass[] = [
 ];
 
 const MovingCursor = props => {
-  const [left] = useState(new Animated.Value(3)); // Initial value for opacity: 0
+  const [left] = useState(new Animated.Value(3)); // Initial value for left: 3
 
   React.useEffect(() => {
     Animated.loop(
@@ -207,7 +207,7 @@ const MovingCursor = props => {
     <Animated.View // Special animatable View
       style={{
         ...props.style,
-        left: left // Bind opacity to animated value
+        left: left // Bind left to animated value
       }}
     >
       {props.children}
