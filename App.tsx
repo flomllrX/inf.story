@@ -15,6 +15,7 @@ import { createStackNavigator } from "react-navigation-stack";
 import { portraits, locations } from "./components/StoryBit";
 import Toast from "react-native-root-toast";
 import ErrorService from "./services/ErrorService";
+import Modal from "react-native-modal";
 
 import codePush from "react-native-code-push";
 import { fonts } from "./theme";

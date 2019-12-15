@@ -101,6 +101,10 @@ const restartApp: () => void = async () => {
   }
 };
 
+const closeTutorial: () => void = async () => {
+  _mainStore.setTutorialDone();
+};
+
 const wipeData: () => void = async () => {
   _mainStore.setError(undefined);
   await _mainStore.clearUncriticalItems();
@@ -116,5 +120,6 @@ export default {
   loadStories,
   resumeStory,
   setStory,
-  wipeData
+  wipeData,
+  closeTutorial
 };

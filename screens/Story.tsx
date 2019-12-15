@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, SafeAreaView, Share } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  Share,
+  Dimensions
+} from "react-native";
 import Chatbox from "../components/Chatbox";
 import StoryComponent from "../components/Story";
 import { colors, fonts } from "../theme";
@@ -11,6 +18,9 @@ import MainStore from "../mobx/mainStore";
 import { withNavigation } from "react-navigation";
 import LoadingStory from "./LoadingStory";
 import { Platform } from "@unimodules/core";
+import Modal from "react-native-modal";
+
+const screenWidth = Math.round(Dimensions.get("window").width);
 
 const styles = StyleSheet.create({
   container: {
@@ -18,6 +28,18 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background
   },
   text: {
+    fontFamily: fonts.regular,
+    color: colors.defaultText
+  },
+  modalContainer: {
+    width: "100%",
+    padding: 30
+  },
+  modalInner: {
+    backgroundColor: colors.modalBackground,
+    padding: 20
+  },
+  modalText: {
     fontFamily: fonts.regular,
     color: colors.defaultText
   }
@@ -65,6 +87,16 @@ class Story extends Component<Props, any> {
       <LoadingStory />
     ) : (
       <SafeAreaView style={styles.container}>
+        <Modal
+          isVisible={!mainStore.tutorialDone}
+          onBackdropPress={() => ControlService.closeTutorial()}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalInner}>
+              <Text style={styles.modalText}>This is a modal</Text>
+            </View>
+          </View>
+        </Modal>
         <Header
           rightButtons={[
             <TouchableOpacity

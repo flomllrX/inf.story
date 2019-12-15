@@ -47,6 +47,7 @@ export default class MainStore {
   @observable uncriticalError: string;
   @observable infering = false;
   @observable actionType: "ACT_SAY" | "ACT_DO" = "ACT_DO"; // Move to chatbox
+  @observable tutorialDone: boolean;
 
   @action setStoryId(storyId: string) {
     this.storyId = storyId;
@@ -126,6 +127,11 @@ export default class MainStore {
     };
   }
 
+  @action setTutorialDone() {
+    this.tutorialDone = true;
+    storeData("tutorialDone", "true");
+  }
+
   clearAsyncStorage = async () => {
     const asyncStorageKeys = await AsyncStorage.getAllKeys();
     if (asyncStorageKeys.length > 0) {
@@ -197,6 +203,13 @@ export default class MainStore {
       getObjectData("story").then(story => {
         if (story) {
           this.story = story;
+        }
+      });
+
+      // Check if tutorial is done
+      getData("tutorialDone").then(tutorialDone => {
+        if (tutorialDone) {
+          this.tutorialDone = true;
         }
       });
     }

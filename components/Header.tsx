@@ -16,7 +16,8 @@ const styles = StyleSheet.create({
     height: 40
   },
   left: {
-    flex: 1
+    flex: 1,
+    minWidth: 50
   },
   right: {
     flex: 4,
