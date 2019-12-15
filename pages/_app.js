@@ -42,13 +42,15 @@ const styles = StyleSheet.create({
 class WebApp extends App {
   state = {};
   async componentDidMount() {
-    await Font.loadAsync({
+    Font.loadAsync({
       "SourceCodePro-Regular": require("../assets/fonts/SourceCodePro-Regular.ttf"),
       "SourceCodePro-SemiBold": require("../assets/fonts/SourceCodePro-SemiBold.ttf"),
       "SourceCodePro-Bold": require("../assets/fonts/SourceCodePro-Bold.ttf")
-    });
-
-    this.setState({ fontLoaded: true });
+    })
+      .then(() => {
+        this.setState({ fontLoaded: true });
+      })
+      .catch(e => console.log("Font loading error", e));
   }
 
   render() {
