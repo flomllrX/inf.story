@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Image, StyleSheet, Text } from "react-native";
+import { View, Image, StyleSheet, Text, Linking } from "react-native";
 import { colors, fonts } from "../theme";
 
 const styles = StyleSheet.create({
@@ -22,7 +22,12 @@ const styles = StyleSheet.create({
 const Index: React.SFC<{}> = props => (
   <View style={styles.container}>
     <Image source={require("../assets/title.png")} style={styles.img} />
-    <Text style={styles.text}>Join the beta</Text>
+    <Text
+      style={styles.text}
+      onPress={() => Linking.openURL("https://discord.gg/yXGmY6y")}
+    >
+      Join the beta
+    </Text>
   </View>
 );
 
