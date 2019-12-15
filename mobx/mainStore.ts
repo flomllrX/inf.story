@@ -179,7 +179,7 @@ export default class MainStore {
       if (userId) {
         this.userId = userId;
       } else {
-        Platform.OS !== "web" && (await signup()); // only signup on mobile devices
+        Platform.OS !== "web" && (await signup()); // only signup in app
         // Generate user id
       }
     });
