@@ -1,5 +1,5 @@
 import React, { Component, useState } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity, KeyboardAvoidingView, Animated } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, KeyboardAvoidingView, Animated, Linking } from "react-native";
 import PropTypes from "prop-types";
 import { colors, fonts } from "../theme";
 import ControlService from "../services/ControlService";
@@ -155,7 +155,9 @@ class Welcome extends Component<any, any> {
         </View>
         <View style={styles.quests}>
           <Text style={styles.questTitle}>Quests:</Text>
-          <Text style={styles.quest}>▢ Join the Discord to access a ??? class</Text>
+          <Text style={styles.quest} onPress={() => Linking.openURL("https://discord.gg/yXGmY6y")}>
+            ▢ Join the Discord to access a ??? class
+          </Text>
         </View>
         {name && playerClass && location ? (
           <TouchableOpacity style={[styles.startButton, styles.resumeButton]} onPress={this.onResume}>
