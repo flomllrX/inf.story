@@ -3,12 +3,13 @@ import { Text, StyleSheet, View, Image, Dimensions } from "react-native";
 import { StoryBit, Origin, Location } from "../types";
 import { colors, fonts } from "../theme";
 import PropTypes from "prop-types";
-import AutoHeightImage from "react-native-scalable-image";
+import AutoHeightImage from "../components/AutoHeightImage";
 
 const screenWidth = Math.round(Dimensions.get("window").width);
 
 interface Props {
   bit: StoryBit;
+  width?: number;
 }
 
 const styles = StyleSheet.create({
@@ -215,7 +216,7 @@ const uppercase = (s: string) => {
   return s[0].toUpperCase() + s.substr(1).toLowerCase();
 };
 
-const Bit: React.SFC<Props> = ({ bit }) => {
+const Bit: React.SFC<Props> = ({ bit, width }) => {
   const { type, payload } = bit;
   let content;
   if (type === "ACT_SAY" || type === "ACT_DO") {
@@ -235,10 +236,7 @@ const Bit: React.SFC<Props> = ({ bit }) => {
     );
   } else if (type === "IMAGE") {
     content = (
-      <AutoHeightImage
-        width={screenWidth * 0.9}
-        source={{ uri: payload as string }}
-      />
+      <AutoHeightImage width={screenWidth * 0.9} uri={payload as string} />
     );
   } else if (type === "ORIGIN") {
     const { name, class: playerClass, location } = payload as Origin;
@@ -262,7 +260,7 @@ const Bit: React.SFC<Props> = ({ bit }) => {
     const source = backgrounds[seed % backgrounds.length];
     content = (
       <View style={styles.box}>
-        <AutoHeightImage width={screenWidth * 0.9} source={source} />
+        <AutoHeightImage width={width || screenWidth * 0.9} uri={source} />
         <Text style={[styles.message, styles.location]}>
           {firstVisit ? (
             <Text>
@@ -289,7 +287,8 @@ const Bit: React.SFC<Props> = ({ bit }) => {
 Bit.defaultProps = {};
 
 Bit.propTypes = {
-  bit: PropTypes.any
+  bit: PropTypes.any,
+  width: PropTypes.number
 };
 
 export default Bit;

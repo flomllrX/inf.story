@@ -8,19 +8,20 @@ import { Platform } from "@unimodules/core";
 interface Props {
   items: StoryBit[];
   extraData?: object;
+  width?: number;
 }
 
-const Story: React.SFC<Props> = props => {
+const Story: React.SFC<Props> = ({ items, extraData, width }) => {
   const renderItem = element => {
     const { item } = element;
-    return <StoryBitComponent bit={item} />;
+    return <StoryBitComponent bit={item} width={width} />;
   };
   return (
     <FlatList
       inverted={Platform.OS !== "web"}
-      data={props.items}
+      data={items}
       renderItem={renderItem}
-      extraData={props.extraData}
+      extraData={extraData}
       keyExtractor={() => "" + Math.random()}
     />
   );
@@ -30,7 +31,8 @@ Story.defaultProps = {};
 
 Story.propTypes = {
   items: PropTypes.array,
-  extraData: PropTypes.object
+  extraData: PropTypes.object,
+  width: PropTypes.number
 };
 
 export default Story;

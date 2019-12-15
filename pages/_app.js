@@ -7,6 +7,7 @@ import dynamic from "next/dynamic";
 import MainStore from "../mobx/mainStore";
 import * as Font from "expo-font";
 import ErrorService from "../services/ErrorService";
+import { portraits, locations } from "../components/StoryBit";
 
 const Loading = dynamic(() => import("../screens/Loading"), {
   ssr: false
@@ -42,15 +43,26 @@ const styles = StyleSheet.create({
 class WebApp extends App {
   state = {};
   async componentDidMount() {
-    Font.loadAsync({
-      "SourceCodePro-Regular": require("../assets/fonts/SourceCodePro-Regular.ttf"),
-      "SourceCodePro-SemiBold": require("../assets/fonts/SourceCodePro-SemiBold.ttf"),
-      "SourceCodePro-Bold": require("../assets/fonts/SourceCodePro-Bold.ttf")
-    })
-      .then(() => {
-        this.setState({ fontLoaded: true });
-      })
-      .catch(e => console.log("Font loading error", e));
+    try {
+      const fontLoaders = Font.loadAsync({
+        "SourceCodePro-Regular": require("../assets/fonts/SourceCodePro-Regular.ttf"),
+        "SourceCodePro-SemiBold": require("../assets/fonts/SourceCodePro-SemiBold.ttf"),
+        "SourceCodePro-Bold": require("../assets/fonts/SourceCodePro-Bold.ttf")
+      });
+      this.setState({ fontLoaded: true });
+      const p = Object.keys(portraits).map(k => portraits[k]);
+      const l = Object.keys(locations)
+        .map(k => locations[k])
+        .reduce((prev, curr) => [...prev, ...curr], []);
+      const imageLoaders = cacheImages([...p, ...l]);
+      try {
+        await Promise.all([...imageLoaders, fontLoaders]);
+      } catch (e) {
+        ErrorService.uncriticalError("Prefetching images failed");
+      }
+    } catch (e) {
+      ErrorService.criticalError(e);
+    }
   }
 
   render() {

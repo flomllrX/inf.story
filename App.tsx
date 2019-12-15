@@ -84,7 +84,11 @@ class App extends React.Component {
       .map(k => locations[k])
       .reduce((prev, curr) => [...prev, ...curr], []);
     const imageLoaders = cacheImages([...p, ...l]);
-    await Promise.all([...imageLoaders, fontLoaders]);
+    try {
+      await Promise.all([...imageLoaders, fontLoaders]);
+    } catch (e) {
+      ErrorService.uncriticalError("Prefetching images failed");
+    }
     this.setState({ fontLoaded: true });
     ControlService.loadStories();
   }

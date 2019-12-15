@@ -12,7 +12,7 @@ import { colors, fonts } from "../theme";
 import { inject, observer } from "mobx-react";
 import ControlService from "../services/ControlService";
 import Header from "../components/Header";
-import AutoHeightImage from "react-native-scalable-image";
+import AutoHeightImage from "../components/AutoHeightImage";
 import { ScrollView } from "react-native-gesture-handler";
 import {
   Collapse,
@@ -79,7 +79,7 @@ class Error extends Component<any, any> {
           </TouchableOpacity>
         </View>
         <AutoHeightImage
-          source={require("../assets/skeleton_dead.gif")}
+          uri={require("../assets/skeleton_dead.gif")}
           width={screenWidth * 0.9}
         />
       </SafeAreaView>
