@@ -88,7 +88,7 @@ class History extends Component<any, any> {
             ))
           ) : (
             <Text style={[styles.text, styles.textBox]}>
-              Once you started your first adventure, it will show up here
+              Once you start your first adventure, it will show up here
             </Text>
           )}
         </ScrollView>
