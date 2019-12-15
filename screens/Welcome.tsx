@@ -1,12 +1,6 @@
-import React, { Component } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  KeyboardAvoidingView
-} from "react-native";
+import React, { Component, useState } from "react";
+import { View, Text, StyleSheet, Image, TouchableOpacity, KeyboardAvoidingView, Animated, Linking } from "react-native";
+import PropTypes from "prop-types";
 import { colors, fonts } from "../theme";
 import ControlService from "../services/ControlService";
 import { inject, observer } from "mobx-react";
@@ -48,6 +42,11 @@ const styles = StyleSheet.create({
     width: 50,
     height: 20
   },
+  selectIcon: {
+    position: "absolute",
+    left: -20,
+    zIndex: 999
+  },
   resumeView: {
     display: "flex",
     flexDirection: "row",
@@ -58,12 +57,64 @@ const styles = StyleSheet.create({
   },
   resumeButton: {
     position: "absolute",
-    bottom: 50
+    bottom: 40
   },
   bold: {
     fontFamily: fonts.bold
+  },
+  quests: {
+    marginTop: 40,
+    marginLeft: 20,
+    marginRight: 20
+  },
+  questTitle: {
+    color: colors.defaultText,
+    fontFamily: fonts.semiBold,
+    fontSize: 18,
+    marginBottom: 8
+  },
+  quest: {
+    color: colors.greyed,
+    fontFamily: fonts.regular,
+    fontSize: 13
   }
 });
+
+const MovingCursor = props => {
+  const [left] = useState(new Animated.Value(3)); // Initial value for left: 3
+
+  React.useEffect(() => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(left, {
+          toValue: -3,
+          duration: 500
+        }),
+        Animated.timing(left, {
+          toValue: 3,
+          duration: 500
+        })
+      ]),
+      {}
+    ).start();
+  }, []);
+
+  return (
+    <Animated.View // Special animatable View
+      style={{
+        ...props.style,
+        left: left // Bind left to animated value
+      }}
+    >
+      {props.children}
+    </Animated.View>
+  );
+};
+
+MovingCursor.propTypes = {
+  style: PropTypes.any,
+  children: PropTypes.any
+};
 
 class Welcome extends Component<any, any> {
   static navigationOptions = { header: null };
@@ -94,24 +145,27 @@ class Welcome extends Component<any, any> {
         <Image source={require("../assets/title.png")} style={styles.img} />
         <View>
           <TouchableOpacity style={styles.startButton} onPress={this.onStart}>
-            <Text style={styles.text}>&gt; Start an Adventure</Text>
+            <View style={{ ...styles.selectIcon }}>
+              <MovingCursor>
+                <Text style={styles.text}>&gt;</Text>
+              </MovingCursor>
+            </View>
+            <Text style={styles.text}>Start an Adventure</Text>
           </TouchableOpacity>
         </View>
+        <View style={styles.quests}>
+          <Text style={styles.questTitle}>Quests:</Text>
+          <Text style={styles.quest} onPress={() => Linking.openURL("https://discord.gg/yXGmY6y")}>
+            ▢ Join the Discord to access a ??? class
+          </Text>
+        </View>
         {name && playerClass && location ? (
-          <TouchableOpacity
-            style={[styles.startButton, styles.resumeButton]}
-            onPress={this.onResume}
-          >
+          <TouchableOpacity style={[styles.startButton, styles.resumeButton]} onPress={this.onResume}>
             <View style={styles.resumeView}>
-              <Image
-                style={{ width: 70, height: 70 }}
-                source={PORTRAITS.find(c => c.value === playerClass).portrait}
-              />
-              <Text style={[styles.text, { paddingLeft: 30, width: "80%" }]}>
-                Resume your adventure with{" "}
-                <Text style={styles.bold}>{name}</Text> the{" "}
-                <Text style={styles.bold}>{playerClass}</Text> from{" "}
-                <Text style={styles.bold}>{location}</Text>.
+              <Image style={{ width: 70, height: 70 }} source={PORTRAITS.find(c => c.value === playerClass).portrait} />
+              <Text style={[styles.text, { paddingLeft: 15, width: "80%" }]}>
+                Resume your adventure with <Text style={styles.bold}>{name}</Text> the{" "}
+                <Text style={styles.bold}>{playerClass}</Text> from <Text style={styles.bold}>{location}</Text>.
               </Text>
             </View>
           </TouchableOpacity>
