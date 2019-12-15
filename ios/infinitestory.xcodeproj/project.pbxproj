@@ -15,6 +15,7 @@
 		6D4F4053D2BC423A9787B11E /* SourceCodePro-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 046A2337002D4A43BC7DCA59 /* SourceCodePro-SemiBold.ttf */; };
 		9D8AEB1DFA114F9DA4D212A7 /* SourceCodePro-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8047307A69474827B9081A22 /* SourceCodePro-Bold.ttf */; };
 		B83F9FB223A27A4A00999841 /* infinitestory.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = B83F9FB123A279BD00999841 /* infinitestory.entitlements */; };
+		B87C24C423A6EFED006DDC45 /* AppCenter-Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = B87C24C323A6EFED006DDC45 /* AppCenter-Config.plist */; };
 		C552D609010BEDD9391F7EBD /* libPods-infinitestory.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA33238BEF153DC35BFD05D5 /* libPods-infinitestory.a */; };
 /* End PBXBuildFile section */
 
@@ -34,6 +35,7 @@
 		9D5536B47DFCFD49D3958475 /* Pods-infinitestory.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-infinitestory.release.xcconfig"; path = "Target Support Files/Pods-infinitestory/Pods-infinitestory.release.xcconfig"; sourceTree = "<group>"; };
 		B83F9FB123A279BD00999841 /* infinitestory.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = infinitestory.entitlements; path = infinitestory/infinitestory.entitlements; sourceTree = "<group>"; };
 		B83F9FC623A2E88200999841 /* libBranch.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libBranch.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B87C24C323A6EFED006DDC45 /* AppCenter-Config.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "AppCenter-Config.plist"; path = "infinitestory/AppCenter-Config.plist"; sourceTree = "<group>"; };
 		C5D9D5C7B426A5D63B2FEC83 /* Pods-infinitestory.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-infinitestory.debug.xcconfig"; path = "Target Support Files/Pods-infinitestory/Pods-infinitestory.debug.xcconfig"; sourceTree = "<group>"; };
 		DA33238BEF153DC35BFD05D5 /* libPods-infinitestory.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-infinitestory.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -108,6 +110,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				B87C24C323A6EFED006DDC45 /* AppCenter-Config.plist */,
 				13B07FAE1A68108700A75B9A /* infinitestory */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
@@ -200,6 +203,7 @@
 				B83F9FB223A27A4A00999841 /* infinitestory.entitlements in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				B87C24C423A6EFED006DDC45 /* AppCenter-Config.plist in Resources */,
 				9D8AEB1DFA114F9DA4D212A7 /* SourceCodePro-Bold.ttf in Resources */,
 				0CE998A119C24E248CAB5533 /* SourceCodePro-Regular.ttf in Resources */,
 				6D4F4053D2BC423A9787B11E /* SourceCodePro-SemiBold.ttf in Resources */,

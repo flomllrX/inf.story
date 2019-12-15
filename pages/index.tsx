@@ -26,7 +26,7 @@ const Index: React.SFC<{}> = props => (
       style={styles.text}
       onPress={() => Linking.openURL("https://discord.gg/yXGmY6y")}
     >
-      Join the beta
+      Join the Discord to get access to the Beta
     </Text>
   </View>
 );

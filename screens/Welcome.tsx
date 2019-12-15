@@ -1,5 +1,14 @@
 import React, { Component, useState } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity, KeyboardAvoidingView, Animated, Linking } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Animated,
+  Linking
+} from "react-native";
 import PropTypes from "prop-types";
 import { colors, fonts } from "../theme";
 import ControlService from "../services/ControlService";
@@ -155,17 +164,28 @@ class Welcome extends Component<any, any> {
         </View>
         <View style={styles.quests}>
           <Text style={styles.questTitle}>Quests:</Text>
-          <Text style={styles.quest} onPress={() => Linking.openURL("https://discord.gg/yXGmY6y")}>
+          <Text
+            style={styles.quest}
+            onPress={() => Linking.openURL("https://discord.gg/yXGmY6y")}
+          >
             ▢ Join the Discord to access a ??? class
           </Text>
         </View>
         {name && playerClass && location ? (
-          <TouchableOpacity style={[styles.startButton, styles.resumeButton]} onPress={this.onResume}>
+          <TouchableOpacity
+            style={[styles.startButton, styles.resumeButton]}
+            onPress={this.onResume}
+          >
             <View style={styles.resumeView}>
-              <Image style={{ width: 70, height: 70 }} source={PORTRAITS.find(c => c.value === playerClass).portrait} />
+              <Image
+                style={{ width: 70, height: 70 }}
+                source={PORTRAITS.find(c => c.value === playerClass).portrait}
+              />
               <Text style={[styles.text, { paddingLeft: 15, width: "80%" }]}>
-                Resume your adventure with <Text style={styles.bold}>{name}</Text> the{" "}
-                <Text style={styles.bold}>{playerClass}</Text> from <Text style={styles.bold}>{location}</Text>.
+                Resume your adventure with{" "}
+                <Text style={styles.bold}>{name}</Text> the{" "}
+                <Text style={styles.bold}>{playerClass}</Text> from{" "}
+                <Text style={styles.bold}>{location}</Text>.
               </Text>
             </View>
           </TouchableOpacity>
