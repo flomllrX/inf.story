@@ -131,7 +131,11 @@ class Story extends Component<Props, any> {
       <LoadingStory />
     ) : (
       <SafeAreaView style={styles.container}>
-        <Modal isVisible={!mainStore.tutorialDone}>
+        <Modal
+          isVisible={!mainStore.tutorialDone}
+          onBackdropPress={() => ControlService.closeTutorial()}
+          onBackButtonPress={() => ControlService.closeTutorial()}
+        >
           <View style={styles.modalContainer}>
             <View style={styles.modalInner}>
               <Text style={styles.modalTitle}>Stay Awhile and Listen</Text>
@@ -160,7 +164,9 @@ class Story extends Component<Props, any> {
               </Text>
               <View style={styles.tutorialButton}>
                 <TouchableOpacity
-                  onPress={() => ControlService.closeTutorial()}
+                  onPress={() => {
+                    ControlService.closeTutorial();
+                  }}
                 >
                   <Text style={styles.textButton}>Understood</Text>
                 </TouchableOpacity>
