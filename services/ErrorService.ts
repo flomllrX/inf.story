@@ -10,9 +10,9 @@ const criticalError = (error: any) => {
   _mainStore.setError(error);
 };
 
-const uncriticalError = (message: string) => {
+const uncriticalError = (message: string, duration?: number) => {
   _mainStore.setUncriticalError(message);
-  setTimeout(() => _mainStore.setUncriticalError(undefined), 2000);
+  setTimeout(() => _mainStore.setUncriticalError(undefined), duration || 2000);
 };
 
 const log = obj => {

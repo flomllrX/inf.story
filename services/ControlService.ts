@@ -52,7 +52,13 @@ const act: (payload: string) => void = async payload => {
   const type = _mainStore.actionType;
   const storyId = _mainStore.storyId;
   _mainStore.setLastActStory(storyId);
-  const { newStoryBits } = await ApiService.act(payload, type, storyId);
+  const { newStoryBits, error } = await ApiService.act(payload, type, storyId);
+  if (error === "MODEL_LOOPING") {
+    ErrorService.uncriticalError(
+      "The AI is confused. Try starting a new adventure.",
+      5000
+    );
+  }
   _mainStore.addStoryBits(newStoryBits);
   _mainStore.setInfering(false);
   _mainStore.storyUpdatedAt(storyId);

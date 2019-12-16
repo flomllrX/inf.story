@@ -68,7 +68,11 @@ const act: (
   payload: string,
   type: string,
   storyId: string
-) => Promise<{ newStoryBits: StoryBit[] }> = async (payload, type, storyId) => {
+) => Promise<{ newStoryBits: StoryBit[]; error?: any }> = async (
+  payload,
+  type,
+  storyId
+) => {
   const response = (await post("/act", {
     uid: storyId,
     type,
