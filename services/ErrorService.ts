@@ -15,8 +15,14 @@ const uncriticalError = (message: string) => {
   setTimeout(() => _mainStore.setUncriticalError(undefined), 2000);
 };
 
+const log = obj => {
+  // const logObj = { log: obj };
+  // _mainStore.log += JSON.stringify(logObj);
+};
+
 export default {
   setMainStore,
   criticalError,
-  uncriticalError
+  uncriticalError,
+  log
 };

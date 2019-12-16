@@ -49,6 +49,8 @@ export default class MainStore {
   @observable actionType: "ACT_SAY" | "ACT_DO" = "ACT_DO"; // Move to chatbox
   @observable tutorialDone: boolean;
 
+  @observable log = "";
+
   @action setStoryId(storyId: string) {
     this.storyId = storyId;
     storeData("storyId", storyId);
@@ -109,15 +111,20 @@ export default class MainStore {
   }
 
   @action addStoryToHistory(uid: string, storyBits: StoryBit[]) {
-    const { payload } = storyBits.find(e => e.type === "ORIGIN");
-    const { name, class: playerClass } = payload as Origin;
-    this.stories[uid] = {
-      uid,
-      origin: payload as Origin,
-      createdAt: new Date().toISOString(),
-      title: `${name}, the ${playerClass}`,
-      updatedAt: new Date().toISOString()
-    };
+    try {
+      const { payload } = storyBits.find(e => e.type === "ORIGIN");
+      const { name, class: playerClass } = payload as Origin;
+      if (!this.stories) this.stories = {};
+      this.stories[uid] = {
+        uid,
+        origin: payload as Origin,
+        createdAt: new Date().toISOString(),
+        title: `${name}, the ${playerClass}`,
+        updatedAt: new Date().toISOString()
+      };
+    } catch (e) {
+      this.log += JSON.stringify({ error: e, location: "addStoryToHistory" });
+    }
   }
 
   @action storyUpdatedAt(storyId: string) {

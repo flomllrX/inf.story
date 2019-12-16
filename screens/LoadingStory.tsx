@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { colors, fonts } from "../theme";
+import { inject, observer } from "mobx-react";
 
 const styles = StyleSheet.create({
   container: {
@@ -27,15 +28,19 @@ const styles = StyleSheet.create({
   }
 });
 
-class LoadingStory extends Component<{}, any> {
+class LoadingStory extends Component<any, any> {
   static navigationOptions = { header: null };
   static defaultProps = {};
 
   render() {
     return (
       <View style={styles.container}>
-        <Text style={[styles.text, styles.bold]}>We are creating the adventure...</Text>
-        <Text style={[styles.text, styles.subText]}>Meanwhile, rest next to the camp fire.</Text>
+        <Text style={[styles.text, styles.bold]}>
+          We are creating the adventure...
+        </Text>
+        <Text style={[styles.text, styles.subText]}>
+          Meanwhile, rest next to the camp fire.
+        </Text>
         <Image style={styles.fire} source={require("../assets/fire.gif")} />
       </View>
     );

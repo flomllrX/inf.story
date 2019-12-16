@@ -14,28 +14,37 @@ const createStory: () => void = () => {
   _mainStore.setCreatingStoryState(true);
 };
 
+const abortStoryCreation: () => void = () => {
+  _mainStore.setCreatingStoryState(false);
+};
+
 const startStory: (playerClass: string, name: string) => void = async (
   playerClass,
   name
 ) => {
-  _mainStore.setStoryLoadingState(true);
-  _mainStore.setCreatingStoryState(false);
-  const userId = _mainStore.userId;
-  const { error, uid, storyBits } = await ApiService.startStory(
-    userId,
-    playerClass,
-    name
-  );
-  if (error) {
-    const errorObj = typeof error === "string" ? { error } : error;
-    ErrorService.criticalError({ ...errorObj, code: 5000 });
-  } else {
-    _mainStore.setStoryId(uid);
-    _mainStore.setStory(storyBits);
-    _mainStore.setLastActStory(uid);
-    _mainStore.addStoryToHistory(uid, storyBits);
+  try {
+    _mainStore.setStoryLoadingState(true);
+    _mainStore.setCreatingStoryState(false);
+    const userId = _mainStore.userId;
+    const { error, uid, storyBits } = await ApiService.startStory(
+      userId,
+      playerClass,
+      name
+    );
+    if (error) {
+      const errorObj = typeof error === "string" ? { error } : error;
+      ErrorService.criticalError({ ...errorObj, code: 5000 });
+    } else {
+      _mainStore.setStoryId(uid);
+      _mainStore.setStory(storyBits);
+      _mainStore.setLastActStory(uid);
+      _mainStore.addStoryToHistory(uid, storyBits);
+    }
+    ErrorService.log({ log: "Setting story loading false" });
+    _mainStore.setStoryLoadingState(false);
+  } catch (e) {
+    ErrorService.log({ error: e });
   }
-  _mainStore.setStoryLoadingState(false);
 };
 
 const act: (payload: string) => void = async payload => {
@@ -121,5 +130,6 @@ export default {
   resumeStory,
   setStory,
   wipeData,
-  closeTutorial
+  closeTutorial,
+  abortStoryCreation
 };

@@ -17,6 +17,7 @@ import { inject, observer } from "mobx-react";
 import PropTypes from "prop-types";
 import Header from "../components/Header";
 import { PlayerClass } from "../types";
+import { withNavigation } from "react-navigation";
 
 const styles = StyleSheet.create({
   container: {
@@ -122,6 +123,12 @@ const styles = StyleSheet.create({
   },
   nextButton: {
     paddingBottom: 20
+  },
+  button: {
+    color: colors.defaultText,
+    fontFamily: fonts.regular,
+    fontSize: 30,
+    paddingHorizontal: 20
   }
 });
 
@@ -229,14 +236,9 @@ class CreateStory extends Component<any, CreateStoryState> {
     name: ""
   };
 
-  onStart = () => {
-    const { playerClass, name } = this.state;
-    // TODO: verify that a name is given. (maybe generate one if none is given)
-    ControlService.startStory(playerClass, name);
-  };
-
   render() {
     const { playerClass, name, step } = this.state;
+    const { navigation } = this.props;
     const renderItem = element => {
       const { item } = element;
       const c: PlayerClass = item;
@@ -270,7 +272,18 @@ class CreateStory extends Component<any, CreateStoryState> {
     };
     return (
       <SafeAreaView style={styles.container}>
-        <Header />
+        <Header
+          leftButton={
+            <TouchableOpacity
+              onPress={() => {
+                ControlService.abortStoryCreation();
+                navigation.goBack();
+              }}
+            >
+              <Text style={styles.button}>&lt;</Text>
+            </TouchableOpacity>
+          }
+        />
         <KeyboardAvoidingView behavior="padding" style={styles.center}>
           {step === 0 ? (
             <SafeAreaView style={styles.playerClassContainer}>
@@ -344,4 +357,4 @@ class CreateStory extends Component<any, CreateStoryState> {
   }
 }
 
-export default inject("mainStore")(observer(CreateStory));
+export default withNavigation(CreateStory);

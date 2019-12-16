@@ -7,6 +7,7 @@ import { Asset } from "expo-asset";
 import { Provider, observer } from "mobx-react";
 import MainStore from "./mobx/mainStore";
 import ControlService from "./services/ControlService";
+import ApiService from "./services/ApiService";
 import Navigation from "./container/Navigation";
 import Story from "./screens/Story";
 import MainStory from "./container/MainStory";
@@ -15,7 +16,6 @@ import { createStackNavigator } from "react-navigation-stack";
 import { portraits, locations } from "./components/StoryBit";
 import Toast from "react-native-root-toast";
 import ErrorService from "./services/ErrorService";
-import Modal from "react-native-modal";
 
 import codePush from "react-native-code-push";
 import { fonts } from "./theme";

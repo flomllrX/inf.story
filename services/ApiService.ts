@@ -1,6 +1,8 @@
 import { StoryBit, StorySmall } from "../types";
 import { Platform } from "react-native";
 import fetch from "isomorphic-unfetch";
+import MainStore from "../mobx/mainStore";
+import ErrorService from "./ErrorService";
 
 const address = "https://api.infinitestory.app";
 
@@ -18,11 +20,15 @@ const post: (
       body: JSON.stringify(body)
     });
     if (response.status >= 300) {
+      ErrorService.log({ error: response.status });
       return { error: "Error" + response.status };
     } else {
-      return await response.json();
+      const responseJson = await response.json();
+      ErrorService.log({ success: responseJson });
+      return await responseJson;
     }
   } catch (e) {
+    ErrorService.log({ error: e });
     return { error: e, location: "ApiService.post exception" };
   }
 };
@@ -32,8 +38,11 @@ const get: (
 ) => Promise<{ [key: string]: string }> = async endpoint => {
   try {
     const response = await fetch(address + endpoint);
-    return response.json();
+    const responseJson = await response.json();
+    ErrorService.log({ success: responseJson });
+    return await responseJson;
   } catch (e) {
+    ErrorService.log({ error: e });
     return { error: e };
   }
 };

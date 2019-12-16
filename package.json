@@ -10,6 +10,8 @@
     "codepush:android": "code-push release-react infinite-story-android android",
     "codepush:android:prod": "appcenter codepush release-react -a flomllr/infinite-story-android -d Production",
     "codepush:ios:prod": "appcenter codepush release-react -a flomllr/infinite-story-ios -d Production",
+    "codepush": "npm run codepush:ios && npm run codepush:android",
+    "codepush:prod": "npm run codepush:ios:prod && npm run codepush:android:prod",
     "storybook": "start-storybook -p 7007",
     "web": "npx next dev",
     "next:build": "npx next build",
