@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Image, StyleSheet, Text, Linking } from "react-native";
 import { colors, fonts } from "../theme";
+import AutoHeightImage from "../components/AutoHeightImage";
 
 const styles = StyleSheet.create({
   container: {
@@ -8,10 +9,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center"
-  },
-  img: {
-    width: 390,
-    height: 120
   },
   text: {
     color: colors.defaultText,
@@ -21,7 +18,7 @@ const styles = StyleSheet.create({
 
 const Index: React.SFC<{}> = props => (
   <View style={styles.container}>
-    <Image source={require("../assets/title.png")} style={styles.img} />
+    <AutoHeightImage uri={require("../assets/title.png")} width={250} />
     <Text
       style={styles.text}
       onPress={() => Linking.openURL("https://discord.gg/yXGmY6y")}
