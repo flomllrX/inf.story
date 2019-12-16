@@ -91,9 +91,7 @@ const styles = StyleSheet.create({
   },
   playerClassContainer: {
     flex: 1,
-    width: "100%",
-    paddingLeft: 80,
-    paddingRight: 80
+    width: "100%"
   },
   header: {
     justifyContent: "center",
@@ -113,7 +111,9 @@ const styles = StyleSheet.create({
     height: 20
   },
   list: {
-    flex: 1
+    flex: 1,
+
+    width: "100%"
   },
   selectIcon: {
     position: "absolute",
@@ -129,6 +129,9 @@ const styles = StyleSheet.create({
     fontFamily: fonts.regular,
     fontSize: 30,
     paddingHorizontal: 20
+  },
+  flex: {
+    flex: 1
   }
 });
 
@@ -250,6 +253,7 @@ class CreateStory extends Component<any, CreateStoryState> {
               this.setState({ playerClass: c.value });
             }
           }}
+          style={styles.flex}
         >
           <View style={styles.playerClass} key={c.name}>
             {isSelected ? (

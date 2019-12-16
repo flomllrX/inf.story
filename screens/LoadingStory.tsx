@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { colors, fonts } from "../theme";
-import { inject, observer } from "mobx-react";
 
 const styles = StyleSheet.create({
   container: {
@@ -13,8 +12,7 @@ const styles = StyleSheet.create({
   text: {
     color: colors.defaultText,
     fontSize: 20,
-    width: "80%",
-    margin: "0 10%"
+    width: "80%"
   },
   bold: {
     fontFamily: fonts.semiBold
