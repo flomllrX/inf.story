@@ -40,7 +40,6 @@ const startStory: (playerClass: string, name: string) => void = async (
       _mainStore.setLastActStory(uid);
       _mainStore.addStoryToHistory(uid, storyBits);
     }
-    ErrorService.log({ log: "Setting story loading false" });
     _mainStore.setStoryLoadingState(false);
   } catch (e) {
     ErrorService.log({ error: e });
@@ -53,15 +52,16 @@ const act: (payload: string) => void = async payload => {
   const storyId = _mainStore.storyId;
   _mainStore.setLastActStory(storyId);
   const { newStoryBits, error } = await ApiService.act(payload, type, storyId);
-  if (error === "MODEL_LOOPING") {
-    ErrorService.uncriticalError(
-      "The AI is confused. Try starting a new adventure.",
-      5000
-    );
-  }
+  console.log("Act error:", error);
   _mainStore.addStoryBits(newStoryBits);
   _mainStore.setInfering(false);
   _mainStore.storyUpdatedAt(storyId);
+  if (error === "MODEL_LOOPING") {
+    ErrorService.storyError(
+      "The AI is confused by your input. Try something else.",
+      5000
+    );
+  }
 };
 
 const loadStory: (

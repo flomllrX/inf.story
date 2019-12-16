@@ -60,7 +60,11 @@ export default class ScaledImage extends React.Component<Props, State> {
     return Platform.OS == "web" ? (
       <Image source={source} style={[this.props.style, { height, width }]} />
     ) : (
-      <AutoHeightImage width={propWidth} source={uri as ImageSourcePropType} />
+      <AutoHeightImage
+        width={propWidth}
+        style={this.props.style}
+        source={uri as ImageSourcePropType}
+      />
     );
   }
 }

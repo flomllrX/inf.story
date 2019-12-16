@@ -42,6 +42,7 @@ export default class MainStore {
   @observable loadingStory = false;
   @observable stories: { [uid: string]: StorySmall };
   @observable lastActStoryId: string;
+  @observable storyError: string;
 
   @observable error: any;
   @observable uncriticalError: string;
@@ -79,6 +80,10 @@ export default class MainStore {
 
   @action setUncriticalError(error: string) {
     this.uncriticalError = error;
+  }
+
+  @action setStoryError(error: string) {
+    this.storyError = error;
   }
 
   @action clearError() {

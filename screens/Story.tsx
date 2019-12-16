@@ -20,6 +20,7 @@ import LoadingStory from "./LoadingStory";
 import { Platform } from "@unimodules/core";
 import Modal from "react-native-modal";
 import style from "react-syntax-highlighter/dist/styles/hljs/agate";
+import Toast from "react-native-root-toast";
 
 const screenWidth = Math.round(Dimensions.get("window").width);
 
@@ -78,6 +79,13 @@ const styles = StyleSheet.create({
     fontFamily: fonts.regular,
     color: colors.defaultText,
     fontSize: 18
+  },
+  toast: {
+    fontFamily: fonts.regular
+  },
+  toastContainer: {
+    backgroundColor: colors.primary,
+    padding: 10
   }
 });
 
@@ -160,6 +168,16 @@ class Story extends Component<Props, any> {
             </View>
           </View>
         </Modal>
+        {!!mainStore.storyError && (
+          <Toast
+            visible={true}
+            position={Toast.positions.CENTER}
+            backgroundColor={colors.primary}
+            opacity={1}
+          >
+            <Text style={styles.toast}>{mainStore.storyError}</Text>
+          </Toast>
+        )}
         <Header
           rightButtons={[
             <TouchableOpacity

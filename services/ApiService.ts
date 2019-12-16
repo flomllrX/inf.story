@@ -24,7 +24,6 @@ const post: (
       return { error: "Error" + response.status };
     } else {
       const responseJson = await response.json();
-      ErrorService.log({ success: responseJson });
       return await responseJson;
     }
   } catch (e) {
@@ -39,7 +38,6 @@ const get: (
   try {
     const response = await fetch(address + endpoint);
     const responseJson = await response.json();
-    ErrorService.log({ success: responseJson });
     return await responseJson;
   } catch (e) {
     ErrorService.log({ error: e });

@@ -16,9 +16,15 @@ import { inject, observer } from "mobx-react";
 import { withNavigation } from "react-navigation";
 import PORTRAITS from "../assets/portraits/PATHS";
 import ErrorService from "../services/ErrorService";
+import AutoHeightImage from "../components/AutoHeightImage";
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.background,
+    flex: 1,
+    justifyContent: "flex-start",
+    alignItems: "center"
+  },
+  centerContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center"
@@ -42,10 +48,6 @@ const styles = StyleSheet.create({
   },
   startButton: {
     marginTop: 50
-  },
-  img: {
-    width: 390,
-    height: 120
   },
   android: {
     width: 50,
@@ -93,6 +95,9 @@ const styles = StyleSheet.create({
     color: colors.greyed,
     fontFamily: fonts.regular,
     fontSize: 13
+  },
+  logo: {
+    marginTop: "20%"
   }
 });
 
@@ -158,7 +163,11 @@ class Welcome extends Component<any, any> {
 
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding">
-        <Image source={require("../assets/title.png")} style={styles.img} />
+        <AutoHeightImage
+          style={styles.logo}
+          uri={require("../assets/title.png")}
+          width={250}
+        />
         <View>
           <TouchableOpacity style={styles.startButton} onPress={this.onStart}>
             <View style={{ ...styles.selectIcon }}>
