@@ -21,18 +21,34 @@ const styles = StyleSheet.create({
   text: {
     color: colors.defaultText,
     fontFamily: fonts.regular
+  },
+  header: {
+    justifyContent: "center",
+    alignItems: "center",
+    paddingTop: 50,
+    paddingBottom: 100
   }
 });
 
 const StoryPage: NextPage<any> = ({ story }) => (
   <View style={styles.container}>
-    <AutoHeightImage uri={require("../assets/title.png")} width={250} />
-    <Text
-      style={styles.text}
-      onPress={() => Linking.openURL("https://discord.gg/yXGmY6y")}
-    >
-      Click here to join the Discord to get access to the Beta
-    </Text>
+    <View style={styles.header}>
+      <AutoHeightImage uri={require("../../assets/title.png")} width={250} />
+      <Text
+        style={styles.text}
+        onPress={() => Linking.openURL("https://discord.gg/yXGmY6y")}
+      >
+        Join the Discord
+      </Text>
+      <Text
+        style={styles.text}
+        onPress={() =>
+          Linking.openURL("https://testflight.apple.com/join/aeEVsAWE")
+        }
+      >
+        Download the iOS Beta
+      </Text>
+    </View>
     <StoryComponent
       items={story}
       width={maxWidth < screenWidth ? maxWidth : undefined}

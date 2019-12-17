@@ -56,7 +56,7 @@ const act: (payload: string) => void = async payload => {
   _mainStore.addStoryBits(newStoryBits);
   _mainStore.setInfering(false);
   _mainStore.storyUpdatedAt(storyId);
-  if (error === "MODEL_LOOPING") {
+  if (error) {
     ErrorService.storyError(
       "The AI is confused by your input. Try something else.",
       5000
