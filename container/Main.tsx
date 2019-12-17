@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  KeyboardAvoidingView,
   SafeAreaView,
   TouchableOpacity
 } from "react-native";
@@ -19,7 +18,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background
   },
   flex: {
-    flex: 1
+    flex: 1,
+    width: "100%"
   },
   buttonContainer: {
     flex: 1,
@@ -33,14 +33,12 @@ const styles = StyleSheet.create({
   },
   button: {
     fontSize: 30,
-    paddingHorizontal: 20,
-    flex: 1,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    width: 30
   },
   buttonText: {
-    fontSize: 13,
-    paddingHorizontal: 10
+    fontSize: 13
   }
 });
 

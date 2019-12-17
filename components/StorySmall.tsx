@@ -1,9 +1,8 @@
 import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { Origin } from "../types";
 import PropTypes from "prop-types";
 import { colors, fonts } from "../theme";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { withNavigation } from "react-navigation";
 import PORTRAITS from "../assets/portraits/PATHS.js";
 import DateTime from "luxon/src/datetime.js";

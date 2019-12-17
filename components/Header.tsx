@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { NavigationContext } from "react-navigation";
 import { colors, fonts } from "../theme";
+import { Platform } from "@unimodules/core";
 
 interface Props {
   leftButton?: any;
@@ -13,14 +14,17 @@ const styles = StyleSheet.create({
   container: {
     display: "flex",
     flexDirection: "row",
-    height: 40
+    height: 50,
+    marginTop: Platform.OS === "android" ? 25 : 0
   },
   left: {
     flex: 1,
-    minWidth: 50
+    justifyContent: "center",
+    alignItems: "flex-start",
+    paddingLeft: 20
   },
   right: {
-    flex: 4,
+    flex: 1,
     flexDirection: "row",
     justifyContent: "flex-end",
     alignItems: "center",
@@ -29,8 +33,12 @@ const styles = StyleSheet.create({
   button: {
     color: colors.defaultText,
     fontFamily: fonts.regular,
-    fontSize: 30,
-    paddingHorizontal: 20
+    fontSize: 30
+  },
+  buttonContainer: {
+    flex: 1,
+    alignItems: "flex-end",
+    justifyContent: "center"
   }
 });
 
@@ -40,7 +48,10 @@ const Header: React.SFC<Props> = ({ leftButton, rightButtons }) => {
     <View style={styles.container}>
       <View style={styles.left}>
         {leftButton || (
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={styles.buttonContainer}
+          >
             <Text style={styles.button}>&lt;</Text>
           </TouchableOpacity>
         )}

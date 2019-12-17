@@ -25,11 +25,15 @@ const styles = StyleSheet.create({
     marginTop: 25,
     color: colors.lightgray
   },
+  flex: {
+    flex: 1,
+    width: "100%"
+  },
   buttonContainer: {
+    flex: 1,
     flexDirection: "row",
     justifyContent: "flex-end",
-    alignItems: "center",
-    width: 75
+    alignItems: "center"
   },
   text: {
     color: colors.defaultText,
@@ -37,17 +41,11 @@ const styles = StyleSheet.create({
   },
   button: {
     fontSize: 30,
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
+    width: 20,
+    marginLeft: 10
   },
   buttonText: {
-    fontSize: 13,
-    paddingHorizontal: 10
-  },
-  flex: {
-    display: "flex",
-    justifyContent: "flex-end"
+    fontSize: 13
   }
 });
 

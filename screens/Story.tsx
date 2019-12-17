@@ -5,21 +5,20 @@ import {
   StyleSheet,
   SafeAreaView,
   Share,
-  Dimensions
+  Dimensions,
+  TouchableOpacity
 } from "react-native";
 import Chatbox from "../components/Chatbox";
 import StoryComponent from "../components/Story";
 import { colors, fonts } from "../theme";
 import { inject, observer } from "mobx-react";
 import ControlService from "../services/ControlService";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import Header from "../components/Header";
 import MainStore from "../mobx/mainStore";
 import { withNavigation } from "react-navigation";
 import LoadingStory from "./LoadingStory";
 import { Platform } from "@unimodules/core";
 import Modal from "react-native-modal";
-import style from "react-syntax-highlighter/dist/styles/hljs/agate";
 import Toast from "react-native-root-toast";
 
 const screenWidth = Math.round(Dimensions.get("window").width);
@@ -68,12 +67,11 @@ const styles = StyleSheet.create({
     fontSize: 16
   },
   tutorialButton: {
-    paddingTop: 20,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
-    paddingBottom: 10
+    height: 50
   },
   textButton: {
     fontFamily: fonts.regular,
