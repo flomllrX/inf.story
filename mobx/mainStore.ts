@@ -133,10 +133,12 @@ export default class MainStore {
   }
 
   @action storyUpdatedAt(storyId: string) {
-    this.stories[storyId] = {
-      ...this.stories[storyId],
-      updatedAt: new Date().toISOString()
-    };
+    if (this.stories) {
+      this.stories[storyId] = {
+        ...this.stories[storyId],
+        updatedAt: new Date().toISOString()
+      };
+    }
   }
 
   @action setTutorialDone() {
@@ -160,45 +162,77 @@ export default class MainStore {
     ]);
   };
 
-  constructor() {
-    const signup = async () => {
-      const userId = uuid();
-      const signupError = err => {
-        this.setError(JSON.stringify(err));
-        reaction(
-          () => this.error,
-          (data, r) => {
-            signup();
-            r.dispose();
-          }
-        );
-      };
-      try {
-        const err = await ApiService.signup(userId);
-        if (!err) {
-          this.userId = userId;
-          storeData("userId", this.userId);
-        } else {
-          signupError({
-            ...err,
-            location: "mainStore.constructor signup api error" + err.location
-          });
+  signup = async () => {
+    const userId = uuid();
+    const signupError = err => {
+      this.setError(JSON.stringify(err));
+      reaction(
+        () => this.error,
+        (data, r) => {
+          this.signup();
+          r.dispose();
         }
-      } catch (e) {
+      );
+    };
+    try {
+      const err = await ApiService.signup(userId);
+      if (!err) {
+        this.userId = userId;
+        storeData("userId", this.userId);
+      } else {
         signupError({
-          ...e,
-          location: "mainStore.constructor signup api exception" + e.location
+          ...err,
+          location: "mainStore.constructor signup api error" + err.location
         });
       }
-    };
+    } catch (e) {
+      signupError({
+        ...e,
+        location: "mainStore.constructor signup api exception" + e.location
+      });
+    }
+  };
 
+  manualSignup = () => {
+    getData("userId").then(async userId => {
+      if (userId) {
+        this.userId = userId;
+      } else {
+        await this.signup();
+      }
+    });
+
+    // Load storyId from device
+    getData("storyId").then(storyId => {
+      if (storyId) {
+        this.storyId = storyId;
+        ControlService.loadStory(storyId);
+      }
+    });
+
+    // Load past story from device
+    getObjectData("story").then(story => {
+      if (story) {
+        this.story = story;
+      }
+    });
+
+    // Check if tutorial is done
+    getData("tutorialDone").then(tutorialDone => {
+      if (tutorialDone) {
+        this.tutorialDone = true;
+      }
+    });
+  };
+
+  constructor() {
     if (Platform.OS !== "web") {
       // Load userId from device
       getData("userId").then(async userId => {
         if (userId) {
           this.userId = userId;
         } else {
-          await signup(); // only signup in app
+          await this.signup(); // only signup in app
           // Generate user id
         }
       });

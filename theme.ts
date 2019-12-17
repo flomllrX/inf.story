@@ -13,7 +13,8 @@ export const colors = {
   actSay: "#94CE86",
   greyed: "rgba(255, 255, 255, 0.45)",
   lightgray: "rgba(255, 255, 255, 0.6)",
-  modalBackground: "#111"
+  modalBackground: "#111",
+  darkgray: "rgba(255, 255, 255, 0.2)"
 };
 export const fonts = {
   regular: "SourceCodePro-Regular",

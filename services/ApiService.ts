@@ -54,11 +54,13 @@ const startStory: (
   playerClass,
   name
 ) => {
+  console.log(userId, playerClass, name);
   const response = (await post("/start_story", {
     playerClass,
     name,
     deviceId: userId
   })) as any;
+  console.log(response);
   return response;
 };
 
@@ -71,6 +73,7 @@ const act: (
   type,
   storyId
 ) => {
+  console.log(storyId, payload, type);
   const response = (await post("/act", {
     uid: storyId,
     type,
