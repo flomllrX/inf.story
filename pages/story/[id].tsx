@@ -1,10 +1,12 @@
 import React from "react";
-import { View, StyleSheet, Dimensions } from "react-native";
+import { View, StyleSheet, Dimensions, Text, Linking } from "react-native";
 import PropTypes from "prop-types";
 import { NextPage, NextPageContext } from "next";
 import ApiService from "../../services/ApiService";
 import ErrorService from "../../services/ErrorService";
 import StoryComponent from "../../components/Story";
+import AutoHeightImage from "../../components/AutoHeightImage";
+import { colors, fonts } from "../../theme";
 
 const screenWidth = Math.round(Dimensions.get("window").width);
 const maxWidth = 600;
@@ -13,13 +15,24 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     maxWidth: Math.min(screenWidth, maxWidth),
-    paddingTop: 50,
+    paddingVertical: 50,
     alignSelf: "center"
+  },
+  text: {
+    color: colors.defaultText,
+    fontFamily: fonts.regular
   }
 });
 
 const StoryPage: NextPage<any> = ({ story }) => (
   <View style={styles.container}>
+    <AutoHeightImage uri={require("../assets/title.png")} width={250} />
+    <Text
+      style={styles.text}
+      onPress={() => Linking.openURL("https://discord.gg/yXGmY6y")}
+    >
+      Click here to join the Discord to get access to the Beta
+    </Text>
     <StoryComponent
       items={story}
       width={maxWidth < screenWidth ? maxWidth : undefined}
