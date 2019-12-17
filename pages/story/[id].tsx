@@ -48,6 +48,16 @@ const StoryPage: NextPage<any> = ({ story }) => (
       >
         Download the iOS Beta
       </Text>
+      <Text
+        style={styles.text}
+        onPress={() =>
+          Linking.openURL(
+            "https://play.google.com/store/apps/details?id=com.infinitestory"
+          )
+        }
+      >
+        Download for Android
+      </Text>
     </View>
     <StoryComponent
       items={story}
