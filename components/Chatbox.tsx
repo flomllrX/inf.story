@@ -125,6 +125,7 @@ const Chatbox: React.SFC<any> = ({
           placeholderTextColor={colors.chatboxPlaceholder}
           onChangeText={onChangeText}
           blurOnSubmit={false}
+          onSubmitEditing={sendMessage}
         />
         <TouchableOpacity
           style={[

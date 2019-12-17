@@ -54,13 +54,11 @@ const startStory: (
   playerClass,
   name
 ) => {
-  console.log(userId, playerClass, name);
   const response = (await post("/start_story", {
     playerClass,
     name,
     deviceId: userId
   })) as any;
-  console.log(response);
   return response;
 };
 
@@ -73,7 +71,6 @@ const act: (
   type,
   storyId
 ) => {
-  console.log(storyId, payload, type);
   const response = (await post("/act", {
     uid: storyId,
     type,
@@ -98,7 +95,6 @@ const getStories: (
 
 const signup: (deviceId: string) => Promise<any> = async deviceId => {
   const result = await post("/signup", { deviceId, platform: Platform.OS });
-  console.log("Res:", result);
   return result.error;
 };
 

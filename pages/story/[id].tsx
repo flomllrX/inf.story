@@ -1,5 +1,12 @@
 import React from "react";
-import { View, StyleSheet, Dimensions, Text, Linking } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+  Text,
+  Linking,
+  TouchableOpacity
+} from "react-native";
 import PropTypes from "prop-types";
 import { NextPage, NextPageContext } from "next";
 import ApiService from "../../services/ApiService";
@@ -33,31 +40,35 @@ const styles = StyleSheet.create({
 const StoryPage: NextPage<any> = ({ story }) => (
   <View style={styles.container}>
     <View style={styles.header}>
-      <AutoHeightImage uri={require("../../assets/title.png")} width={250} />
+      <AutoHeightImage uri={require("../../assets/title.png")} width={150} />
       <Text
         style={styles.text}
         onPress={() => Linking.openURL("https://discord.gg/yXGmY6y")}
       >
         Join the Discord
       </Text>
-      <Text
-        style={styles.text}
-        onPress={() =>
-          Linking.openURL("https://testflight.apple.com/join/aeEVsAWE")
-        }
-      >
-        Download the iOS Beta
-      </Text>
-      <Text
-        style={styles.text}
+      <TouchableOpacity
         onPress={() =>
           Linking.openURL(
             "https://play.google.com/store/apps/details?id=com.infinitestory"
           )
         }
       >
-        Download for Android
-      </Text>
+        <AutoHeightImage
+          uri={require("../../assets/googleplay.svg")}
+          width={170}
+        />
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() =>
+          Linking.openURL("https://testflight.apple.com/join/aeEVsAWE")
+        }
+      >
+        <AutoHeightImage
+          uri={require("../../assets/appstore.svg")}
+          width={150}
+        />
+      </TouchableOpacity>
     </View>
     <StoryComponent
       items={story}
