@@ -17,6 +17,7 @@ import { withNavigation } from "react-navigation";
 import PORTRAITS from "../assets/portraits/PATHS";
 import ErrorService from "../services/ErrorService";
 import AutoHeightImage from "../components/AutoHeightImage";
+import { Platform } from "@unimodules/core";
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.background,
@@ -162,7 +163,10 @@ class Welcome extends Component<any, any> {
     };
 
     return (
-      <KeyboardAvoidingView style={styles.container} behavior="padding">
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS ? "padding" : null}
+      >
         <AutoHeightImage
           style={styles.logo}
           uri={require("../assets/title.png")}

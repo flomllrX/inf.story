@@ -18,6 +18,7 @@ import PropTypes from "prop-types";
 import Header from "../components/Header";
 import { PlayerClass } from "../types";
 import { withNavigation } from "react-navigation";
+import { Platform } from "@unimodules/core";
 
 const styles = StyleSheet.create({
   container: {
@@ -288,7 +289,10 @@ class CreateStory extends Component<any, CreateStoryState> {
             </TouchableOpacity>
           }
         />
-        <KeyboardAvoidingView behavior="padding" style={styles.center}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : null}
+          style={styles.center}
+        >
           {step === 0 ? (
             <SafeAreaView style={styles.playerClassContainer}>
               <View style={styles.header}>
@@ -306,7 +310,9 @@ class CreateStory extends Component<any, CreateStoryState> {
             undefined
           )}
           {step === 1 ? (
-            <KeyboardAvoidingView behavior="padding">
+            <KeyboardAvoidingView
+              behavior={Platform.OS === "ios" ? "padding" : null}
+            >
               <View style={styles.name}>
                 <Image
                   style={{ width: 80, height: 80 }}

@@ -11,6 +11,7 @@ import {
   TouchableOpacity
 } from "react-native";
 import { inject, observer } from "mobx-react";
+import { Platform } from "@unimodules/core";
 
 interface Props {
   value: string;
@@ -92,7 +93,7 @@ const Chatbox: React.SFC<any> = ({
 }) => {
   const actionDo = mainStore.actionType === "ACT_DO";
   return (
-    <KeyboardAvoidingView behavior="padding">
+    <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : null}>
       <View style={styles.footer}>
         <TouchableOpacity
           style={[styles.toggleButton]}
