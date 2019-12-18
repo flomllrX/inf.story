@@ -19,6 +19,8 @@ import AutoHeightImage from "../components/AutoHeightImage";
 import LoadingStory from "../screens/LoadingStory";
 import { useMediaQuery } from "react-responsive";
 
+const maxWidth = 500;
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.background,
@@ -35,7 +37,7 @@ const styles = StyleSheet.create({
   },
   storyContainer: {
     flex: 1,
-    maxWidth: 500,
+    maxWidth: maxWidth,
     borderLeftColor: colors.darkgray,
     borderLeftWidth: 1
   },
@@ -361,7 +363,7 @@ const Play: React.SFC<any> = ({ mainStore }) => {
         {story && (
           <View style={styles.storyContainer}>
             <ScrollView style={{ flex: 1 }}>
-              <Story items={story.slice().reverse()} />
+              <Story items={story.slice().reverse()} width={maxWidth} />
             </ScrollView>
             <View>
               <Chatbox
