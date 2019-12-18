@@ -8,6 +8,7 @@ import MainStore from "../mobx/mainStore";
 import * as Font from "expo-font";
 import ErrorService from "../services/ErrorService";
 import { portraits, locations } from "../components/StoryBit";
+import { initGA, logPageView } from "../analytics";
 
 const Loading = dynamic(() => import("../screens/Loading"), {
   ssr: false
@@ -63,6 +64,13 @@ class WebApp extends App {
     } catch (e) {
       ErrorService.criticalError(e);
     }
+
+    // Analytics
+    if (!window.GA_INITIALIZED) {
+      initGA();
+      window.GA_INITIALIZED = true;
+    }
+    logPageView();
   }
 
   render() {
