@@ -20,6 +20,7 @@ import LoadingStory from "./LoadingStory";
 import { Platform } from "@unimodules/core";
 import Modal from "react-native-modal";
 import Toast from "react-native-root-toast";
+import TellMeMore from "../components/TellMeMore";
 
 const screenWidth = Math.round(Dimensions.get("window").width);
 
@@ -206,12 +207,15 @@ class Story extends Component<Props, any> {
         />
         <StoryComponent items={mainStore.story} extraData={this.state} />
         {ownStory && (
-          <Chatbox
-            value={typing}
-            sendMessage={this.sendMessage}
-            onChangeText={typing => this.setState({ typing })}
-            inputDisabled={mainStore.infering}
-          />
+          <>
+            <TellMeMore />
+            <Chatbox
+              value={typing}
+              sendMessage={this.sendMessage}
+              onChangeText={typing => this.setState({ typing })}
+              inputDisabled={mainStore.infering}
+            />
+          </>
         )}
       </SafeAreaView>
     );

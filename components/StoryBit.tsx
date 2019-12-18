@@ -16,7 +16,6 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     paddingHorizontal: 20,
-    paddingVertical: 10,
     flex: 1
   },
   rowText: {
@@ -32,6 +31,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: colors.primary,
     fontFamily: fonts.regular
+  },
+  promptContainer: {
+    marginVertical: 25,
+    display: "flex",
+    flexDirection: "row"
   },
   semiBold: {
     fontFamily: fonts.semiBold
@@ -49,7 +53,8 @@ const styles = StyleSheet.create({
   },
   origin: {
     flexDirection: "row",
-    flex: 1
+    flex: 1,
+    marginVertical: 25
   },
   originPortrait: {
     width: 150,
@@ -69,8 +74,9 @@ const styles = StyleSheet.create({
   image: {
     flex: 1
   },
-  box: {
-    flex: 1
+  locationbox: {
+    flex: 1,
+    marginVertical: 25
   }
 });
 
@@ -220,8 +226,8 @@ const Bit: React.SFC<Props> = ({ bit, width }) => {
   const { type, payload } = bit;
   let content;
   if (type === "ACT_SAY" || type === "ACT_DO") {
-    content = (
-      <>
+    content = payload ? (
+      <View style={styles.promptContainer}>
         <Text
           style={[
             styles.prompt,
@@ -232,7 +238,9 @@ const Bit: React.SFC<Props> = ({ bit, width }) => {
           &gt;{" "}
         </Text>
         <Text style={[styles.message, styles.semiBold]}>{payload}</Text>
-      </>
+      </View>
+    ) : (
+      undefined
     );
   } else if (type === "IMAGE") {
     content = (
@@ -262,7 +270,7 @@ const Bit: React.SFC<Props> = ({ bit, width }) => {
     console.log("seed", seed);
     console.log("source", source);
     content = (
-      <View style={styles.box}>
+      <View style={styles.locationbox}>
         <AutoHeightImage width={width || screenWidth * 0.9} uri={source} />
         <Text style={[styles.message, styles.location]}>
           {firstVisit ? (
@@ -280,10 +288,12 @@ const Bit: React.SFC<Props> = ({ bit, width }) => {
     content = <Text style={styles.message}>{bit.payload}</Text>;
   }
 
-  return (
+  return content ? (
     <View style={styles.row}>
       <View style={styles.rowText}>{content}</View>
     </View>
+  ) : (
+    <></>
   );
 };
 

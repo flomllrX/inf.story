@@ -18,6 +18,7 @@ import Chatbox from "../components/Chatbox";
 import AutoHeightImage from "../components/AutoHeightImage";
 import LoadingStory from "../screens/LoadingStory";
 import { useMediaQuery } from "react-responsive";
+import TellMeMore from "../components/TellMeMore";
 
 const maxWidth = 500;
 
@@ -363,9 +364,10 @@ const Play: React.SFC<any> = ({ mainStore }) => {
         {story && (
           <View style={styles.storyContainer}>
             <ScrollView style={{ flex: 1 }}>
-              <Story items={story.slice().reverse()} width={maxWidth} />
+              <Story items={story} width={maxWidth} inverted />
             </ScrollView>
             <View>
+              <TellMeMore />
               <Chatbox
                 value={typing}
                 sendMessage={sendMessage}

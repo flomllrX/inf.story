@@ -27,9 +27,8 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     borderWidth: 1,
     borderColor: colors.chatboxBorder,
-    marginHorizontal: 20,
-    marginBottom: 10,
-    marginTop: 20
+    marginVertical: 10,
+    marginHorizontal: 20
   },
   input: {
     paddingRight: 20,
