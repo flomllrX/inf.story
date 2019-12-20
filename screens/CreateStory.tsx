@@ -242,11 +242,23 @@ class CreateStory extends Component<any, CreateStoryState> {
 
   render() {
     const { playerClass, name, step } = this.state;
-    const { navigation } = this.props;
+    const { navigation, mainStore } = this.props;
     const renderItem = element => {
       const { item } = element;
       const c: PlayerClass = item;
-      const isSelected = playerClass == c.value;
+      const isSelected = playerClass === c.value;
+      if (
+        c.value === "orc" &&
+        mainStore.achievements &&
+        mainStore.achievements.find(e => e === "discord")
+      ) {
+        console.log("ORCCC");
+        c.locked = false;
+        c.name = "Orc";
+        c.description =
+          "You are a filthy creature with a taste for human flesh.";
+      }
+
       return (
         <TouchableOpacity
           onPress={() => {
@@ -367,4 +379,4 @@ class CreateStory extends Component<any, CreateStoryState> {
   }
 }
 
-export default withNavigation(CreateStory);
+export default inject("mainStore")(observer(withNavigation(CreateStory)));

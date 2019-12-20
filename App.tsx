@@ -20,7 +20,8 @@ import ErrorService from "./services/ErrorService";
 import codePush from "react-native-code-push";
 import { fonts } from "./theme";
 const codePushOptions = {
-  checkFrequency: codePush.CheckFrequency.ON_APP_RESUME
+  checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
+  installMode: codePush.InstallMode.IMMEDIATE
 };
 
 const prefix = "infinitestory://";
