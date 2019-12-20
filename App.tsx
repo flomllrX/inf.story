@@ -92,6 +92,7 @@ class App extends React.Component {
     }
     this.setState({ fontLoaded: true });
     ControlService.loadStories();
+    ControlService.loadAchievements();
   }
 
   render() {

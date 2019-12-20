@@ -43,6 +43,7 @@ export default class MainStore {
   @observable stories: { [uid: string]: StorySmall };
   @observable lastActStoryId: string;
   @observable storyError: string;
+  @observable achievements: string[];
 
   @observable error: any;
   @observable uncriticalError: string;
@@ -144,6 +145,19 @@ export default class MainStore {
   @action setTutorialDone() {
     this.tutorialDone = true;
     storeData("tutorialDone", "true");
+  }
+
+  @action setAchievements(achievements: string[]) {
+    this.achievements = achievements;
+    console.log(achievements);
+  }
+
+  @action addAchievement(achievement: string) {
+    if (this.achievements) {
+      this.achievements.push(achievement);
+    } else {
+      this.achievements = [achievement];
+    }
   }
 
   clearAsyncStorage = async () => {

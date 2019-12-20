@@ -5,6 +5,7 @@ import MainScreen from "./Main";
 import History from "../screens/History";
 import ControlService from "../services/ControlService";
 import { inject, observer } from "mobx-react";
+import { colors, fonts } from "../theme";
 
 const styles = StyleSheet.create({
   container: {
@@ -16,7 +17,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   right: {
-    backgroundColor: "yellow"
+    backgroundColor: colors.background
   },
   center: {
     backgroundColor: "blue"
@@ -25,6 +26,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center"
+  },
+  text: {
+    fontFamily: fonts.regular,
+    color: colors.defaultText
   }
 });
 
@@ -51,11 +56,10 @@ class Navigation extends Component<any, any> {
       >
         <History slideRight={() => this.slideRight()} />
         <MainScreen slideLeft={() => this.slideLeft()} />
-        {/*
         <View style={[styles.viewStyle, styles.right]}>
-          <Text>Community (coming soon)</Text>
+          <Text style={styles.text}>User ID</Text>
+          <Text style={styles.text}>{mainStore.userId}</Text>
         </View>
-        */}
       </Swiper>
     );
   }

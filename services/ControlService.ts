@@ -1,4 +1,4 @@
-import { StoryBit } from "../types";
+import { StoryBit, Location } from "../types";
 import MainStore from "../mobx/mainStore";
 import ApiService from "./ApiService";
 let _mainStore: MainStore;
@@ -52,10 +52,20 @@ const act: (payload: string) => void = async payload => {
   const storyId = _mainStore.storyId;
   _mainStore.setLastActStory(storyId);
   const { newStoryBits, error } = await ApiService.act(payload, type, storyId);
-  console.log("Act error:", error);
   _mainStore.addStoryBits(newStoryBits);
   _mainStore.setInfering(false);
   _mainStore.storyUpdatedAt(storyId);
+
+  // Update achievements
+  newStoryBits.forEach(s => {
+    if (s.type === "LOCATION") {
+      const location = (s.payload as unknown) as Location;
+      if (location.firstVisit) {
+        _mainStore.addAchievement("visited:" + location.location);
+      }
+    }
+  });
+
   if (error) {
     ErrorService.storyError(
       "The AI is confused by your input. Try something else.",
@@ -126,6 +136,20 @@ const wipeData: () => void = async () => {
   restartApp();
 };
 
+const loadAchievements: () => void = async () => {
+  if (_mainStore.userId) {
+    const { achievements, error } = await ApiService.getAchievements(
+      _mainStore.userId
+    );
+    if (error) {
+      ErrorService.uncriticalError("Could not load achievements");
+    }
+    if (achievements) {
+      _mainStore.setAchievements(achievements);
+    }
+  }
+};
+
 export default {
   setMainStore,
   startStory,
@@ -137,5 +161,6 @@ export default {
   setStory,
   wipeData,
   closeTutorial,
-  abortStoryCreation
+  abortStoryCreation,
+  loadAchievements
 };

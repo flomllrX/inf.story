@@ -83,6 +83,7 @@ class App extends React.Component {
     this.setState({ fontLoaded: true });
     console.log("Calling controll service");
     ControlService.loadStories();
+    ControlService.loadAchievements();
   }
 
   render() {

@@ -98,10 +98,15 @@ const signup: (deviceId: string) => Promise<any> = async deviceId => {
   return result.error;
 };
 
+const getAchievements: (deviceId: string) => Promise<any> = async deviceId => {
+  return await get("/user/" + deviceId);
+};
+
 export default {
   startStory,
   act,
   getStory,
   getStories,
-  signup
+  signup,
+  getAchievements
 };

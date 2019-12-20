@@ -162,6 +162,10 @@ class Welcome extends Component<any, any> {
       origin: {}
     };
 
+    const discordAchievement =
+      mainStore.achievements &&
+      mainStore.achievements.find(e => e === "discord");
+
     return (
       <KeyboardAvoidingView
         style={styles.container}
@@ -190,10 +194,11 @@ class Welcome extends Component<any, any> {
             {mainStore.tutorialDone ? "▣" : "▢"} Start your first adventure!
           </Text>
           <Text
-            style={styles.quest}
+            style={discordAchievement ? styles.questDone : styles.quest}
             onPress={() => Linking.openURL("https://discord.gg/yXGmY6y")}
           >
-            ▢ Join the Discord to access a ??? class
+            {discordAchievement ? "▣" : "▢"} Join the Discord to access a ???
+            class
           </Text>
         </View>
         {name && playerClass && location ? (
