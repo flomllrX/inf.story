@@ -44,6 +44,7 @@ const AppContainer = createAppContainer(MainNavigator);
 const mainStore = new MainStore();
 ControlService.setMainStore(mainStore);
 ErrorService.setMainStore(mainStore);
+ApiService.setMainStore(mainStore);
 
 /** Prefetch images */
 function cacheImages(images) {

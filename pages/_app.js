@@ -9,6 +9,7 @@ import * as Font from "expo-font";
 import ErrorService from "../services/ErrorService";
 import { portraits, locations } from "../components/StoryBit";
 import { initGA, logPageView } from "../analytics";
+import ApiService from "../services/ApiService";
 
 const Loading = dynamic(() => import("../screens/Loading"), {
   ssr: false
@@ -22,6 +23,7 @@ const ErrorScreen = dynamic(() => import("../screens/ErrorWeb"), {
 const mainStore = new MainStore();
 ControlService.setMainStore(mainStore);
 ErrorService.setMainStore(mainStore);
+ApiService.setMainStore(mainStore);
 
 /** Prefetch images */
 function cacheImages(images) {

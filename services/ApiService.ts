@@ -3,8 +3,13 @@ import { Platform } from "react-native";
 import fetch from "isomorphic-unfetch";
 import MainStore from "../mobx/mainStore";
 import ErrorService from "./ErrorService";
+let _mainStore: MainStore;
 
 const address = "https://api.infinitestory.app";
+
+const setMainStore = (mainStore: MainStore) => {
+  this.mainStore = mainStore;
+};
 
 const post: (
   endpoint: string,
@@ -15,7 +20,8 @@ const post: (
       method: "POST",
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        Authorization: _mainStore.userId
       },
       body: JSON.stringify(body)
     });
@@ -108,5 +114,6 @@ export default {
   getStory,
   getStories,
   signup,
-  getAchievements
+  getAchievements,
+  setMainStore
 };
