@@ -20,8 +20,8 @@ const post: (
       method: "POST",
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: _mainStore.userId
+        "Content-Type": "application/json"
+        //Authorization: _mainStore.userId
       },
       body: JSON.stringify(body)
     });
