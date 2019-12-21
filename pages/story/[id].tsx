@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   }
 });
 
-const StoryPage: NextPage<any> = ({ story }) => (
+const StoryPage: NextPage<any> = ({ story, error }) => (
   <View style={styles.container}>
     <View style={styles.header}>
       <AutoHeightImage uri={require("../../assets/title.png")} width={150} />
@@ -70,10 +70,14 @@ const StoryPage: NextPage<any> = ({ story }) => (
         />
       </TouchableOpacity>
     </View>
-    <StoryComponent
-      items={story}
-      width={maxWidth < screenWidth ? maxWidth : undefined}
-    />
+    {story ? (
+      <StoryComponent
+        items={story}
+        width={maxWidth < screenWidth ? maxWidth : undefined}
+      />
+    ) : (
+      <Text style={styles.text}>Sorry, this story is private</Text>
+    )}
   </View>
 );
 
@@ -81,17 +85,19 @@ StoryPage.getInitialProps = async ({ query }) => {
   try {
     const { id } = query;
     const { storyBits, error } = await ApiService.getStory(id as string);
+    console.log("Res", storyBits, error);
     if (error) {
-      ErrorService.criticalError(error);
+      return { error };
     }
     return { story: storyBits || [] };
   } catch (e) {
-    ErrorService.criticalError(e);
+    return { error: e };
   }
 };
 
 StoryPage.propTypes = {
-  story: PropTypes.any
+  story: PropTypes.any,
+  error: PropTypes.any
 };
 
 export default StoryPage;

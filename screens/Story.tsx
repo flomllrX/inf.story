@@ -21,6 +21,7 @@ import { Platform } from "@unimodules/core";
 import Modal from "react-native-modal";
 import Toast from "react-native-root-toast";
 import TellMeMore from "../components/TellMeMore";
+import ApiService from "../services/ApiService";
 
 const screenWidth = Math.round(Dimensions.get("window").width);
 
@@ -120,6 +121,23 @@ class Story extends Component<Props, any> {
     }
   }
 
+  share = () => {
+    const { mainStore, navigation } = this.props;
+    const storyId = navigation.getParam("storyId") || mainStore.storyId;
+    if (storyId) {
+      ApiService.updateStory(storyId, true);
+      Platform.OS === "ios"
+        ? Share.share({
+            url: "https://infinitestory.app/story/" + storyId
+          })
+        : Share.share({
+            message:
+              "Check out my story: https://infinitestory.app/story/" +
+              (storyId || mainStore.storyId)
+          });
+    }
+  };
+
   render() {
     const { typing } = this.state;
     const { mainStore, navigation } = this.props;
@@ -185,22 +203,7 @@ class Story extends Component<Props, any> {
         )}
         <Header
           rightButtons={[
-            <TouchableOpacity
-              key={0}
-              onPress={() => {
-                Platform.OS === "ios"
-                  ? Share.share({
-                      url:
-                        "https://infinitestory.app/story/" +
-                        (storyId || mainStore.storyId)
-                    })
-                  : Share.share({
-                      message:
-                        "Check out my story: https://infinitestory.app/story/" +
-                        (storyId || mainStore.storyId)
-                    });
-              }}
-            >
+            <TouchableOpacity key={0} onPress={this.share}>
               <Text style={styles.text}>Share</Text>
             </TouchableOpacity>
           ]}

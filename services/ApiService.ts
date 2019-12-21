@@ -15,7 +15,6 @@ const post: (
   endpoint: string,
   body: { [key: string]: string | number }
 ) => Promise<{ [key: string]: string }> = async (endpoint, body) => {
-  console.log("UserID:", _mainStore.userId);
   try {
     const response = await fetch(address + endpoint, {
       method: "POST",
@@ -36,6 +35,33 @@ const post: (
   } catch (e) {
     ErrorService.log({ error: e });
     return { error: e, location: "ApiService.post exception" };
+  }
+};
+
+const put: (
+  endpoint: string,
+  body: { [key: string]: string | number | boolean }
+) => Promise<{ [key: string]: string }> = async (endpoint, body) => {
+  try {
+    const response = await fetch(address + endpoint, {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: _mainStore.userId
+      },
+      body: JSON.stringify(body)
+    });
+    if (response.status >= 300) {
+      ErrorService.log({ error: response.status });
+      return { error: "Error" + response.status };
+    } else {
+      const responseJson = await response.json();
+      return await responseJson;
+    }
+  } catch (e) {
+    ErrorService.log({ error: e });
+    return { error: e, location: "ApiService.put exception" };
   }
 };
 
@@ -114,6 +140,13 @@ const getAchievements: (deviceId: string) => Promise<any> = async deviceId => {
   return await get("/user/" + deviceId);
 };
 
+const updateStory: (
+  storyId: string,
+  makePublic: boolean
+) => Promise<any> = async (storyId, makePublic) => {
+  return await put("/story/" + storyId, { public: makePublic });
+};
+
 export default {
   startStory,
   act,
@@ -121,5 +154,6 @@ export default {
   getStories,
   signup,
   getAchievements,
-  setMainStore
+  setMainStore,
+  updateStory
 };
