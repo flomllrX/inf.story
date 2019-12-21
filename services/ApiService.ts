@@ -8,20 +8,21 @@ let _mainStore: MainStore;
 const address = "https://api.infinitestory.app";
 
 const setMainStore = (mainStore: MainStore) => {
-  this.mainStore = mainStore;
+  _mainStore = mainStore;
 };
 
 const post: (
   endpoint: string,
   body: { [key: string]: string | number }
 ) => Promise<{ [key: string]: string }> = async (endpoint, body) => {
+  console.log("UserID:", _mainStore.userId);
   try {
     const response = await fetch(address + endpoint, {
       method: "POST",
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/json"
-        //Authorization: _mainStore.userId
+        "Content-Type": "application/json",
+        Authorization: _mainStore.userId
       },
       body: JSON.stringify(body)
     });
@@ -42,7 +43,12 @@ const get: (
   endpoint: string
 ) => Promise<{ [key: string]: string }> = async endpoint => {
   try {
-    const response = await fetch(address + endpoint);
+    const response = await fetch(address + endpoint, {
+      method: "GET",
+      headers: {
+        Authorization: _mainStore.userId
+      }
+    });
     const responseJson = await response.json();
     return await responseJson;
   } catch (e) {

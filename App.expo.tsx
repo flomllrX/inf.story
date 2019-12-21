@@ -16,6 +16,7 @@ import { portraits, locations } from "./components/StoryBit";
 import Toast from "react-native-root-toast";
 import ErrorService from "./services/ErrorService";
 import { fonts } from "./theme";
+import ApiService from "./services/ApiService";
 
 const prefix = "infinitestory://";
 
@@ -37,6 +38,7 @@ const AppContainer = createAppContainer(MainNavigator);
 const mainStore = new MainStore();
 ControlService.setMainStore(mainStore);
 ErrorService.setMainStore(mainStore);
+ApiService.setMainStore(mainStore);
 
 /** Prefetch images */
 function cacheImages(images) {
