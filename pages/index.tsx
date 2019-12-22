@@ -333,7 +333,9 @@ const Play: React.SFC<any> = ({ mainStore }) => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() =>
-              Linking.openURL("https://testflight.apple.com/join/aeEVsAWE")
+              Linking.openURL(
+                "https://apps.apple.com/de/app/the-infinite-story/id1491164959?l=en"
+              )
             }
           >
             <AutoHeightImage
