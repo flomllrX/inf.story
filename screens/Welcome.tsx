@@ -99,6 +99,13 @@ const styles = StyleSheet.create({
   },
   logo: {
     marginTop: "20%"
+  },
+  warning: {
+    color: colors.defaultText,
+    margin: 20,
+    padding: 10,
+    fontSize: 15,
+    backgroundColor: colors.primary
   }
 });
 
@@ -176,16 +183,29 @@ class Welcome extends Component<any, any> {
           uri={require("../assets/title.png")}
           width={250}
         />
-        <View>
-          <TouchableOpacity style={styles.startButton} onPress={this.onStart}>
-            <View style={{ ...styles.selectIcon }}>
-              <MovingCursor>
-                <Text style={styles.text}>&gt;</Text>
-              </MovingCursor>
-            </View>
-            <Text style={styles.text}>Start an Adventure</Text>
-          </TouchableOpacity>
-        </View>
+        {!mainStore.apiAvailable ? (
+          <Text style={[styles.text, styles.warning]}>
+            Warning: we are currently offline for maintenance. Join the{" "}
+            <Text
+              onPress={() => Linking.openURL("https://discord.gg/yXGmY6y")}
+              style={styles.underline}
+            >
+              Discord
+            </Text>{" "}
+            to get notified immediately when we are back up.
+          </Text>
+        ) : (
+          <View>
+            <TouchableOpacity style={styles.startButton} onPress={this.onStart}>
+              <View style={{ ...styles.selectIcon }}>
+                <MovingCursor>
+                  <Text style={styles.text}>&gt;</Text>
+                </MovingCursor>
+              </View>
+              <Text style={styles.text}>Start an Adventure</Text>
+            </TouchableOpacity>
+          </View>
+        )}
         <View style={styles.quests}>
           <Text style={styles.questTitle}>Quests:</Text>
           <Text

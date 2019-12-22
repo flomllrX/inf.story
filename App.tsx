@@ -70,9 +70,11 @@ class App extends React.Component {
   state: {
     fontLoaded: boolean;
     activeStoryId: string | undefined;
+    apiAvailable?: boolean;
   } = {
     fontLoaded: false,
-    activeStoryId: undefined
+    activeStoryId: undefined,
+    apiAvailable: true
   };
 
   /** Fetch custom fonts */

@@ -52,6 +52,7 @@ export default class MainStore {
   @observable tutorialDone: boolean;
 
   @observable log = "";
+  @observable apiAvailable = true;
 
   @action setStoryId(storyId: string) {
     this.storyId = storyId;
@@ -240,6 +241,10 @@ export default class MainStore {
   };
 
   constructor() {
+    ApiService.checkAvailability().then(
+      available => (this.apiAvailable = available)
+    );
+
     if (Platform.OS !== "web") {
       // Load userId from device
       getData("userId").then(async userId => {

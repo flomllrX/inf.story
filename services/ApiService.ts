@@ -21,7 +21,7 @@ const post: (
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: _mainStore.userId
+        Authorization: _mainStore && _mainStore.userId
       },
       body: JSON.stringify(body)
     });
@@ -48,7 +48,7 @@ const put: (
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: _mainStore.userId
+        Authorization: _mainStore && _mainStore.userId
       },
       body: JSON.stringify(body)
     });
@@ -66,15 +66,17 @@ const put: (
 };
 
 const get: (
-  endpoint: string
-) => Promise<{ [key: string]: string }> = async endpoint => {
+  endpoint: string,
+  raw?: boolean
+) => Promise<{ [key: string]: string | number }> = async (endpoint, raw) => {
   try {
     const response = await fetch(address + endpoint, {
       method: "GET",
       headers: {
-        Authorization: _mainStore.userId
+        Authorization: _mainStore && _mainStore.userId
       }
     });
+    if (raw) return response;
     const responseJson = await response.json();
     return await responseJson;
   } catch (e) {
@@ -147,6 +149,16 @@ const updateStory: (
   return await put("/story/" + storyId, { public: makePublic });
 };
 
+const checkAvailability: () => Promise<boolean> = async () => {
+  const response = await get("", true);
+  console.log(JSON.stringify(response));
+  if (!response || response.status !== 200) {
+    return false;
+  } else {
+    return true;
+  }
+};
+
 export default {
   startStory,
   act,
@@ -155,5 +167,6 @@ export default {
   signup,
   getAchievements,
   setMainStore,
-  updateStory
+  updateStory,
+  checkAvailability
 };

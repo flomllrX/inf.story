@@ -54,6 +54,16 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     marginTop: 40,
     marginBottom: 30
+  },
+  warning: {
+    color: colors.defaultText,
+    margin: 20,
+    padding: 10,
+    fontSize: 15,
+    backgroundColor: colors.primary
+  },
+  underline: {
+    textDecorationLine: "underline"
   }
 });
 
@@ -349,11 +359,23 @@ const Play: React.SFC<any> = ({ mainStore }) => {
               </Text>
             </>
           ) : (
-            !isTabletOrMobile && (
+            !isTabletOrMobile &&
+            (mainStore.apiAvailable ? (
               <TouchableOpacity onPress={startStory}>
                 <Text style={styles.text}>Play in browser</Text>
               </TouchableOpacity>
-            )
+            ) : (
+              <Text style={[styles.text, styles.warning]}>
+                Warning: we are currently offline for maintenance. Join the{" "}
+                <Text
+                  onPress={() => Linking.openURL("https://discord.gg/yXGmY6y")}
+                  style={styles.underline}
+                >
+                  Discord
+                </Text>{" "}
+                to get notified immediately when we are back up.
+              </Text>
+            ))
           )}
         </View>
         {loadingStory && (
