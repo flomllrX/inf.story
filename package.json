@@ -27,6 +27,7 @@
     "appcenter": "2.6.0",
     "appcenter-analytics": "2.6.0",
     "appcenter-crashes": "2.6.0",
+    "appcenter-push": "^2.6.1",
     "bundle-loader": "^0.5.6",
     "eslint": "^6.7.2",
     "eslint-plugin-react": "^7.17.0",

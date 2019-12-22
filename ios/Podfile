@@ -42,5 +42,6 @@ target 'infinitestory' do
   pod 'react-native-branch', path: '../node_modules/react-native-branch'
   use_unimodules!
   use_native_modules!
+  pod 'Firebase/Core'
 
 end
