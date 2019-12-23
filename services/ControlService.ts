@@ -58,7 +58,6 @@ const act: (payload: string) => void = async payload => {
       storyId
     );
     _mainStore.addStoryBits(newStoryBits);
-    _mainStore.setInfering(false);
     _mainStore.storyUpdatedAt(storyId);
 
     // Update achievements
@@ -78,6 +77,7 @@ const act: (payload: string) => void = async payload => {
       );
     }
   }
+  _mainStore.setInfering(false);
 };
 
 const loadStory: (
@@ -104,6 +104,7 @@ const setStory: (storyId: string) => void = async storyId => {
 const resumeStory: () => void = async () => {
   _mainStore.setStoryLoadingState(true);
   const { lastActStoryId } = _mainStore;
+  _mainStore.setStoryId(lastActStoryId);
   await loadStory(lastActStoryId);
   _mainStore.setStoryLoadingState(false);
 };
