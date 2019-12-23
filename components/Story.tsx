@@ -11,9 +11,16 @@ interface Props {
   extraData?: object;
   width?: number;
   inverted?: boolean;
+  own?: boolean;
 }
 
-const Story: React.SFC<Props> = ({ items, extraData, width, inverted }) => {
+const Story: React.SFC<Props> = ({
+  items,
+  extraData,
+  width,
+  inverted,
+  own
+}) => {
   const [popoverIndex, setPopoverIndex] = useState();
 
   let ref;
@@ -24,14 +31,16 @@ const Story: React.SFC<Props> = ({ items, extraData, width, inverted }) => {
         bit={item}
         width={width}
         onLongPress={() => {
-          setPopoverIndex(index);
+          own && setPopoverIndex(index);
         }}
-        onPress={() => setPopoverIndex(undefined)}
+        onPress={() => own && setPopoverIndex(undefined)}
         popoverVisible={popoverIndex === index}
         popoverText={"Rollback to this point"}
         onPopoverPress={() => {
-          setPopoverIndex(undefined);
-          ControlService.rollback(index);
+          if (own) {
+            setPopoverIndex(undefined);
+            ControlService.rollback(index);
+          }
         }}
       />
     );
@@ -58,7 +67,8 @@ Story.propTypes = {
   items: PropTypes.array,
   extraData: PropTypes.object,
   width: PropTypes.number,
-  inverted: PropTypes.bool
+  inverted: PropTypes.bool,
+  own: PropTypes.bool
 };
 
 export default Story;

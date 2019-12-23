@@ -208,7 +208,11 @@ class Story extends Component<Props, any> {
             </TouchableOpacity>
           ]}
         />
-        <StoryComponent items={mainStore.story} extraData={this.state} />
+        <StoryComponent
+          items={mainStore.story}
+          extraData={this.state}
+          own={!!ownStory}
+        />
         {ownStory && (
           <>
             <TellMeMore />
