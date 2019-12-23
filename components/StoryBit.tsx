@@ -1,10 +1,16 @@
 import React from "react";
-import { Text, StyleSheet, View, Image, Dimensions } from "react-native";
+import {
+  Text,
+  StyleSheet,
+  View,
+  Image,
+  Dimensions,
+  TouchableOpacity
+} from "react-native";
 import { StoryBit, Origin, Location } from "../types";
 import { colors, fonts } from "../theme";
 import PropTypes from "prop-types";
 import AutoHeightImage from "../components/AutoHeightImage";
-import { TouchableOpacity } from "react-native-gesture-handler";
 
 const screenWidth = Math.round(Dimensions.get("window").width);
 
@@ -324,6 +330,7 @@ const Bit: React.SFC<Props> = ({
         onLongPress={onLongPress}
         onPress={onPress}
         style={{ flex: 1 }}
+        activeOpacity={1.0}
       >
         <View style={styles.rowText}>{content}</View>
       </TouchableOpacity>
