@@ -51,26 +51,32 @@ const act: (payload: string) => void = async payload => {
   const type = _mainStore.actionType;
   const storyId = _mainStore.storyId;
   _mainStore.setLastActStory(storyId);
-  const { newStoryBits, error } = await ApiService.act(payload, type, storyId);
-  _mainStore.addStoryBits(newStoryBits);
-  _mainStore.setInfering(false);
-  _mainStore.storyUpdatedAt(storyId);
-
-  // Update achievements
-  newStoryBits.forEach(s => {
-    if (s.type === "LOCATION") {
-      const location = (s.payload as unknown) as Location;
-      if (location.firstVisit) {
-        _mainStore.addAchievement("visited:" + location.location);
-      }
-    }
-  });
-
-  if (error) {
-    ErrorService.storyError(
-      "The AI is confused by your input. Try something else.",
-      5000
+  if (type && storyId) {
+    const { newStoryBits, error } = await ApiService.act(
+      payload,
+      type,
+      storyId
     );
+    _mainStore.addStoryBits(newStoryBits);
+    _mainStore.setInfering(false);
+    _mainStore.storyUpdatedAt(storyId);
+
+    // Update achievements
+    newStoryBits.forEach(s => {
+      if (s.type === "LOCATION") {
+        const location = (s.payload as unknown) as Location;
+        if (location.firstVisit) {
+          _mainStore.addAchievement("visited:" + location.location);
+        }
+      }
+    });
+
+    if (error) {
+      ErrorService.storyError(
+        "The AI is confused by your input. Try something else.",
+        5000
+      );
+    }
   }
 };
 

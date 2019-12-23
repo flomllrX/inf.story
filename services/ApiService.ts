@@ -111,6 +111,7 @@ const act: (
   type,
   storyId
 ) => {
+  console.log({ payload, type, uid: storyId });
   const response = (await post("/act", {
     uid: storyId,
     type,
