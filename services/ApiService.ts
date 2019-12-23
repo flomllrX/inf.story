@@ -111,12 +111,13 @@ const act: (
   type,
   storyId
 ) => {
-  console.log({ payload, type, uid: storyId });
+  console.log("Act", { payload, type, uid: storyId });
   const response = (await post("/act", {
     uid: storyId,
     type,
     payload
   })) as any;
+  console.log(response);
   return response;
 };
 
@@ -160,6 +161,19 @@ const checkAvailability: () => Promise<boolean> = async () => {
   }
 };
 
+const rollback: (
+  storyId: string,
+  bitId: number
+) => Promise<{ storyBits?: StoryBit[]; error?: any }> = async (
+  storyId,
+  bitId
+) => {
+  console.log("Rollback", storyId, bitId);
+  const response = await post("/rollback", { uid: storyId, index: bitId });
+  console.log(response);
+  return response;
+};
+
 export default {
   startStory,
   act,
@@ -169,5 +183,6 @@ export default {
   getAchievements,
   setMainStore,
   updateStory,
-  checkAvailability
+  checkAvailability,
+  rollback
 };

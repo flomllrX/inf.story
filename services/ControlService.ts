@@ -157,6 +157,21 @@ const loadAchievements: () => void = async () => {
   }
 };
 
+const rollback: (bitId: number) => void = async bitId => {
+  _mainStore.setInfering(true);
+  const { storyId, story } = _mainStore;
+  const { error, storyBits } = await ApiService.rollback(
+    storyId,
+    story.length - bitId
+  );
+  if (error || !storyBits) {
+    ErrorService.uncriticalError("Rollback failed");
+  } else {
+    _mainStore.setStory(storyBits);
+  }
+  _mainStore.setInfering(false);
+};
+
 export default {
   setMainStore,
   startStory,
@@ -169,5 +184,6 @@ export default {
   wipeData,
   closeTutorial,
   abortStoryCreation,
-  loadAchievements
+  loadAchievements,
+  rollback
 };

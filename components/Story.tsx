@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { FlatList } from "react-native";
 import { StoryBit } from "../types";
 import StoryBitComponent from "./StoryBit";
 import { Platform } from "@unimodules/core";
+import ControlService from "../services/ControlService";
 
 interface Props {
   items: StoryBit[];
@@ -13,14 +14,32 @@ interface Props {
 }
 
 const Story: React.SFC<Props> = ({ items, extraData, width, inverted }) => {
+  const [popoverIndex, setPopoverIndex] = useState();
+
   let ref;
   const renderItem = element => {
-    const { item } = element;
-    return <StoryBitComponent bit={item} width={width} />;
+    const { item, index } = element;
+    return (
+      <StoryBitComponent
+        bit={item}
+        width={width}
+        onLongPress={() => {
+          setPopoverIndex(index);
+        }}
+        onPress={() => setPopoverIndex(undefined)}
+        popoverVisible={popoverIndex === index}
+        popoverText={"Rollback to this point"}
+        onPopoverPress={() => {
+          setPopoverIndex(undefined);
+          ControlService.rollback(index);
+        }}
+      />
+    );
   };
   useEffect(() => {
     ref.scrollToIndex({ animated: true, index: 0, viewPosition: 0 });
   }, [items]);
+
   return (
     <FlatList
       inverted={inverted || Platform.OS !== "web"}

@@ -4,17 +4,22 @@ import { StoryBit, Origin, Location } from "../types";
 import { colors, fonts } from "../theme";
 import PropTypes from "prop-types";
 import AutoHeightImage from "../components/AutoHeightImage";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const screenWidth = Math.round(Dimensions.get("window").width);
 
 interface Props {
   bit: StoryBit;
   width?: number;
+  popoverVisible?: boolean;
+  popoverText?: string;
+  onLongPress?: () => void;
+  onPopoverPress?: () => void;
+  onPress?: () => void;
 }
 
 const styles = StyleSheet.create({
   row: {
-    flexDirection: "row",
     paddingHorizontal: 20,
     flex: 1
   },
@@ -33,9 +38,11 @@ const styles = StyleSheet.create({
     fontFamily: fonts.regular
   },
   promptContainer: {
-    marginVertical: 25,
     display: "flex",
     flexDirection: "row"
+  },
+  promtContainerMargin: {
+    marginVertical: 25
   },
   semiBold: {
     fontFamily: fonts.semiBold
@@ -77,6 +84,16 @@ const styles = StyleSheet.create({
   locationbox: {
     flex: 1,
     marginVertical: 25
+  },
+  popover: {
+    backgroundColor: colors.verydarkgray,
+    padding: 20,
+    flex: 1,
+    marginVertical: 10
+  },
+  popoverText: {
+    fontFamily: fonts.regular,
+    color: colors.defaultText
   }
 });
 
@@ -222,7 +239,15 @@ const uppercase = (s: string) => {
   return s[0].toUpperCase() + s.substr(1).toLowerCase();
 };
 
-const Bit: React.SFC<Props> = ({ bit, width }) => {
+const Bit: React.SFC<Props> = ({
+  bit,
+  width,
+  popoverVisible,
+  onLongPress,
+  popoverText,
+  onPopoverPress,
+  onPress
+}) => {
   const { type, payload } = bit;
   let content;
   if (type === "ACT_SAY" || type === "ACT_DO") {
@@ -285,9 +310,23 @@ const Bit: React.SFC<Props> = ({ bit, width }) => {
     content = <Text style={styles.message}>{bit.payload}</Text>;
   }
 
+  const prompt = type === "ACT_DO" || type === "ACT_SAY";
   return content ? (
-    <View style={styles.row}>
-      <View style={styles.rowText}>{content}</View>
+    <View style={[styles.row, prompt && styles.promtContainerMargin]}>
+      {popoverVisible && (
+        <TouchableOpacity onPress={onPopoverPress} style={{ flex: 1 }}>
+          <View style={styles.popover}>
+            <Text style={styles.popoverText}>{popoverText}</Text>
+          </View>
+        </TouchableOpacity>
+      )}
+      <TouchableOpacity
+        onLongPress={onLongPress}
+        onPress={onPress}
+        style={{ flex: 1 }}
+      >
+        <View style={styles.rowText}>{content}</View>
+      </TouchableOpacity>
     </View>
   ) : (
     <></>
@@ -298,7 +337,12 @@ Bit.defaultProps = {};
 
 Bit.propTypes = {
   bit: PropTypes.any,
-  width: PropTypes.number
+  width: PropTypes.number,
+  onLongPress: PropTypes.any,
+  onPopoverPress: PropTypes.any,
+  popoverText: PropTypes.string,
+  popoverVisible: PropTypes.bool,
+  onPress: PropTypes.any
 };
 
 export default Bit;

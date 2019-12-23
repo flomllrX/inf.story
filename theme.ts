@@ -14,7 +14,8 @@ export const colors = {
   greyed: "rgba(255, 255, 255, 0.45)",
   lightgray: "rgba(255, 255, 255, 0.6)",
   modalBackground: "#111",
-  darkgray: "rgba(255, 255, 255, 0.2)"
+  darkgray: "rgba(255, 255, 255, 0.2)",
+  verydarkgray: "rgba(255, 255, 255, 0.05)"
 };
 export const fonts = {
   regular: "SourceCodePro-Regular",
