@@ -239,7 +239,8 @@ export const portraits = {
   shadow: require("../assets/portraits/shadow.png"),
   squire: require("../assets/portraits/squire.png"),
   ranger: require("../assets/portraits/ranger.png"),
-  rogue: require("../assets/portraits/rogue.png")
+  rogue: require("../assets/portraits/rogue.png"),
+  wizard: require("../assets/portraits/wizard.png")
 };
 const uppercase = (s: string) => {
   return s[0].toUpperCase() + s.substr(1).toLowerCase();

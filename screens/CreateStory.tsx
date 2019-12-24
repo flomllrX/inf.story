@@ -180,6 +180,12 @@ const CLASSES: PlayerClass[] = [
     value: "ranger"
   },
   {
+    name: "Wizard",
+    portrait: require("../assets/portraits/wizard.png"),
+    description: "Magic!",
+    value: "wizard"
+  },
+  {
     name: "???",
     portrait: require("../assets/portraits/orc.png"),
     description: "🔒 This class is locked",
