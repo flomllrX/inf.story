@@ -258,7 +258,6 @@ class CreateStory extends Component<any, CreateStoryState> {
         mainStore.achievements &&
         mainStore.achievements.find(e => e === "discord")
       ) {
-        console.log("ORCCC");
         c.locked = false;
         c.name = "Orc";
         c.description =
