@@ -74,7 +74,8 @@ const classes = [
   "wizard",
   "ranger",
   "peasant",
-  "rogue"
+  "rogue",
+  "wizard"
 ];
 
 const names = [

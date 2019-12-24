@@ -24,6 +24,10 @@ export default [
     value: "ranger"
   },
   {
+    portrait: require("./wizard.png"),
+    value: "wizard"
+  },
+  {
     portrait: require("./orc.png"),
     value: "orc"
   },

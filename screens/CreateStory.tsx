@@ -180,6 +180,12 @@ const CLASSES: PlayerClass[] = [
     value: "ranger"
   },
   {
+    name: "Wizard",
+    portrait: require("../assets/portraits/wizard.png"),
+    description: "Magic!",
+    value: "wizard"
+  },
+  {
     name: "???",
     portrait: require("../assets/portraits/orc.png"),
     description: "🔒 This class is locked",
@@ -252,7 +258,6 @@ class CreateStory extends Component<any, CreateStoryState> {
         mainStore.achievements &&
         mainStore.achievements.find(e => e === "discord")
       ) {
-        console.log("ORCCC");
         c.locked = false;
         c.name = "Orc";
         c.description =
