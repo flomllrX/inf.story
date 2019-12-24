@@ -46,7 +46,9 @@ const Story: React.SFC<Props> = ({
     );
   };
   useEffect(() => {
-    ref.scrollToIndex({ animated: true, index: 0, viewPosition: 0 });
+    try {
+      ref.scrollToIndex({ animated: true, index: 0, viewPosition: 0 });
+    } catch (e) {}
   }, [items]);
 
   return (

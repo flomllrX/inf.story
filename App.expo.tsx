@@ -2,11 +2,20 @@ import React from "react";
 import Loading from "./screens/Loading";
 import ErrorScreen from "./screens/Error";
 import * as Font from "expo-font";
-import { View, StyleSheet, Image, Text } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Image,
+  Text,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform
+} from "react-native";
 import { Asset } from "expo-asset";
 import { Provider, observer } from "mobx-react";
 import MainStore from "./mobx/mainStore";
 import ControlService from "./services/ControlService";
+import ApiService from "./services/ApiService";
 import Navigation from "./container/Navigation";
 import Story from "./screens/Story";
 import MainStory from "./container/MainStory";
@@ -15,8 +24,9 @@ import { createStackNavigator } from "react-navigation-stack";
 import { portraits, locations } from "./components/StoryBit";
 import Toast from "react-native-root-toast";
 import ErrorService from "./services/ErrorService";
-import { fonts } from "./theme";
-import ApiService from "./services/ApiService";
+import Modal from "react-native-modal";
+
+import { fonts, colors } from "./theme";
 
 const prefix = "infinitestory://";
 
@@ -57,6 +67,14 @@ const styles = StyleSheet.create({
   },
   toast: {
     fontFamily: fonts.regular
+  },
+  modalContainer: {
+    width: "100%",
+    padding: 10
+  },
+  modalInner: {
+    backgroundColor: colors.modalBackground,
+    padding: 20
   }
 });
 
@@ -64,9 +82,11 @@ class App extends React.Component {
   state: {
     fontLoaded: boolean;
     activeStoryId: string | undefined;
+    apiAvailable?: boolean;
   } = {
     fontLoaded: false,
-    activeStoryId: undefined
+    activeStoryId: undefined,
+    apiAvailable: true
   };
 
   /** Fetch custom fonts */
@@ -81,9 +101,12 @@ class App extends React.Component {
       .map(k => locations[k])
       .reduce((prev, curr) => [...prev, ...curr], []);
     const imageLoaders = cacheImages([...p, ...l]);
-    await Promise.all([...imageLoaders, fontLoaders]);
+    try {
+      await Promise.all([...imageLoaders, fontLoaders]);
+    } catch (e) {
+      ErrorService.uncriticalError("Prefetching images failed");
+    }
     this.setState({ fontLoaded: true });
-    console.log("Calling controll service");
     ControlService.loadStories();
     ControlService.loadAchievements();
   }
@@ -108,6 +131,16 @@ class App extends React.Component {
             <Text style={styles.toast}>{mainStore.uncriticalError}</Text>
           </Toast>
         )}
+
+        <Modal
+          isVisible={mainStore.modalVisible}
+          onBackdropPress={() => ControlService.closeModal()}
+          onBackButtonPress={() => ControlService.closeModal()}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalInner}>{mainStore.modalContent}</View>
+          </View>
+        </Modal>
       </Provider>
     );
   }

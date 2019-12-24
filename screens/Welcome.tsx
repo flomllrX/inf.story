@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Animated,
-  Linking
+  Linking,
+  TextInput
 } from "react-native";
 import PropTypes from "prop-types";
 import { colors, fonts } from "../theme";
@@ -43,9 +44,12 @@ const styles = StyleSheet.create({
     textDecorationLine: "underline"
   },
   textInput: {
-    minWidth: 50,
     borderBottomWidth: 1,
-    borderBottomColor: colors.defaultText
+    borderBottomColor: colors.defaultText,
+    alignSelf: "center",
+    marginTop: 20,
+    marginBottom: 10,
+    minWidth: 200
   },
   startButton: {
     marginTop: 50
@@ -106,6 +110,44 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 15,
     backgroundColor: colors.primary
+  },
+  modalTitle: {
+    fontFamily: fonts.semiBold,
+    color: colors.defaultText,
+    fontSize: 18,
+    paddingBottom: 10,
+    alignSelf: "center"
+  },
+  modalText: {
+    fontFamily: fonts.regular,
+    color: colors.defaultText,
+    fontSize: 16
+  },
+  modalBold: {
+    fontFamily: fonts.semiBold,
+    color: colors.defaultText,
+    fontSize: 16
+  },
+  modalRed: {
+    fontFamily: fonts.bold,
+    color: colors.actDo,
+    fontSize: 16
+  },
+  modalGreen: {
+    fontFamily: fonts.semiBold,
+    color: colors.actSay,
+    fontSize: 16
+  },
+  tutorialButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%"
+  },
+  textButton: {
+    fontFamily: fonts.regular,
+    color: colors.defaultText,
+    fontSize: 18
   }
 });
 
@@ -158,6 +200,30 @@ class Welcome extends Component<any, any> {
     const { navigation } = this.props;
     ControlService.resumeStory();
     navigation.navigate("MainStoryModal");
+  };
+
+  onDiscordQuest = () => {
+    let code;
+    Linking.openURL("https://discord.gg/yXGmY6y");
+    ControlService.openModal(
+      <>
+        <Text style={styles.modalTitle}>Enter your Discord code</Text>
+        <TextInput
+          style={[styles.text, styles.textInput]}
+          onChangeText={text => (code = text)}
+        />
+        <View style={styles.tutorialButton}>
+          <TouchableOpacity
+            onPress={async () => {
+              await ControlService.useDiscordCode("" + code);
+              ControlService.closeModal();
+            }}
+          >
+            <Text style={styles.textButton}>Verify</Text>
+          </TouchableOpacity>
+        </View>
+      </>
+    );
   };
 
   render() {
@@ -215,7 +281,7 @@ class Welcome extends Component<any, any> {
           </Text>
           <Text
             style={discordAchievement ? styles.questDone : styles.quest}
-            onPress={() => Linking.openURL("https://discord.gg/yXGmY6y")}
+            onPress={this.onDiscordQuest}
           >
             {discordAchievement ? "▣" : "▢"} Join the Discord to access a ???
             class

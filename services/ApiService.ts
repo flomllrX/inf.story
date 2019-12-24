@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import { StoryBit, StorySmall } from "../types";
 import { Platform } from "react-native";
 import fetch from "isomorphic-unfetch";
@@ -168,9 +169,17 @@ const rollback: (
   storyId,
   bitId
 ) => {
-  console.log("Rollback", storyId, bitId);
   const response = await post("/rollback", { uid: storyId, index: bitId });
-  console.log(response);
+  return response;
+};
+
+const useDiscordCode: (
+  code: string,
+  userId: string
+) => Promise<{ ok?: "ok"; error?: any }> = async (code, userId) => {
+  console.log({ timestamp: Date.now(), code, device_id: userId });
+  const response = await post("/use_discord_code", { code, device_id: userId });
+  console.log("useDiscord", response);
   return response;
 };
 
@@ -184,5 +193,6 @@ export default {
   setMainStore,
   updateStory,
   checkAvailability,
-  rollback
+  rollback,
+  useDiscordCode
 };

@@ -5,6 +5,7 @@ import uuid from "uuid/v4";
 import ControlService from "../services/ControlService";
 import ApiService from "../services/ApiService";
 import { Origin } from "../types";
+import { ReactChild } from "react";
 
 const storeData = async (key: string, value: string) => {
   try {
@@ -53,6 +54,9 @@ export default class MainStore {
 
   @observable log = "";
   @observable apiAvailable = true;
+
+  @observable modalVisible: boolean;
+  @observable.shallow modalContent: ReactChild;
 
   @action setStoryId(storyId: string) {
     this.storyId = storyId;
@@ -159,6 +163,14 @@ export default class MainStore {
     } else {
       this.achievements = [achievement];
     }
+  }
+
+  @action setModalVisibility(visible: boolean) {
+    this.modalVisible = visible;
+  }
+
+  @action setModalContent(content: ReactChild) {
+    this.modalContent = content;
   }
 
   clearAsyncStorage = async () => {

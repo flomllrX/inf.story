@@ -2,7 +2,15 @@ import React from "react";
 import Loading from "./screens/Loading";
 import ErrorScreen from "./screens/Error";
 import * as Font from "expo-font";
-import { View, StyleSheet, Image, Text } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Image,
+  Text,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform
+} from "react-native";
 import { Asset } from "expo-asset";
 import { Provider, observer } from "mobx-react";
 import MainStore from "./mobx/mainStore";
@@ -16,9 +24,10 @@ import { createStackNavigator } from "react-navigation-stack";
 import { portraits, locations } from "./components/StoryBit";
 import Toast from "react-native-root-toast";
 import ErrorService from "./services/ErrorService";
+import Modal from "react-native-modal";
 
 import codePush from "react-native-code-push";
-import { fonts } from "./theme";
+import { fonts, colors } from "./theme";
 const codePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
   installMode: codePush.InstallMode.IMMEDIATE
@@ -63,6 +72,14 @@ const styles = StyleSheet.create({
   },
   toast: {
     fontFamily: fonts.regular
+  },
+  modalContainer: {
+    width: "100%",
+    padding: 10
+  },
+  modalInner: {
+    backgroundColor: colors.modalBackground,
+    padding: 20
   }
 });
 
@@ -119,6 +136,15 @@ class App extends React.Component {
             <Text style={styles.toast}>{mainStore.uncriticalError}</Text>
           </Toast>
         )}
+        <Modal
+          isVisible={mainStore.modalVisible}
+          onBackdropPress={() => ControlService.closeModal()}
+          onBackButtonPress={() => ControlService.closeModal()}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalInner}>{mainStore.modalContent}</View>
+          </View>
+        </Modal>
       </Provider>
     );
   }

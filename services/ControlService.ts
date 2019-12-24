@@ -5,6 +5,7 @@ let _mainStore: MainStore;
 import Constants from "expo-constants";
 import CodePush from "react-native-code-push";
 import ErrorService from "./ErrorService";
+import { ReactChild } from "react";
 
 const setMainStore = store => {
   _mainStore = store;
@@ -133,8 +134,17 @@ const restartApp: () => void = async () => {
   }
 };
 
-const closeTutorial: () => void = async () => {
+const setTutorialDone: () => void = async () => {
   _mainStore.setTutorialDone();
+};
+
+const openModal: (content: ReactChild) => void = content => {
+  _mainStore.setModalVisibility(true);
+  _mainStore.setModalContent(content);
+};
+
+const closeModal: () => void = async () => {
+  _mainStore.setModalVisibility(false);
 };
 
 const wipeData: () => void = async () => {
@@ -172,6 +182,21 @@ const rollback: (bitId: number) => void = async bitId => {
   _mainStore.setInfering(false);
 };
 
+const useDiscordCode: (code: string) => void = async code => {
+  const { userId } = _mainStore;
+  console.log("Discord Code: ", code);
+  if (userId && code) {
+    const { ok, error } = await ApiService.useDiscordCode(code, userId);
+    if (error || !ok) {
+      ErrorService.uncriticalError("Please enter a valid code");
+    } else {
+      _mainStore.addAchievement("discord");
+    }
+  } else {
+    ErrorService.uncriticalError("UserID not found");
+  }
+};
+
 export default {
   setMainStore,
   startStory,
@@ -182,8 +207,11 @@ export default {
   resumeStory,
   setStory,
   wipeData,
-  closeTutorial,
+  setTutorialDone,
+  openModal,
+  closeModal,
   abortStoryCreation,
   loadAchievements,
-  rollback
+  rollback,
+  useDiscordCode
 };

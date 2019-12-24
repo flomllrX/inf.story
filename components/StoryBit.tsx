@@ -320,7 +320,11 @@ const Bit: React.SFC<Props> = ({
   return content ? (
     <View style={[styles.row, prompt && styles.promtContainerMargin]}>
       {popoverVisible && (
-        <TouchableOpacity onPress={onPopoverPress} style={{ flex: 1 }}>
+        <TouchableOpacity
+          onPress={onPopoverPress}
+          style={{ flex: 1 }}
+          activeOpacity={0.6}
+        >
           <View style={styles.popover}>
             <Text style={styles.popoverText}>{popoverText}</Text>
           </View>
@@ -330,7 +334,7 @@ const Bit: React.SFC<Props> = ({
         onLongPress={onLongPress}
         onPress={onPress}
         style={{ flex: 1 }}
-        activeOpacity={1.0}
+        activeOpacity={0.8}
       >
         <View style={styles.rowText}>{content}</View>
       </TouchableOpacity>
