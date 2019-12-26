@@ -4,9 +4,12 @@ import { Platform } from "react-native";
 import fetch from "isomorphic-unfetch";
 import MainStore from "../mobx/mainStore";
 import ErrorService from "./ErrorService";
+import Constants from "expo-constants";
+
 let _mainStore: MainStore;
 
-const address = "https://api.infinitestory.app";
+const address =
+  Constants.appOwnership === "expo" ? "https://api-dev.infinitestory.app" : "https://api.infinitestory.app";
 
 const setMainStore = (mainStore: MainStore) => {
   _mainStore = mainStore;
