@@ -9,7 +9,9 @@ import Constants from "expo-constants";
 let _mainStore: MainStore;
 
 const address =
-  Constants.appOwnership === "expo" ? "https://api-dev.infinitestory.app" : "https://api.infinitestory.app";
+  Constants.appOwnership === "expo" && Platform.OS !== "web"
+    ? "https://api-dev.infinitestory.app"
+    : "https://api.infinitestory.app";
 
 const setMainStore = (mainStore: MainStore) => {
   _mainStore = mainStore;
