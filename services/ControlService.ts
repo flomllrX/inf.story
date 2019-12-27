@@ -197,6 +197,15 @@ const useDiscordCode: (code: string) => void = async code => {
   }
 };
 
+const deleteStory: (storyId: string) => void = async storyId => {
+  const { ok, error } = await ApiService.deleteStory(storyId);
+  if (ok && !error) {
+    _mainStore.deleteStory(storyId);
+  } else {
+    ErrorService.uncriticalError("Could not delete the story");
+  }
+};
+
 export default {
   setMainStore,
   startStory,
@@ -213,5 +222,6 @@ export default {
   abortStoryCreation,
   loadAchievements,
   rollback,
-  useDiscordCode
+  useDiscordCode,
+  deleteStory
 };

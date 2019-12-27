@@ -138,6 +138,10 @@ export default class MainStore {
     }
   }
 
+  @action deleteStory(storyId: string) {
+    this.stories && delete this.stories[storyId];
+  }
+
   @action storyUpdatedAt(storyId: string) {
     if (this.stories) {
       this.stories[storyId] = {

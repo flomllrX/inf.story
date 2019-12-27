@@ -152,11 +152,12 @@ class Story extends Component<Props, any> {
     }
   }
 
-  share = () => {
+  share = async () => {
     const { mainStore, navigation } = this.props;
     const storyId = navigation.getParam("storyId") || mainStore.storyId;
     if (storyId) {
-      ApiService.updateStory(storyId, true);
+      const response = await ApiService.updateStory(storyId, true);
+      console.log(response);
       Platform.OS === "ios"
         ? Share.share({
             url: "https://infinitestory.app/story/" + storyId
@@ -167,6 +168,13 @@ class Story extends Component<Props, any> {
               (storyId || mainStore.storyId)
           });
     }
+  };
+
+  deleteStory = async () => {
+    const { mainStore, navigation } = this.props;
+    const storyId = mainStore.storyId;
+    await ControlService.deleteStory(storyId);
+    navigation.goBack();
   };
 
   render() {
@@ -191,7 +199,10 @@ class Story extends Component<Props, any> {
         )}
         <Header
           rightButtons={[
-            <TouchableOpacity key={0} onPress={this.share}>
+            <TouchableOpacity key={0} onPress={this.deleteStory}>
+              <Text style={styles.text}>Delete</Text>
+            </TouchableOpacity>,
+            <TouchableOpacity key={1} onPress={this.share}>
               <Text style={styles.text}>Share</Text>
             </TouchableOpacity>
           ]}

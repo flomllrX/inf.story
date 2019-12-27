@@ -57,7 +57,7 @@ const Story: React.SFC<Props> = ({
       data={items}
       renderItem={renderItem}
       extraData={extraData}
-      keyExtractor={() => "" + Math.random()}
+      keyExtractor={() => "" + Math.random() * 1000}
       ref={r => (ref = r)}
     />
   );

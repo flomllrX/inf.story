@@ -67,7 +67,7 @@ class History extends Component<any, any> {
           leftButton={<View></View>}
           rightButtons={[
             <TouchableOpacity
-              key={0}
+              key={Math.random()}
               style={styles.flex}
               onPress={() => slideRight()}
             >
