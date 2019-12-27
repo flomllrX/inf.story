@@ -35,7 +35,7 @@ const Story: React.SFC<Props> = ({
         }}
         onPress={() => own && setPopoverIndex(undefined)}
         popoverVisible={popoverIndex === index}
-        popoverText={"Rollback to this point"}
+        popoverText={"↺ Rollback to this point"}
         onPopoverPress={() => {
           if (own) {
             setPopoverIndex(undefined);

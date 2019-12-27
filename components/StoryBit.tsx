@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     marginVertical: 10
   },
   popoverText: {
-    fontFamily: fonts.regular,
+    fontFamily: fonts.semiBold,
     color: colors.defaultText
   }
 });
