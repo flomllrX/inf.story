@@ -77,6 +77,19 @@ const styles = StyleSheet.create({
     fontFamily: fonts.regular,
     color: colors.defaultText,
     fontSize: 18
+  },
+  headerButton: {
+    marginRight: 20
+  },
+  modalButton: {
+    paddingTop: 20,
+    fontSize: 18
+  },
+  modal: {
+    alignItems: "center"
+  },
+  red: {
+    color: colors.primary
   }
 });
 
@@ -173,8 +186,28 @@ class Story extends Component<Props, any> {
   deleteStory = async () => {
     const { mainStore, navigation } = this.props;
     const storyId = mainStore.storyId;
-    await ControlService.deleteStory(storyId);
-    navigation.goBack();
+    ControlService.openModal(
+      <View style={[styles.modal]}>
+        <Text style={styles.modalTitle}>Warning:</Text>
+        <Text style={styles.text}>This action can not be undone</Text>
+        <Text
+          onPress={async () => {
+            await ControlService.deleteStory(storyId);
+            await ControlService.closeModal();
+            navigation.goBack();
+          }}
+          style={[styles.text, styles.modalButton, styles.red]}
+        >
+          Delete story
+        </Text>
+        <Text
+          style={[styles.text, styles.modalButton]}
+          onPress={async () => await ControlService.closeModal()}
+        >
+          Cancel
+        </Text>
+      </View>
+    );
   };
 
   render() {
@@ -199,7 +232,11 @@ class Story extends Component<Props, any> {
         )}
         <Header
           rightButtons={[
-            <TouchableOpacity key={0} onPress={this.deleteStory}>
+            <TouchableOpacity
+              key={0}
+              onPress={this.deleteStory}
+              style={styles.headerButton}
+            >
               <Text style={styles.text}>Delete</Text>
             </TouchableOpacity>,
             <TouchableOpacity key={1} onPress={this.share}>

@@ -33,7 +33,8 @@ const post: (
     });
     if (response.status >= 300) {
       ErrorService.log({ error: response.status });
-      return { error: "Error" + response.status };
+      console.log(JSON.stringify(response));
+      return { error: "Error " + response.status };
     } else {
       const responseJson = await response.json();
       return await responseJson;
@@ -60,7 +61,8 @@ const put: (
     });
     if (response.status >= 300) {
       ErrorService.log({ error: response.status });
-      return { error: "Error" + response.status };
+      console.log(JSON.stringify(response));
+      return { error: "Error " + response.status };
     } else {
       const responseJson = await response.json();
       return await responseJson;
@@ -72,9 +74,10 @@ const put: (
 };
 
 const del: (
-  endpoint: string,
-  body?: { [key: string]: string | number | boolean }
-) => Promise<{ [key: string]: string }> = async (endpoint, body) => {
+  endpoint: string
+) => Promise<{ [key: string]: string }> = async endpoint => {
+  console.log("UserId", _mainStore.userId);
+  console.log("Test");
   try {
     const response = await fetch(address + endpoint, {
       method: "DELETE",
@@ -82,12 +85,12 @@ const del: (
         Accept: "application/json",
         "Content-Type": "application/json",
         Authorization: _mainStore && _mainStore.userId
-      },
-      body: body && JSON.stringify(body)
+      }
     });
     if (response.status >= 300) {
       ErrorService.log({ error: response.status });
-      return { error: "Error" + response.status };
+      console.log(JSON.stringify(response));
+      return { error: "Error " + response.status };
     } else {
       const responseJson = await response.json();
       return await responseJson;
@@ -217,6 +220,8 @@ const deleteStory: (
   storyId: string
 ) => Promise<{ ok?: "ok"; error?: any }> = async storyId => {
   console.log("StoryId", storyId);
+  console.log("Test2");
+  console.log("UserId X", _mainStore.userId);
   const response = await del("/story/" + storyId);
   console.log(response);
   return response;
