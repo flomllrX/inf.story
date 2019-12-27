@@ -56,10 +56,6 @@ class Navigation extends Component<any, any> {
       >
         <History slideRight={() => this.slideRight()} />
         <MainScreen slideLeft={() => this.slideLeft()} />
-        <View style={[styles.viewStyle, styles.right]}>
-          <Text style={styles.text}>User ID</Text>
-          <Text style={styles.text}>{mainStore.userId}</Text>
-        </View>
       </Swiper>
     );
   }
