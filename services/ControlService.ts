@@ -62,14 +62,15 @@ const act: (payload: string) => void = async payload => {
     _mainStore.storyUpdatedAt(storyId);
 
     // Update achievements
-    newStoryBits.forEach(s => {
-      if (s.type === "LOCATION") {
-        const location = (s.payload as unknown) as Location;
-        if (location.firstVisit) {
-          _mainStore.addAchievement("visited:" + location.location);
+    newStoryBits &&
+      newStoryBits.forEach(s => {
+        if (s.type === "LOCATION") {
+          const location = (s.payload as unknown) as Location;
+          if (location && location.firstVisit) {
+            _mainStore.addAchievement("visited:" + location.location);
+          }
         }
-      }
-    });
+      });
 
     if (error) {
       ErrorService.storyError(
