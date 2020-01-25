@@ -1,4 +1,4 @@
-import { StoryBit, Location } from "../types";
+import { StoryBit, Location, Prompt } from "../types";
 import MainStore from "../mobx/mainStore";
 import ApiService from "./ApiService";
 let _mainStore: MainStore;
@@ -19,18 +19,20 @@ const abortStoryCreation: () => void = () => {
   _mainStore.setCreatingStoryState(false);
 };
 
-const startStory: (playerClass: string, name: string) => void = async (
-  playerClass,
-  name
-) => {
+const startStory: (
+  playerClass?: string,
+  name?: string,
+  promptId?: string
+) => void = async (playerClass, name, promptId) => {
   try {
     _mainStore.setStoryLoadingState(true);
     _mainStore.setCreatingStoryState(false);
     const userId = _mainStore.userId;
-    const { error, uid, storyBits } = await ApiService.startStory(
+    const { error, uid, storyBits, title } = await ApiService.startStory(
       userId,
       playerClass,
-      name
+      name,
+      promptId
     );
     if (error) {
       const errorObj = typeof error === "string" ? { error } : error;
@@ -39,12 +41,64 @@ const startStory: (playerClass: string, name: string) => void = async (
       _mainStore.setStoryId(uid);
       _mainStore.setStory(storyBits);
       _mainStore.setLastActStory(uid);
-      _mainStore.addStoryToHistory(uid, storyBits);
+      _mainStore.addStoryToHistory(uid, storyBits, title);
     }
     _mainStore.setStoryLoadingState(false);
   } catch (e) {
     ErrorService.log({ error: e });
   }
+};
+
+const createPrompt: (title: string, context: string) => Promise<any> = async (
+  title,
+  context
+) => {
+  _mainStore.setPromptButtonActivated(false);
+  const userId = _mainStore.userId;
+  if (
+    !(context.includes(".") || context.includes("!") || context.includes("?"))
+  ) {
+    context += ".";
+  }
+  const prompt = (await ApiService.createPrompt(
+    userId,
+    context,
+    title
+  )) as Prompt;
+  _mainStore.addPrompt(prompt);
+  _mainStore.setPromptButtonActivated(true);
+  _mainStore.setCurrentPromptUid(prompt.uid);
+  return prompt;
+};
+
+const updatePrompt: (
+  promptId: number,
+  title: string,
+  context: string,
+  publ?: boolean
+) => Promise<any> = async (promptId, title, context, publ) => {
+  _mainStore.setPromptButtonActivated(false);
+  const response = await ApiService.updatePrompt(
+    promptId,
+    title,
+    context,
+    publ
+  );
+  if (response.ok) {
+    let { prompts } = _mainStore;
+    prompts = prompts.map(p => {
+      if (p.uid === promptId) {
+        p.title = title;
+        p.context = context;
+        p.public = publ;
+      }
+      return p;
+    });
+    _mainStore.setPrompts(prompts);
+  }
+  console.log(response);
+  _mainStore.setPromptButtonActivated(true);
+  return response;
 };
 
 const act: (payload: string) => void = async payload => {
@@ -185,7 +239,6 @@ const rollback: (bitId: number) => void = async bitId => {
 
 const useDiscordCode: (code: string) => void = async code => {
   const { userId } = _mainStore;
-  console.log("Discord Code: ", code);
   if (userId && code) {
     const { ok, error } = await ApiService.useDiscordCode(code, userId);
     if (error || !ok) {
@@ -207,6 +260,12 @@ const deleteStory: (storyId: string) => void = async storyId => {
   }
 };
 
+const loadPrompts: () => void = async () => {
+  const { userId } = _mainStore;
+  const { prompts } = await ApiService.getPrompts(userId);
+  _mainStore.setPrompts(prompts);
+};
+
 export default {
   setMainStore,
   startStory,
@@ -224,5 +283,8 @@ export default {
   loadAchievements,
   rollback,
   useDiscordCode,
-  deleteStory
+  deleteStory,
+  createPrompt,
+  loadPrompts,
+  updatePrompt
 };

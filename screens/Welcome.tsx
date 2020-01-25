@@ -19,6 +19,8 @@ import PORTRAITS from "../assets/portraits/PATHS";
 import ErrorService from "../services/ErrorService";
 import AutoHeightImage from "../components/AutoHeightImage";
 import { Platform } from "@unimodules/core";
+import ModeButton from "../components/ModeButton";
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.background,
@@ -102,7 +104,7 @@ const styles = StyleSheet.create({
     fontSize: 13
   },
   logo: {
-    marginTop: "20%"
+    marginTop: "5%"
   },
   warning: {
     color: colors.defaultText,
@@ -196,6 +198,11 @@ class Welcome extends Component<any, any> {
     navigation.navigate("MainStoryModal");
   };
 
+  onStartCreative = () => {
+    const { navigation } = this.props;
+    navigation.navigate("CreativeModeModal");
+  };
+
   onResume = async () => {
     const { navigation } = this.props;
     ControlService.resumeStory();
@@ -230,9 +237,11 @@ class Welcome extends Component<any, any> {
     const { mainStore } = this.props;
     const { stories, lastActStoryId: storyId } = mainStore;
     const {
-      origin: { name, class: playerClass, location }
+      origin: { name, class: playerClass, location },
+      title
     } = (storyId && stories && stories[storyId]) || {
-      origin: {}
+      origin: {},
+      title: ""
     };
 
     const discordAchievement =
@@ -263,12 +272,24 @@ class Welcome extends Component<any, any> {
         ) : (
           <View>
             <TouchableOpacity style={styles.startButton} onPress={this.onStart}>
-              <View style={{ ...styles.selectIcon }}>
-                <MovingCursor>
-                  <Text style={styles.text}>&gt;</Text>
-                </MovingCursor>
-              </View>
-              <Text style={styles.text}>Start an Adventure</Text>
+              <ModeButton
+                icon={require("../assets/classic.png")}
+                title={"Classic"}
+              >
+                Play in a rich fantasy world as one of the eight different
+                classes.
+              </ModeButton>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{ marginTop: 20 }}
+              onPress={this.onStartCreative}
+            >
+              <ModeButton
+                icon={require("../assets/creative.png")}
+                title={"Creative"}
+              >
+                Write your own stories from scratch.
+              </ModeButton>
             </TouchableOpacity>
           </View>
         )}
@@ -287,7 +308,7 @@ class Welcome extends Component<any, any> {
             class
           </Text>
         </View>
-        {name && playerClass && location ? (
+        {(name && playerClass && location) || title ? (
           <TouchableOpacity
             style={[styles.startButton, styles.resumeButton]}
             onPress={this.onResume}
@@ -295,14 +316,25 @@ class Welcome extends Component<any, any> {
             <View style={styles.resumeView}>
               <Image
                 style={{ width: 70, height: 70 }}
-                source={PORTRAITS.find(c => c.value === playerClass).portrait}
+                source={
+                  playerClass
+                    ? PORTRAITS.find(c => c.value === playerClass).portrait
+                    : require("../assets/creative.png")
+                }
               />
-              <Text style={[styles.text, { paddingLeft: 15, width: "80%" }]}>
-                Resume your adventure with{" "}
-                <Text style={styles.bold}>{name}</Text> the{" "}
-                <Text style={styles.bold}>{playerClass}</Text> from{" "}
-                <Text style={styles.bold}>{location}</Text>.
-              </Text>
+              {playerClass && location && name ? (
+                <Text style={[styles.text, { paddingLeft: 15, width: "80%" }]}>
+                  Resume your adventure with{" "}
+                  <Text style={styles.bold}>{name}</Text> the{" "}
+                  <Text style={styles.bold}>{playerClass}</Text> from{" "}
+                  <Text style={styles.bold}>{location}</Text>.
+                </Text>
+              ) : (
+                <Text style={[styles.text, { paddingLeft: 15, width: "80%" }]}>
+                  Resume &quot;<Text style={styles.bold}>{title}</Text>
+                  &quot;
+                </Text>
+              )}
             </View>
           </TouchableOpacity>
         ) : null}

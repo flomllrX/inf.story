@@ -10,7 +10,7 @@ import DateTime from "luxon/src/datetime.js";
 interface Props {
   createdAt: string;
   updatedAt: string;
-  origin: Origin;
+  origin?: Origin;
   uid: string | number;
   navigation: any;
   title?: string;
@@ -57,7 +57,11 @@ const StorySmall: React.SFC<Props> = ({
     >
       <Image
         style={{ width: 70, height: 70 }}
-        source={PORTRAITS.find(c => c.value === origin.class).portrait}
+        source={
+          origin && origin.class && origin.name
+            ? PORTRAITS.find(c => c.value === origin.class).portrait
+            : require("../assets/creative.png")
+        }
       />
       <View style={{ flex: 1, marginLeft: 10 }}>
         <Text style={styles.text}>

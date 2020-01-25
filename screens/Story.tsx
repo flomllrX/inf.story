@@ -117,7 +117,6 @@ class Story extends Component<Props, any> {
   };
 
   componentDidMount() {
-    console.log("moutned");
     const { navigation, mainStore } = this.props;
     const storyId = navigation.getParam("storyId");
     if (storyId) {
@@ -170,7 +169,6 @@ class Story extends Component<Props, any> {
     const storyId = navigation.getParam("storyId") || mainStore.storyId;
     if (storyId) {
       const response = await ApiService.updateStory(storyId, true);
-      console.log(response);
       Platform.OS === "ios"
         ? Share.share({
             url: "https://infinitestory.app/story/" + storyId

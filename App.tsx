@@ -25,9 +25,10 @@ import { portraits, locations } from "./components/StoryBit";
 import Toast from "react-native-root-toast";
 import ErrorService from "./services/ErrorService";
 import Modal from "react-native-modal";
-
+import CreatePrompt from "./screens/CreatePrompt";
 import codePush from "react-native-code-push";
 import { fonts, colors } from "./theme";
+import CreativeModeOverview from "./screens/CreativeModeOverview";
 const codePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
   installMode: codePush.InstallMode.IMMEDIATE
@@ -40,7 +41,9 @@ const MainNavigator = createStackNavigator(
   {
     Navigation: { screen: Navigation, path: "" },
     StoryModal: { screen: Story, path: "story/:storyId" },
-    MainStoryModal: { screen: MainStory }
+    MainStoryModal: { screen: MainStory },
+    PromptModal: { screen: CreatePrompt },
+    CreativeModeModal: { screen: CreativeModeOverview }
   },
   {
     mode: "modal",
@@ -113,6 +116,7 @@ class App extends React.Component {
     }
     this.setState({ fontLoaded: true });
     ControlService.loadStories();
+    ControlService.loadPrompts();
     ControlService.loadAchievements();
   }
 

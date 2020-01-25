@@ -87,7 +87,6 @@ StoryPage.getInitialProps = async ({ query }) => {
   try {
     const { id } = query;
     const { storyBits, error } = await ApiService.getStory(id as string);
-    console.log("Res", storyBits, error);
     if (error) {
       return { error };
     }

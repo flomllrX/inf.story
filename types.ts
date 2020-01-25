@@ -45,3 +45,12 @@ export interface StorySmall {
   uid: string;
   updatedAt: string;
 }
+
+export interface Prompt {
+  uid: number;
+  title: string;
+  context: string;
+  public: boolean;
+  author: string;
+  code: string;
+}

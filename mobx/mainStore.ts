@@ -1,5 +1,5 @@
 import { action, observable, autorun, reaction } from "mobx";
-import { StoryBit, StorySmall } from "../types";
+import { StoryBit, StorySmall, Prompt } from "../types";
 import { AsyncStorage, Platform } from "react-native";
 import uuid from "uuid/v4";
 import ControlService from "../services/ControlService";
@@ -58,6 +58,37 @@ export default class MainStore {
   @observable modalVisible: boolean;
   @observable.shallow modalContent: ReactChild;
 
+  @observable prompts: Prompt[];
+
+  @observable currentPromptTitle: string;
+  @observable currentPromptContext: string;
+  @observable currentPromptUid: number;
+  @observable promptButtonActivated = true;
+
+  @action setPrompts(prompts: Prompt[]) {
+    this.prompts = prompts;
+  }
+
+  @action addPrompt(prompt: Prompt) {
+    this.prompts.unshift(prompt);
+  }
+
+  @action setCurrentPromptTitle(title: string) {
+    this.currentPromptTitle = title;
+  }
+
+  @action setCurrentPromptContext(context: string) {
+    this.currentPromptContext = context;
+  }
+
+  @action setCurrentPromptUid(uid: number) {
+    this.currentPromptUid = uid;
+  }
+
+  @action setPromptButtonActivated(activated: boolean) {
+    this.promptButtonActivated = activated;
+  }
+
   @action setStoryId(storyId: string) {
     this.storyId = storyId;
     storeData("storyId", storyId);
@@ -78,6 +109,10 @@ export default class MainStore {
 
   @action setLastActStory(storyId: string) {
     this.lastActStoryId = storyId;
+  }
+
+  @action setApiAvailability(available: boolean) {
+    this.apiAvailable = available;
   }
 
   @action setError(error: any) {
@@ -121,7 +156,11 @@ export default class MainStore {
     this.actionType = this.actionType === "ACT_DO" ? "ACT_SAY" : "ACT_DO";
   }
 
-  @action addStoryToHistory(uid: string, storyBits: StoryBit[]) {
+  @action addStoryToHistory(
+    uid: string,
+    storyBits: StoryBit[],
+    title?: string
+  ) {
     try {
       const { payload } = storyBits.find(e => e.type === "ORIGIN");
       const { name, class: playerClass } = payload as Origin;
@@ -130,7 +169,7 @@ export default class MainStore {
         uid,
         origin: payload as Origin,
         createdAt: new Date().toISOString(),
-        title: `${name}, the ${playerClass}`,
+        title: title || `${name}, the ${playerClass}`,
         updatedAt: new Date().toISOString()
       };
     } catch (e) {
@@ -256,11 +295,17 @@ export default class MainStore {
     });
   };
 
-  constructor() {
-    ApiService.checkAvailability().then(
-      available => (this.apiAvailable = available)
-    );
+  checkAvailability = () => {
+    console.log("Checking availability");
+    ApiService.checkAvailability().then(available => {
+      this.setApiAvailability(available);
+      if (!available) {
+        setTimeout(this.checkAvailability, 10000);
+      }
+    });
+  };
 
+  constructor() {
     if (Platform.OS !== "web") {
       // Load userId from device
       getData("userId").then(async userId => {

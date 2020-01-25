@@ -5,6 +5,7 @@ import fetch from "isomorphic-unfetch";
 import MainStore from "../mobx/mainStore";
 import ErrorService from "./ErrorService";
 import Constants from "expo-constants";
+import { Prompt } from "../types";
 
 let _mainStore: MainStore;
 
@@ -76,8 +77,6 @@ const put: (
 const del: (
   endpoint: string
 ) => Promise<{ [key: string]: string }> = async endpoint => {
-  console.log("UserId", _mainStore.userId);
-  console.log("Test");
   try {
     const response = await fetch(address + endpoint, {
       method: "DELETE",
@@ -123,18 +122,22 @@ const get: (
 
 const startStory: (
   userId: string,
-  playerClass: string,
-  name: string
-) => Promise<{ uid?: string; storyBits?: StoryBit[]; error?: any }> = async (
-  userId,
-  playerClass,
-  name
-) => {
+  playerClass?: string,
+  name?: string,
+  promptId?: string
+) => Promise<{
+  uid?: string;
+  storyBits?: StoryBit[];
+  error?: any;
+  title?: string;
+}> = async (userId, playerClass, name, promptId) => {
   const response = (await post("/start_story", {
     playerClass,
     name,
-    deviceId: userId
+    deviceId: userId,
+    promptId
   })) as any;
+  console.log("new story", response);
   return response;
 };
 
@@ -147,13 +150,11 @@ const act: (
   type,
   storyId
 ) => {
-  console.log("Act", { payload, type, uid: storyId });
   const response = (await post("/act", {
     uid: storyId,
     type,
     payload
   })) as any;
-  console.log(response);
   return response;
 };
 
@@ -189,7 +190,6 @@ const updateStory: (
 
 const checkAvailability: () => Promise<boolean> = async () => {
   const response = await get("", true);
-  console.log(JSON.stringify(response));
   if (!response || response.status !== 200) {
     return false;
   } else {
@@ -219,11 +219,43 @@ const useDiscordCode: (
 const deleteStory: (
   storyId: string
 ) => Promise<{ ok?: "ok"; error?: any }> = async storyId => {
-  console.log("StoryId", storyId);
-  console.log("Test2");
-  console.log("UserId X", _mainStore.userId);
   const response = await del("/story/" + storyId);
-  console.log(response);
+  return response;
+};
+
+const createPrompt: (
+  deviceId: string,
+  context: string,
+  title: string
+) => Promise<{ ok?: "ok"; error?: any }> = async (deviceId, context, title) => {
+  const response = await post("/prompt", {
+    deviceId,
+    context,
+    title
+  });
+  return response;
+};
+
+const updatePrompt: (
+  promptId: number,
+  title: string,
+  context: string,
+  publ?: boolean
+) => Promise<any> = async (promptId, title, context, publ) => {
+  const response = await put("/prompt/" + promptId, {
+    title,
+    context,
+    public: publ
+  });
+  return response;
+};
+
+const getPrompts: (
+  deviceId: string
+) => Promise<{ prompts: Prompt[] }> = async deviceId => {
+  const response = ((await get("/prompts/" + deviceId)) as unknown) as Promise<{
+    prompts: Prompt[];
+  }>;
   return response;
 };
 
@@ -239,5 +271,8 @@ export default {
   checkAvailability,
   rollback,
   useDiscordCode,
-  deleteStory
+  deleteStory,
+  createPrompt,
+  getPrompts,
+  updatePrompt
 };

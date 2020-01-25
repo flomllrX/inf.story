@@ -243,7 +243,7 @@ export const portraits = {
   wizard: require("../assets/portraits/wizard.png")
 };
 const uppercase = (s: string) => {
-  return s[0].toUpperCase() + s.substr(1).toLowerCase();
+  return s ? s[0].toUpperCase() + s.substr(1).toLowerCase() : s;
 };
 
 const Bit: React.SFC<Props> = ({
@@ -280,20 +280,39 @@ const Bit: React.SFC<Props> = ({
     );
   } else if (type === "ORIGIN") {
     const { name, class: playerClass, location } = payload as Origin;
-    content = (
-      <View style={styles.origin}>
-        <Image source={portraits[playerClass]} style={styles.originPortrait} />
-        <View style={styles.originText}>
-          <Text style={[styles.message, styles.originName]}>{name}</Text>
-          <Text style={[styles.message, styles.originSubtitle]}>
-            {uppercase(playerClass)}
-          </Text>
-          <Text style={[styles.message, styles.originSubtitle]}>
-            from {location}
-          </Text>
+    if (name && playerClass) {
+      content = (
+        <View style={styles.origin}>
+          <Image
+            source={portraits[playerClass]}
+            style={styles.originPortrait}
+          />
+          <View style={styles.originText}>
+            <Text style={[styles.message, styles.originName]}>{name}</Text>
+            <Text style={[styles.message, styles.originSubtitle]}>
+              {uppercase(playerClass)}
+            </Text>
+            <Text style={[styles.message, styles.originSubtitle]}>
+              from {location}
+            </Text>
+          </View>
         </View>
-      </View>
-    );
+      );
+    } else {
+      content = (
+        <View style={styles.origin}>
+          <Image
+            source={require("../assets/creative.png")}
+            style={styles.originPortrait}
+          />
+          <View style={styles.originText}>
+            <Text style={[styles.message, styles.originName]}>
+              Creative mode
+            </Text>
+          </View>
+        </View>
+      );
+    }
   } else if (type === "LOCATION") {
     const { location, firstVisit, seed } = payload as Location;
     const backgrounds = locations[location];
