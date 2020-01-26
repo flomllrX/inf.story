@@ -12,13 +12,15 @@ const styles = StyleSheet.create({
   text: {
     color: colors.defaultText,
     fontSize: 20,
-    width: "80%"
+    width: "80%",
+    fontFamily: fonts.regular
   },
   bold: {
     fontFamily: fonts.semiBold
   },
-  subText: {
-    fontFamily: fonts.regular
+  hint: {
+    color: colors.lightgray,
+    fontSize: 16
   },
   fire: {
     width: 350,
@@ -36,10 +38,14 @@ class LoadingStory extends Component<any, any> {
         <Text style={[styles.text, styles.bold]}>
           We are creating the adventure...
         </Text>
-        <Text style={[styles.text, styles.subText]}>
+        <Text style={[styles.text]}>
           Meanwhile, rest next to the camp fire.
         </Text>
         <Image style={styles.fire} source={require("../assets/fire.gif")} />
+        <Text style={[styles.text, styles.hint]}>
+          Hint: rollback to any point in your story by long-pressing the text
+          passage
+        </Text>
       </View>
     );
   }
