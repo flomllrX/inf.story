@@ -233,6 +233,7 @@ const createPrompt: (
     context,
     title
   });
+  console.log("Creating prompt", response);
   return response;
 };
 

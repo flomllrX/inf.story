@@ -17,7 +17,8 @@ export const colors = {
   darkgray: "rgba(255, 255, 255, 0.2)",
   verydarkgray: "rgba(255, 255, 255, 0.1)",
   borderBoxInner: "rgba(255, 255, 255, 0.28)",
-  borderBoxOuter: "rgba(255, 255, 255, 0.61);"
+  borderBoxOuter: "rgba(255, 255, 255, 0.61);",
+  transparentBlack: "rgba(0, 0, 0, 0.8);"
 };
 export const fonts = {
   regular: "SourceCodePro-Regular",

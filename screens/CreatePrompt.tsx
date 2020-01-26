@@ -1,5 +1,14 @@
 import React, { Component, useState, useContext } from "react";
-import { View, Text, StyleSheet, SafeAreaView, TextInput } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  TextInput,
+  TouchableWithoutFeedback,
+  KeyboardAvoidingView,
+  Platform
+} from "react-native";
 import { inject, observer } from "mobx-react";
 import { colors, fonts } from "../theme";
 import Header from "../components/Header";
@@ -8,6 +17,7 @@ import PixelBorderBox from "../components/PixelBorderBox";
 import ControlService from "../services/ControlService";
 import { NavigationContext } from "react-navigation";
 import PixelButton from "../components/PixelButton";
+import { ScrollView } from "react-native-gesture-handler";
 
 interface Props {
   mainStore?: any;
@@ -28,6 +38,9 @@ const styles = StyleSheet.create({
   innerContainer: {
     flex: 1,
     marginHorizontal: 20
+  },
+  keyboardAvoidingView: {
+    flex: 1
   },
   textInput: {
     color: colors.defaultText,
@@ -72,6 +85,9 @@ const styles = StyleSheet.create({
   shareButton: {
     color: colors.defaultText,
     fontFamily: fonts.regular
+  },
+  contextInput: {
+    minHeight: 300
   }
 });
 
@@ -106,47 +122,52 @@ const CreatePrompt: React.SFC<Props> = ({ mainStore }) => {
   return (
     <SafeAreaView style={styles.container}>
       <Header />
-      <View style={styles.innerContainer}>
-        <View style={{ height: 80 }}>
-          <Text style={styles.title}>Title</Text>
-          <PixelBorderBox>
-            <TextInput
-              style={styles.textInput}
-              placeholder="Insert the title of your story..."
-              placeholderTextColor={colors.lightgray}
-              value={title}
-              onChangeText={text => mainStore.setCurrentPromptTitle(text)}
+      <KeyboardAvoidingView
+        behavior={Platform.OS ? "padding" : null}
+        style={styles.keyboardAvoidingView}
+      >
+        <ScrollView style={styles.innerContainer}>
+          <View style={{ height: 80 }}>
+            <Text style={styles.title}>Title</Text>
+            <PixelBorderBox>
+              <TextInput
+                style={styles.textInput}
+                placeholder="Insert the title of your story..."
+                placeholderTextColor={colors.lightgray}
+                value={title}
+                onChangeText={text => mainStore.setCurrentPromptTitle(text)}
+              />
+            </PixelBorderBox>
+          </View>
+          <View style={{ flex: 3, marginTop: 30 }}>
+            <Text style={styles.title}>Opening</Text>
+            <PixelBorderBox>
+              <TextInput
+                multiline
+                style={[styles.textInput, styles.contextInput]}
+                placeholder="Insert background information and the opening of your story in this box..."
+                placeholderTextColor={colors.lightgray}
+                value={context}
+                onChangeText={text => mainStore.setCurrentPromptContext(text)}
+              />
+            </PixelBorderBox>
+          </View>
+          <View style={styles.buttons}>
+            <PixelButton
+              onPress={onSave}
+              label={"Save"}
+              style={{ marginRight: 15, flex: 1 }}
+              deactivated={buttonsDisabled}
             />
-          </PixelBorderBox>
-        </View>
-        <View style={{ flex: 3, marginTop: 30 }}>
-          <Text style={styles.title}>Opening</Text>
-          <PixelBorderBox>
-            <TextInput
-              multiline
-              style={styles.textInput}
-              placeholder="Insert background information and the opening of your story in this box..."
-              placeholderTextColor={colors.lightgray}
-              value={context}
-              onChangeText={text => mainStore.setCurrentPromptContext(text)}
+            <PixelButton
+              onPress={onStart}
+              label={"Start"}
+              style={{ marginLeft: 15, flex: 1 }}
+              deactivated={buttonsDisabled}
             />
-          </PixelBorderBox>
-        </View>
-        <View style={styles.buttons}>
-          <PixelButton
-            onPress={onSave}
-            label={"Save"}
-            style={{ marginRight: 15, flex: 1 }}
-            deactivated={buttonsDisabled}
-          />
-          <PixelButton
-            onPress={onStart}
-            label={"Start"}
-            style={{ marginLeft: 15, flex: 1 }}
-            deactivated={buttonsDisabled}
-          />
-        </View>
-      </View>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

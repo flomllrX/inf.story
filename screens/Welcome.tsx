@@ -20,6 +20,7 @@ import ErrorService from "../services/ErrorService";
 import AutoHeightImage from "../components/AutoHeightImage";
 import { Platform } from "@unimodules/core";
 import ModeButton from "../components/ModeButton";
+import { ScrollView } from "react-native-gesture-handler";
 
 const styles = StyleSheet.create({
   container: {
@@ -75,7 +76,8 @@ const styles = StyleSheet.create({
   },
   resumeButton: {
     position: "absolute",
-    bottom: 40
+    bottom: 40,
+    backgroundColor: colors.transparentBlack
   },
   bold: {
     fontFamily: fonts.bold
@@ -253,61 +255,66 @@ class Welcome extends Component<any, any> {
         style={styles.container}
         behavior={Platform.OS ? "padding" : null}
       >
-        <AutoHeightImage
-          style={styles.logo}
-          uri={require("../assets/title.png")}
-          width={250}
-        />
-        {!mainStore.apiAvailable ? (
-          <Text style={[styles.text, styles.warning]}>
-            Warning: we are currently offline for maintenance. Join the{" "}
+        <ScrollView contentContainerStyle={styles.container}>
+          <AutoHeightImage
+            style={styles.logo}
+            uri={require("../assets/title.png")}
+            width={250}
+          />
+          {!mainStore.apiAvailable ? (
+            <Text style={[styles.text, styles.warning]}>
+              Warning: we are currently offline for maintenance. Join the{" "}
+              <Text
+                onPress={() => Linking.openURL("https://discord.gg/yXGmY6y")}
+                style={styles.underline}
+              >
+                Discord
+              </Text>{" "}
+              to get notified immediately when we are back up.
+            </Text>
+          ) : (
+            <View>
+              <TouchableOpacity
+                style={styles.startButton}
+                onPress={this.onStart}
+              >
+                <ModeButton
+                  icon={require("../assets/classic.png")}
+                  title={"Classic"}
+                >
+                  Play in a rich fantasy world as one of the eight different
+                  classes.
+                </ModeButton>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{ marginTop: 20 }}
+                onPress={this.onStartCreative}
+              >
+                <ModeButton
+                  icon={require("../assets/creative.png")}
+                  title={"Creative"}
+                >
+                  Write your own stories from scratch.
+                </ModeButton>
+              </TouchableOpacity>
+            </View>
+          )}
+          <View style={styles.quests}>
+            <Text style={styles.questTitle}>Quests:</Text>
             <Text
-              onPress={() => Linking.openURL("https://discord.gg/yXGmY6y")}
-              style={styles.underline}
+              style={mainStore.tutorialDone ? styles.questDone : styles.quest}
             >
-              Discord
-            </Text>{" "}
-            to get notified immediately when we are back up.
-          </Text>
-        ) : (
-          <View>
-            <TouchableOpacity style={styles.startButton} onPress={this.onStart}>
-              <ModeButton
-                icon={require("../assets/classic.png")}
-                title={"Classic"}
-              >
-                Play in a rich fantasy world as one of the eight different
-                classes.
-              </ModeButton>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{ marginTop: 20 }}
-              onPress={this.onStartCreative}
+              {mainStore.tutorialDone ? "▣" : "▢"} Start your first adventure!
+            </Text>
+            <Text
+              style={discordAchievement ? styles.questDone : styles.quest}
+              onPress={this.onDiscordQuest}
             >
-              <ModeButton
-                icon={require("../assets/creative.png")}
-                title={"Creative"}
-              >
-                Write your own stories from scratch.
-              </ModeButton>
-            </TouchableOpacity>
+              {discordAchievement ? "▣" : "▢"} Join the Discord to access a ???
+              class
+            </Text>
           </View>
-        )}
-        <View style={styles.quests}>
-          <Text style={styles.questTitle}>Quests:</Text>
-          <Text
-            style={mainStore.tutorialDone ? styles.questDone : styles.quest}
-          >
-            {mainStore.tutorialDone ? "▣" : "▢"} Start your first adventure!
-          </Text>
-          <Text
-            style={discordAchievement ? styles.questDone : styles.quest}
-            onPress={this.onDiscordQuest}
-          >
-            {discordAchievement ? "▣" : "▢"} Join the Discord to access a ???
-            class
-          </Text>
-        </View>
+        </ScrollView>
         {(name && playerClass && location) || title ? (
           <TouchableOpacity
             style={[styles.startButton, styles.resumeButton]}

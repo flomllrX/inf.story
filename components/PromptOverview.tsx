@@ -67,7 +67,9 @@ const PromptOverview: React.SFC<Props> = ({
       </Text>
       <Text style={[styles.text, styles.title]}>{title}</Text>
       <Text style={[styles.text]}>
-        {context.length > 150 ? context.substr(0, 150) + "..." : context}
+        {context && context.length > 150
+          ? context.substr(0, 150) + "..."
+          : context}
       </Text>
     </TouchableOpacity>
   );
