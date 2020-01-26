@@ -260,6 +260,13 @@ const getPrompts: (
   return response;
 };
 
+const deletePrompt: (
+  promptId: number
+) => Promise<{ ok?: "ok"; error?: any }> = async promptId => {
+  const response = await del("/prompt/" + promptId);
+  return response;
+};
+
 export default {
   startStory,
   act,
@@ -275,5 +282,6 @@ export default {
   deleteStory,
   createPrompt,
   getPrompts,
-  updatePrompt
+  updatePrompt,
+  deletePrompt
 };

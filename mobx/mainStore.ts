@@ -89,6 +89,14 @@ export default class MainStore {
     this.promptButtonActivated = activated;
   }
 
+  @action deletePrompt(promptId: number) {
+    this.prompts = this.prompts.filter(p => p.uid !== promptId);
+    this.currentPromptContext = "";
+    this.currentPromptContext = "";
+    this.currentPromptUid = undefined;
+    this.promptButtonActivated = true;
+  }
+
   @action setStoryId(storyId: string) {
     this.storyId = storyId;
     storeData("storyId", storyId);

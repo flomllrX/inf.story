@@ -17,7 +17,7 @@ import PixelBorderBox from "../components/PixelBorderBox";
 import ControlService from "../services/ControlService";
 import { NavigationContext } from "react-navigation";
 import PixelButton from "../components/PixelButton";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 
 interface Props {
   mainStore?: any;
@@ -46,6 +46,10 @@ const styles = StyleSheet.create({
     color: colors.defaultText,
     fontFamily: fonts.regular,
     margin: 10
+  },
+  text: {
+    color: colors.defaultText,
+    fontFamily: fonts.regular
   },
   borderTop: {
     height: 3,
@@ -119,9 +123,22 @@ const CreatePrompt: React.SFC<Props> = ({ mainStore }) => {
     }
     navigation.goBack();
   };
+
+  const onDeletePrompt = async () => {
+    if (mainStore.currentPromptUid) {
+      await ControlService.deletePrompt(promptId);
+    }
+    navigation.goBack();
+  };
   return (
     <SafeAreaView style={styles.container}>
-      <Header />
+      <Header
+        rightButtons={[
+          <TouchableOpacity key={Math.random()} onPress={onDeletePrompt}>
+            <Text style={styles.text}>Delete</Text>
+          </TouchableOpacity>
+        ]}
+      />
       <KeyboardAvoidingView
         behavior={Platform.OS ? "padding" : null}
         style={styles.keyboardAvoidingView}

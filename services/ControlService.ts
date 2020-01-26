@@ -260,6 +260,17 @@ const deleteStory: (storyId: string) => void = async storyId => {
   }
 };
 
+const deletePrompt: (promptId: number) => void = async promptId => {
+  _mainStore.setPromptButtonActivated(false);
+  const { ok, error } = await ApiService.deletePrompt(promptId);
+  if (ok && !error) {
+    _mainStore.deletePrompt(promptId);
+  } else {
+    ErrorService.uncriticalError("Could not delete the story opening");
+  }
+  _mainStore.setPromptButtonActivated(true);
+};
+
 const loadPrompts: () => void = async () => {
   const { userId } = _mainStore;
   const { prompts } = await ApiService.getPrompts(userId);
@@ -286,5 +297,6 @@ export default {
   deleteStory,
   createPrompt,
   loadPrompts,
-  updatePrompt
+  updatePrompt,
+  deletePrompt
 };
