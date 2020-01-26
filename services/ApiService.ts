@@ -11,7 +11,7 @@ let _mainStore: MainStore;
 
 const address =
   Constants.appOwnership === "expo" && Platform.OS !== "web"
-    ? "https://api-dev.infinitestory.app"
+    ? "https://api.infinitestory.app"
     : "https://api.infinitestory.app";
 
 const setMainStore = (mainStore: MainStore) => {

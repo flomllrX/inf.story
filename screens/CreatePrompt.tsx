@@ -108,10 +108,12 @@ const CreatePrompt: React.SFC<Props> = ({ mainStore }) => {
   const buttonsDisabled = !promptButtonActivated || !(title && context);
 
   const onStart = async () => {
-    if (!promptId) {
-      await ControlService.createPrompt(title, context);
+    let uid = promptId;
+    if (!uid) {
+      const { uid: newUid } = await ControlService.createPrompt(title, context);
+      uid = newUid;
     }
-    ControlService.startStory(undefined, undefined, promptId);
+    ControlService.startStory(undefined, undefined, uid);
     await navigation.goBack();
     navigation.navigate("StoryModal");
   };

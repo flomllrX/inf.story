@@ -24,6 +24,7 @@ const startStory: (
   name?: string,
   promptId?: string
 ) => void = async (playerClass, name, promptId) => {
+  console.log("Starting story", playerClass, name, promptId);
   try {
     _mainStore.setStoryLoadingState(true);
     _mainStore.setCreatingStoryState(false);
@@ -65,9 +66,11 @@ const createPrompt: (title: string, context: string) => Promise<any> = async (
     context,
     title
   )) as Prompt;
-  _mainStore.addPrompt(prompt);
-  _mainStore.setPromptButtonActivated(true);
-  _mainStore.setCurrentPromptUid(prompt.uid);
+  if (prompt && prompt.uid) {
+    _mainStore.addPrompt(prompt);
+    _mainStore.setPromptButtonActivated(true);
+    _mainStore.setCurrentPromptUid(prompt.uid);
+  }
   return prompt;
 };
 
