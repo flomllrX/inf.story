@@ -6,6 +6,7 @@ import ControlService from "../services/ControlService";
 import ApiService from "../services/ApiService";
 import { Origin } from "../types";
 import { ReactChild } from "react";
+import amp from "amplitude-js";
 
 const storeData = async (key: string, value: string) => {
   try {
@@ -64,6 +65,8 @@ export default class MainStore {
   @observable currentPromptContext: string;
   @observable currentPromptUid: number;
   @observable promptButtonActivated = true;
+
+  @observable amplitude: any;
 
   @action setPrompts(prompts: Prompt[]) {
     this.prompts = prompts;
@@ -323,6 +326,11 @@ export default class MainStore {
           await this.signup(); // only signup in app
           // Generate user id
         }
+
+        // setup analytics
+        this.amplitude = amp.getInstance();
+        this.amplitude.init("4bccfe413c519c04549cbed588017a81");
+        this.amplitude.setUserId(this.userId);
       });
 
       // Load storyId from device
@@ -347,26 +355,5 @@ export default class MainStore {
         }
       });
     }
-
-    // Loading story
-    // autorun(() => {
-    //   if (this.loadingStory && !this.storyId) {
-    //     NavigationService.replace("LoadingStory");
-    //   }
-    // });
-
-    // // Display story
-    // autorun(() => {
-    //   if (this.navigatorAvailable && !this.loadingStory && this.storyId) {
-    //     NavigationService.replace("Story");
-    //   }
-    // });
-
-    // // Display error
-    // autorun(() => {
-    //   if (this.navigatorAvailable && this.error !== undefined) {
-    //     NavigationService.replace("Error");
-    //   }
-    // });
   }
 }

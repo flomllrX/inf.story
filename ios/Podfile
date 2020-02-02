@@ -40,6 +40,7 @@ target 'infinitestory' do
   pod 'RNScreens', :path => '../node_modules/react-native-screens'
   pod 'CodePush', :path => '../node_modules/react-native-code-push'
   pod 'react-native-branch', path: '../node_modules/react-native-branch'
+  pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
   use_unimodules!
   use_native_modules!
   pod 'Firebase/Core'

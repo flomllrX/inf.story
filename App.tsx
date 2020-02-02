@@ -29,6 +29,7 @@ import CreatePrompt from "./screens/CreatePrompt";
 import codePush from "react-native-code-push";
 import { fonts, colors } from "./theme";
 import CreativeModeOverview from "./screens/CreativeModeOverview";
+import AnalyticsService from "./services/AnalyticsService";
 const codePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
   installMode: codePush.InstallMode.IMMEDIATE
@@ -57,6 +58,7 @@ const mainStore = new MainStore();
 ControlService.setMainStore(mainStore);
 ErrorService.setMainStore(mainStore);
 ApiService.setMainStore(mainStore);
+AnalyticsService.setMainStore(mainStore);
 
 /** Prefetch images */
 function cacheImages(images) {
@@ -118,6 +120,7 @@ class App extends React.Component {
     ControlService.loadStories();
     ControlService.loadPrompts();
     ControlService.loadAchievements();
+    AnalyticsService.openApp();
   }
 
   render() {

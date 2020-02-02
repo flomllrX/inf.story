@@ -6,6 +6,7 @@ import Constants from "expo-constants";
 import CodePush from "react-native-code-push";
 import ErrorService from "./ErrorService";
 import { ReactChild } from "react";
+import AnalyticsService from "./AnalyticsService";
 
 const setMainStore = store => {
   _mainStore = store;
@@ -137,6 +138,7 @@ const act: (payload: string) => void = async payload => {
     }
   }
   _mainStore.setInfering(false);
+  AnalyticsService.logAct();
 };
 
 const loadStory: (
