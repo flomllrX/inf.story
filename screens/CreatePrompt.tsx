@@ -45,7 +45,8 @@ const styles = StyleSheet.create({
   textInput: {
     color: colors.defaultText,
     fontFamily: fonts.regular,
-    margin: 10
+    marginHorizontal: 10,
+    textAlignVertical: "top"
   },
   text: {
     color: colors.defaultText,
@@ -142,11 +143,11 @@ const CreatePrompt: React.SFC<Props> = ({ mainStore }) => {
         ]}
       />
       <KeyboardAvoidingView
-        behavior={Platform.OS ? "padding" : null}
+        behavior={Platform.OS === "ios" ? "padding" : null}
         style={styles.keyboardAvoidingView}
       >
         <ScrollView style={styles.innerContainer}>
-          <View style={{ height: 80 }}>
+          <View style={{ height: 90 }}>
             <Text style={styles.title}>Title</Text>
             <PixelBorderBox>
               <TextInput

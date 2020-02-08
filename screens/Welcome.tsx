@@ -25,7 +25,6 @@ import { ScrollView } from "react-native-gesture-handler";
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.background,
-    flex: 1,
     justifyContent: "flex-start",
     alignItems: "center"
   },
@@ -83,9 +82,9 @@ const styles = StyleSheet.create({
     fontFamily: fonts.bold
   },
   quests: {
-    marginTop: 40,
-    marginLeft: 20,
-    marginRight: 20
+    marginVertical: 40,
+    marginHorizontal: 20,
+    marginBottom: 160
   },
   questTitle: {
     color: colors.defaultText,
@@ -252,8 +251,8 @@ class Welcome extends Component<any, any> {
 
     return (
       <KeyboardAvoidingView
-        style={styles.container}
-        behavior={Platform.OS ? "padding" : null}
+        style={[styles.container, { flex: 1 }]}
+        behavior={Platform.OS === "ios" ? "padding" : null}
       >
         <ScrollView contentContainerStyle={styles.container}>
           <AutoHeightImage

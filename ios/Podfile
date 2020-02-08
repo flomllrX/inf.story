@@ -45,4 +45,6 @@ target 'infinitestory' do
   use_native_modules!
   pod 'Firebase/Core'
 
+  pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
+
 end
