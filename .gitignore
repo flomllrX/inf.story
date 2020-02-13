@@ -91,4 +91,5 @@ buck-out/
 # Next.js dependencies
 /.pnp
 .pnp.js
+*.swp
 # @end @expo/next-adapter

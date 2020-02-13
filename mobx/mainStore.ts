@@ -6,8 +6,12 @@ import ControlService from "../services/ControlService";
 import ApiService from "../services/ApiService";
 import { Origin } from "../types";
 import { ReactChild } from "react";
-import amp from "amplitude-js";
-
+import Constants from "expo-constants";
+let amp;
+const ampEnabled = Constants.appOwnership !== "expo" 
+if (ampEnabled) {
+  amp = require("amplitude-js");
+}
 const storeData = async (key: string, value: string) => {
   try {
     await AsyncStorage.setItem("@" + key, "" + value);
@@ -227,6 +231,12 @@ export default class MainStore {
     this.modalContent = content;
   }
 
+  @action logEvent(event) {
+    if(ampEnabled){
+      this.amplitude.logEvent(event)
+    }
+  }
+
   clearAsyncStorage = async () => {
     const asyncStorageKeys = await AsyncStorage.getAllKeys();
     if (asyncStorageKeys.length > 0) {
@@ -328,9 +338,11 @@ export default class MainStore {
         }
 
         // setup analytics
-        this.amplitude = amp.getInstance();
-        this.amplitude.init("4bccfe413c519c04549cbed588017a81");
-        this.amplitude.setUserId(this.userId);
+	if(ampEnabled){
+          this.amplitude = amp.getInstance();
+          this.amplitude.init("4bccfe413c519c04549cbed588017a81");
+          this.amplitude.setUserId(this.userId);
+	}
       });
 
       // Load storyId from device

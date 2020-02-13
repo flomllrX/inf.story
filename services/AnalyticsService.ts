@@ -6,11 +6,11 @@ const setMainStore = store => {
 };
 
 const openApp = () => {
-  _mainStore.amplitude.logEvent("open app");
+  _mainStore.logEvent("open app");
 };
 
 const logAct = () => {
-  _mainStore.amplitude.logEvent("act");
+  _mainStore.logEvent("act");
 };
 
 export default {
