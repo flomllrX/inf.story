@@ -355,6 +355,8 @@ PODS:
     - React
   - RNGestureHandler (1.5.2):
     - React
+  - RNIap (4.4.6):
+    - React
   - RNReanimated (1.4.0):
     - React
   - RNScreens (2.0.0-alpha.17):
@@ -429,6 +431,7 @@ DEPENDENCIES:
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler/RNGestureHandler.podspec`)
+  - RNIap (from `../node_modules/react-native-iap`)
   - RNReanimated (from `../node_modules/react-native-reanimated/RNReanimated.podspec`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
@@ -570,6 +573,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-device-info"
   RNGestureHandler:
     :podspec: "../node_modules/react-native-gesture-handler/RNGestureHandler.podspec"
+  RNIap:
+    :path: "../node_modules/react-native-iap"
   RNReanimated:
     :podspec: "../node_modules/react-native-reanimated/RNReanimated.podspec"
   RNScreens:
@@ -678,6 +683,7 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: 8539fc80a0075fcc9c8e2dff84cd22dc5bf1dacf
   RNDeviceInfo: d390c040be2e59e2f23c83995bf1cd2f66658b06
   RNGestureHandler: 946a7691e41df61e2c4b1884deab41a4cdc3afff
+  RNIap: 845bb84d37dbc9e8b8a160ad59b11d2e7e76cf28
   RNReanimated: b2ab0b693dddd2339bd2f300e770f6302d2e960c
   RNScreens: f5e2ff7ccde2a1bfcf2a48c6fd07fdcf1fd95223
   RNSVG: f6177f8d7c095fada7cfee2e4bb7388ba426064c
@@ -696,6 +702,6 @@ SPEC CHECKSUMS:
   UMTaskManagerInterface: ee5b1ee1056eb338ff2d521ba79460d8cd0bae7d
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: 0d0590dae72fe88e66e381074efa11d5a1ced034
+PODFILE CHECKSUM: 670fdc02c6c6116b76206c408d353b86a186974d
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.9.1

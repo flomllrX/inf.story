@@ -7,6 +7,7 @@
     <!-- OPTIONAL PERMISSIONS, REMOVE WHATEVER YOU DO NOT NEED -->
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="com.android.vending.BILLING" />
 
     <!-- These require runtime permissions on M -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
