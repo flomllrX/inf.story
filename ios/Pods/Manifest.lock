@@ -145,6 +145,7 @@ PODS:
     - nanopb/encode (= 0.3.9011)
   - nanopb/decode (0.3.9011)
   - nanopb/encode (0.3.9011)
+  - Purchases (3.2.2)
   - RCTRequired (0.61.5)
   - RCTTypeSafety (0.61.5):
     - FBLazyVector (= 0.61.5)
@@ -349,6 +350,9 @@ PODS:
     - React
   - RNGestureHandler (1.5.2):
     - React
+  - RNPurchases (3.2.0):
+    - Purchases (~> 3.2.1)
+    - React
   - RNReanimated (1.4.0):
     - React
   - RNScreens (2.0.0-alpha.17):
@@ -422,6 +426,7 @@ DEPENDENCIES:
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler/RNGestureHandler.podspec`)
+  - RNPurchases (from `../node_modules/react-native-purchases`)
   - RNReanimated (from `../node_modules/react-native-reanimated/RNReanimated.podspec`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
@@ -457,6 +462,7 @@ SPEC REPOS:
     - GoogleUtilities
     - JWT
     - nanopb
+    - Purchases
     - SSZipArchive
 
 EXTERNAL SOURCES:
@@ -560,6 +566,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-device-info"
   RNGestureHandler:
     :podspec: "../node_modules/react-native-gesture-handler/RNGestureHandler.podspec"
+  RNPurchases:
+    :path: "../node_modules/react-native-purchases"
   RNReanimated:
     :podspec: "../node_modules/react-native-reanimated/RNReanimated.podspec"
   RNScreens:
@@ -644,6 +652,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: 29bd0d8f850efbd28cff6d99e8b7da1f8d236bcf
   JWT: 9b5c05abbcc1a0e69c3c91e1655b3387fc7e581d
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
+  Purchases: 392c729893c011c7d4d37d7f7c9f863e597d4a9b
   RCTRequired: b153add4da6e7dbc44aebf93f3cf4fcae392ddf1
   RCTTypeSafety: 9aa1b91d7f9310fc6eadc3cf95126ffe818af320
   React: b6a59ef847b2b40bb6e0180a97d0ca716969ac78
@@ -666,6 +675,7 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: 8539fc80a0075fcc9c8e2dff84cd22dc5bf1dacf
   RNDeviceInfo: d390c040be2e59e2f23c83995bf1cd2f66658b06
   RNGestureHandler: 946a7691e41df61e2c4b1884deab41a4cdc3afff
+  RNPurchases: 01c054bf9a16be5269f4656d065661f2f8633f0a
   RNReanimated: b2ab0b693dddd2339bd2f300e770f6302d2e960c
   RNScreens: f5e2ff7ccde2a1bfcf2a48c6fd07fdcf1fd95223
   RNSVG: f6177f8d7c095fada7cfee2e4bb7388ba426064c
