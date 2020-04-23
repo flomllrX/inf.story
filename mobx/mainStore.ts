@@ -8,7 +8,7 @@ import { Origin } from "../types";
 import { ReactChild } from "react";
 import Constants from "expo-constants";
 let amp;
-const ampEnabled = Constants.appOwnership !== "expo";
+const ampEnabled = Constants.appOwnership !== "expo" 
 if (ampEnabled) {
   amp = require("amplitude-js");
 }
@@ -232,8 +232,8 @@ export default class MainStore {
   }
 
   @action logEvent(event) {
-    if (ampEnabled) {
-      this.amplitude.logEvent(event);
+    if(ampEnabled){
+      this.amplitude.logEvent(event)
     }
   }
 
@@ -338,11 +338,11 @@ export default class MainStore {
         }
 
         // setup analytics
-        if (ampEnabled) {
+	if(ampEnabled){
           this.amplitude = amp.getInstance();
           this.amplitude.init("4bccfe413c519c04549cbed588017a81");
           this.amplitude.setUserId(this.userId);
-        }
+	}
       });
 
       // Load storyId from device

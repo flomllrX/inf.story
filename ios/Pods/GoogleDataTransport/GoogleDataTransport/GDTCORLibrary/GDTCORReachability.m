@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-#import "GDTCORLibrary/Public/GDTCORReachability.h"
+#import "GDTCORLibrary/Private/GDTCORReachability.h"
 #import "GDTCORLibrary/Private/GDTCORReachability_Private.h"
-#if !TARGET_OS_WATCH
 
 #import <GoogleDataTransport/GDTCORConsoleLogger.h>
 
@@ -60,9 +59,7 @@ static void GDTCORReachabilityCallback(SCNetworkReachabilityRef reachability,
   __block SCNetworkReachabilityFlags currentFlags;
   dispatch_sync([GDTCORReachability sharedInstance] -> _reachabilityQueue, ^{
     GDTCORReachability *reachability = [GDTCORReachability sharedInstance];
-    currentFlags =
-        reachability->_callbackFlags ? reachability->_callbackFlags : reachability->_flags;
-    GDTCORLogDebug("Initial reachability flags determined: %d", currentFlags);
+    currentFlags = reachability->_flags ? reachability->_flags : reachability->_callbackFlags;
   });
   return currentFlags;
 }
@@ -93,7 +90,6 @@ static void GDTCORReachabilityCallback(SCNetworkReachabilityRef reachability,
     dispatch_async(_reachabilityQueue, ^{
       Boolean valid = SCNetworkReachabilityGetFlags(self->_reachabilityRef, &self->_flags);
       if (!valid) {
-        GDTCORLogDebug("%@", @"Determining reachability failed.");
         self->_flags = 0;
       }
     });
@@ -112,8 +108,5 @@ static void GDTCORReachabilityCallback(SCNetworkReachabilityRef reachability,
 static void GDTCORReachabilityCallback(SCNetworkReachabilityRef reachability,
                                        SCNetworkReachabilityFlags flags,
                                        void *info) {
-  GDTCORLogDebug("Reachability changed, new flags: %d", flags);
   [[GDTCORReachability sharedInstance] setCallbackFlags:flags];
 }
-
-#endif

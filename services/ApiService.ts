@@ -131,7 +131,6 @@ const startStory: (
   error?: any;
   title?: string;
 }> = async (userId, playerClass, name, promptId) => {
-  console.log("Data", userId, playerClass, name, promptId);
   const response = (await post("/start_story", {
     playerClass,
     name,

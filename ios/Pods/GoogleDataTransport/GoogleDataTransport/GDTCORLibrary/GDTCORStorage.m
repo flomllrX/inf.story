@@ -19,13 +19,28 @@
 
 #import <GoogleDataTransport/GDTCORAssert.h>
 #import <GoogleDataTransport/GDTCORConsoleLogger.h>
-#import <GoogleDataTransport/GDTCOREvent.h>
 #import <GoogleDataTransport/GDTCORLifecycle.h>
 #import <GoogleDataTransport/GDTCORPrioritizer.h>
+#import <GoogleDataTransport/GDTCORStoredEvent.h>
 
 #import "GDTCORLibrary/Private/GDTCOREvent_Private.h"
 #import "GDTCORLibrary/Private/GDTCORRegistrar_Private.h"
 #import "GDTCORLibrary/Private/GDTCORUploadCoordinator.h"
+
+/** Creates and/or returns a singleton NSString that is the shared storage path.
+ *
+ * @return The SDK event storage path.
+ */
+static NSString *GDTCORStoragePath() {
+  static NSString *storagePath;
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    NSString *cachePath =
+        NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)[0];
+    storagePath = [NSString stringWithFormat:@"%@/google-sdks-events", cachePath];
+  });
+  return storagePath;
+}
 
 @implementation GDTCORStorage
 
@@ -33,7 +48,7 @@
   static NSString *archivePath;
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{
-    archivePath = [GDTCORRootDirectory() URLByAppendingPathComponent:@"GDTCORStorageArchive"].path;
+    archivePath = [GDTCORStoragePath() stringByAppendingPathComponent:@"GDTCORStorageArchive"];
   });
   return archivePath;
 }
@@ -58,19 +73,9 @@
   return self;
 }
 
-- (void)storeEvent:(GDTCOREvent *)event
-        onComplete:(void (^_Nullable)(BOOL wasWritten, NSError *error))completion {
-  GDTCORLogDebug("Saving event: %@", event);
+- (void)storeEvent:(GDTCOREvent *)event {
   if (event == nil) {
-    GDTCORLogDebug("%@", @"The event was nil, so it was not saved.");
     return;
-  }
-  BOOL hadOriginalCompletion = completion != nil;
-  if (!completion) {
-    completion = ^(BOOL wasWritten, NSError *error) {
-      GDTCORLogDebug(@"event %@ stored. success:%@ error:%@", event, wasWritten ? @"YES" : @"NO",
-                     error);
-    };
   }
 
   [self createEventDirectoryIfNotExists];
@@ -91,71 +96,62 @@
     // Check that a prioritizer is available for this target.
     id<GDTCORPrioritizer> prioritizer =
         [GDTCORRegistrar sharedInstance].targetToPrioritizer[@(target)];
-    GDTCORAssert(prioritizer, @"There's no prioritizer registered for the given target. Are you "
-                              @"sure you've added the support library for the backend you need?");
+    GDTCORAssert(prioritizer, @"There's no prioritizer registered for the given target.");
 
     // Write the transport bytes to disk, get a filename.
-    GDTCORAssert([event.dataObject transportBytes],
-                 @"The event should have been serialized to bytes");
-    NSError *error = nil;
-    NSURL *eventFile = [self saveEventBytesToDisk:event eventHash:event.hash error:&error];
-    GDTCORLogDebug("Event saved to disk: %@", eventFile);
-    completion(eventFile != nil, error);
+    GDTCORAssert(event.dataObjectTransportBytes, @"The event should have been serialized to bytes");
+    NSURL *eventFile = [self saveEventBytesToDisk:event.dataObjectTransportBytes
+                                        eventHash:event.hash];
+    GDTCORDataFuture *dataFuture = [[GDTCORDataFuture alloc] initWithFileURL:eventFile];
+    GDTCORStoredEvent *storedEvent = [event storedEventWithDataFuture:dataFuture];
 
     // Add event to tracking collections.
-    [self addEventToTrackingCollections:event];
+    [self addEventToTrackingCollections:storedEvent];
 
-    // Have the prioritizer prioritize the event and save state if there was an onComplete block.
-    [prioritizer prioritizeEvent:event];
-    if (hadOriginalCompletion && [prioritizer respondsToSelector:@selector(saveState)]) {
-      [prioritizer saveState];
-      GDTCORLogDebug(@"Prioritizer %@ has saved state due to an event's onComplete block.",
-                     prioritizer);
-    }
+    // Have the prioritizer prioritize the event.
+    [prioritizer prioritizeEvent:storedEvent];
 
     // Check the QoS, if it's high priority, notify the target that it has a high priority event.
     if (event.qosTier == GDTCOREventQoSFast) {
       [self.uploadCoordinator forceUploadForTarget:target];
     }
 
-    // Write state to disk if there was an onComplete block or if we're in the background.
-    if (hadOriginalCompletion || [[GDTCORApplication sharedApplication] isRunningInBackground]) {
-      if (hadOriginalCompletion) {
-        GDTCORLogDebug("%@", @"Saving storage state because a completion block was passed.");
+    // Write state to disk if we're in the background.
+    if ([[GDTCORApplication sharedApplication] isRunningInBackground]) {
+      if (@available(macOS 10.13, iOS 11.0, tvOS 11.0, *)) {
+        NSError *error;
+        NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self
+                                             requiringSecureCoding:YES
+                                                             error:&error];
+        [data writeToFile:[GDTCORStorage archivePath] atomically:YES];
       } else {
-        GDTCORLogDebug("%@", @"Saving storage state because the app is running in the background");
-      }
-      NSError *error;
-      GDTCOREncodeArchive(self, [GDTCORStorage archivePath], &error);
-      if (error) {
-        GDTCORLogDebug(@"Serializing GDTCORStorage to an archive failed: %@", error);
+#if !TARGET_OS_MACCATALYST
+        [NSKeyedArchiver archiveRootObject:self toFile:[GDTCORStorage archivePath]];
+#endif
       }
     }
 
     // Cancel or end the associated background task if it's still valid.
     [[GDTCORApplication sharedApplication] endBackgroundTask:bgID];
     bgID = GDTCORBackgroundIdentifierInvalid;
-    GDTCORLogDebug("Event %@ is stored. There are %ld events stored on disk", event,
-                   (unsigned long)self->_storedEvents.count);
   });
 }
 
-- (void)removeEvents:(NSSet<GDTCOREvent *> *)events {
-  NSSet<GDTCOREvent *> *eventsToRemove = [events copy];
+- (void)removeEvents:(NSSet<GDTCORStoredEvent *> *)events {
+  NSSet<GDTCORStoredEvent *> *eventsToRemove = [events copy];
   dispatch_async(_storageQueue, ^{
-    for (GDTCOREvent *event in eventsToRemove) {
+    for (GDTCORStoredEvent *event in eventsToRemove) {
       // Remove from disk, first and foremost.
       NSError *error;
-      if (event.fileURL) {
-        NSURL *fileURL = event.fileURL;
+      if (event.dataFuture.fileURL) {
+        NSURL *fileURL = event.dataFuture.fileURL;
         [[NSFileManager defaultManager] removeItemAtURL:fileURL error:&error];
         GDTCORAssert(error == nil, @"There was an error removing an event file: %@", error);
-        GDTCORLogDebug("Removed event from disk: %@", fileURL);
       }
 
       // Remove from the tracking collections.
       [self.storedEvents removeObject:event];
-      [self.targetToEventSet[@(event.target)] removeObject:event];
+      [self.targetToEventSet[event.target] removeObject:event];
     }
   });
 }
@@ -165,34 +161,39 @@
 /** Creates the storage directory if it does not exist. */
 - (void)createEventDirectoryIfNotExists {
   NSError *error;
-  BOOL result = [[NSFileManager defaultManager] createDirectoryAtURL:GDTCORRootDirectory()
-                                         withIntermediateDirectories:YES
-                                                          attributes:0
-                                                               error:&error];
+  BOOL result = [[NSFileManager defaultManager] createDirectoryAtPath:GDTCORStoragePath()
+                                          withIntermediateDirectories:YES
+                                                           attributes:0
+                                                                error:&error];
   if (!result || error) {
     GDTCORLogError(GDTCORMCEDirectoryCreationError, @"Error creating the directory: %@", error);
   }
 }
 
-/** Saves the event's dataObject to a file using NSData mechanisms.
+/** Saves the event's dataObjectTransportBytes to a file using NSData mechanisms.
  *
  * @note This method should only be called from a method within a block on _storageQueue to maintain
  * thread safety.
  *
- * @param event The event.
+ * @param transportBytes The transport bytes of the event.
  * @param eventHash The hash value of the event.
  * @return The filename
  */
-- (NSURL *)saveEventBytesToDisk:(GDTCOREvent *)event
-                      eventHash:(NSUInteger)eventHash
-                          error:(NSError **)error {
-  NSString *eventFileName = [NSString stringWithFormat:@"event-%lu", (unsigned long)eventHash];
-  NSError *writingError;
-  [event writeToGDTPath:eventFileName error:&writingError];
-  if (writingError) {
-    GDTCORLogDebug(@"There was an error saving an event to disk: %@", writingError);
+- (NSURL *)saveEventBytesToDisk:(NSData *)transportBytes eventHash:(NSUInteger)eventHash {
+  NSString *storagePath = GDTCORStoragePath();
+  NSString *event = [NSString stringWithFormat:@"event-%lu", (unsigned long)eventHash];
+  NSURL *eventFilePath = [NSURL fileURLWithPath:[storagePath stringByAppendingPathComponent:event]];
+
+  GDTCORAssert(![[NSFileManager defaultManager] fileExistsAtPath:eventFilePath.path],
+               @"An event shouldn't already exist at this path: %@", eventFilePath.path);
+
+  BOOL writingSuccess = [transportBytes writeToURL:eventFilePath atomically:YES];
+  if (!writingSuccess) {
+    GDTCORLogError(GDTCORMCEFileWriteError, @"An event file could not be written: %@",
+                   eventFilePath);
   }
-  return event.fileURL;
+
+  return eventFilePath;
 }
 
 /** Adds the event to internal tracking collections.
@@ -202,22 +203,27 @@
  *
  * @param event The event to track.
  */
-- (void)addEventToTrackingCollections:(GDTCOREvent *)event {
+- (void)addEventToTrackingCollections:(GDTCORStoredEvent *)event {
   [_storedEvents addObject:event];
-  NSNumber *target = @(event.target);
-  NSMutableSet<GDTCOREvent *> *events = self.targetToEventSet[target];
+  NSMutableSet<GDTCORStoredEvent *> *events = self.targetToEventSet[event.target];
   events = events ? events : [[NSMutableSet alloc] init];
   [events addObject:event];
-  _targetToEventSet[target] = events;
+  _targetToEventSet[event.target] = events;
 }
 
 #pragma mark - GDTCORLifecycleProtocol
 
 - (void)appWillForeground:(GDTCORApplication *)app {
-  NSError *error;
-  GDTCORDecodeArchive([GDTCORStorage class], [GDTCORStorage archivePath], nil, &error);
-  if (error) {
-    GDTCORLogDebug(@"Deserializing GDTCORStorage from an archive failed: %@", error);
+  if (@available(macOS 10.13, iOS 11.0, tvOS 11.0, *)) {
+    NSError *error;
+    NSData *data = [NSData dataWithContentsOfFile:[GDTCORStorage archivePath]];
+    if (data) {
+      [NSKeyedUnarchiver unarchivedObjectOfClass:[GDTCORStorage class] fromData:data error:&error];
+    }
+  } else {
+#if !TARGET_OS_MACCATALYST
+    [NSKeyedUnarchiver unarchiveObjectWithFile:[GDTCORStorage archivePath]];
+#endif
   }
 }
 
@@ -231,12 +237,17 @@
                          [app endBackgroundTask:bgID];
                          bgID = GDTCORBackgroundIdentifierInvalid;
                        }];
-    NSError *error;
-    GDTCOREncodeArchive(self, [GDTCORStorage archivePath], &error);
-    if (error) {
-      GDTCORLogDebug(@"Serializing GDTCORStorage to an archive failed: %@", error);
+
+    if (@available(macOS 10.13, iOS 11.0, tvOS 11.0, *)) {
+      NSError *error;
+      NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self
+                                           requiringSecureCoding:YES
+                                                           error:&error];
+      [data writeToFile:[GDTCORStorage archivePath] atomically:YES];
     } else {
-      GDTCORLogDebug(@"Serialized GDTCORStorage to %@", [GDTCORStorage archivePath]);
+#if !TARGET_OS_MACCATALYST
+      [NSKeyedArchiver archiveRootObject:self toFile:[GDTCORStorage archivePath]];
+#endif
     }
 
     // End the background task if it's still valid.
@@ -246,15 +257,17 @@
 }
 
 - (void)appWillTerminate:(GDTCORApplication *)application {
-  dispatch_sync(_storageQueue, ^{
+  if (@available(macOS 10.13, iOS 11.0, tvOS 11.0, *)) {
     NSError *error;
-    GDTCOREncodeArchive(self, [GDTCORStorage archivePath], &error);
-    if (error) {
-      GDTCORLogDebug(@"Serializing GDTCORStorage to an archive failed: %@", error);
-    } else {
-      GDTCORLogDebug(@"Serialized GDTCORStorage to %@", [GDTCORStorage archivePath]);
-    }
-  });
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self
+                                         requiringSecureCoding:YES
+                                                         error:&error];
+    [data writeToFile:[GDTCORStorage archivePath] atomically:YES];
+  } else {
+#if !TARGET_OS_MACCATALYST
+    [NSKeyedArchiver archiveRootObject:self toFile:[GDTCORStorage archivePath]];
+#endif
+  }
 }
 
 #pragma mark - NSSecureCoding
@@ -273,18 +286,15 @@ static NSString *const kGDTCORStorageUploadCoordinatorKey = @"GDTCORStorageUploa
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-  // Sets a global translation mapping to decode GDTCORStoredEvent objects encoded as instances of
-  // GDTCOREvent instead.
-  [NSKeyedUnarchiver setClass:[GDTCOREvent class] forClassName:@"GDTCORStoredEvent"];
-
   // Create the singleton and populate its ivars.
   GDTCORStorage *sharedInstance = [self.class sharedInstance];
   dispatch_sync(sharedInstance.storageQueue, ^{
-    NSSet *classes = [NSSet setWithObjects:[NSMutableOrderedSet class], [GDTCOREvent class], nil];
+    NSSet *classes =
+        [NSSet setWithObjects:[NSMutableOrderedSet class], [GDTCORStoredEvent class], nil];
     sharedInstance->_storedEvents = [aDecoder decodeObjectOfClasses:classes
                                                              forKey:kGDTCORStorageStoredEventsKey];
-    classes = [NSSet
-        setWithObjects:[NSMutableDictionary class], [NSMutableSet class], [GDTCOREvent class], nil];
+    classes = [NSSet setWithObjects:[NSMutableDictionary class], [NSMutableSet class],
+                                    [GDTCORStoredEvent class], nil];
     sharedInstance->_targetToEventSet =
         [aDecoder decodeObjectOfClasses:classes forKey:kGDTCORStorageTargetToEventSetKey];
     sharedInstance->_uploadCoordinator =
@@ -296,11 +306,11 @@ static NSString *const kGDTCORStorageUploadCoordinatorKey = @"GDTCORStorageUploa
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   GDTCORStorage *sharedInstance = [self.class sharedInstance];
-  NSMutableOrderedSet<GDTCOREvent *> *storedEvents = sharedInstance->_storedEvents;
+  NSMutableOrderedSet<GDTCORStoredEvent *> *storedEvents = sharedInstance->_storedEvents;
   if (storedEvents) {
     [aCoder encodeObject:storedEvents forKey:kGDTCORStorageStoredEventsKey];
   }
-  NSMutableDictionary<NSNumber *, NSMutableSet<GDTCOREvent *> *> *targetToEventSet =
+  NSMutableDictionary<NSNumber *, NSMutableSet<GDTCORStoredEvent *> *> *targetToEventSet =
       sharedInstance->_targetToEventSet;
   if (targetToEventSet) {
     [aCoder encodeObject:targetToEventSet forKey:kGDTCORStorageTargetToEventSetKey];

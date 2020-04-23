@@ -154,6 +154,42 @@ const styles = StyleSheet.create({
   }
 });
 
+const MovingCursor = props => {
+  const [left] = useState(new Animated.Value(3)); // Initial value for left: 3
+
+  React.useEffect(() => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(left, {
+          toValue: -3,
+          duration: 500
+        }),
+        Animated.timing(left, {
+          toValue: 3,
+          duration: 500
+        })
+      ]),
+      {}
+    ).start();
+  }, []);
+
+  return (
+    <Animated.View // Special animatable View
+      style={{
+        ...props.style,
+        left: left // Bind left to animated value
+      }}
+    >
+      {props.children}
+    </Animated.View>
+  );
+};
+
+MovingCursor.propTypes = {
+  style: PropTypes.any,
+  children: PropTypes.any
+};
+
 class Welcome extends Component<any, any> {
   static navigationOptions = { header: null };
 
