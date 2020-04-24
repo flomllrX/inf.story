@@ -1,1 +1,12 @@
-../../../../../node_modules/react-native-purchases/ios/Common/SKProductDiscount+HybridAdditions.h
+//
+//  Created by RevenueCat.
+//  Copyright © 2019 RevenueCat. All rights reserved.
+//
+
+#import <StoreKit/StoreKit.h>
+
+@interface SKProductDiscount (HybridAdditions)
+
+- (NSDictionary *)dictionary;
+
+@end

@@ -1,1 +1,3 @@
-../../../../../node_modules/@unimodules/core/ios/UMCore/UMErrorCodes.h
+// Copyright 2018-present 650 Industries. All rights reserved.
+
+extern NSString *const UMErrorCodeCanceled;

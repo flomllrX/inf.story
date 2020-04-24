@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 export const colors = {
   primary: "#F06868",
   defaultText: "#fff",
@@ -18,10 +19,11 @@ export const colors = {
   verydarkgray: "rgba(255, 255, 255, 0.1)",
   borderBoxInner: "rgba(255, 255, 255, 0.28)",
   borderBoxOuter: "rgba(255, 255, 255, 0.61);",
-  transparentBlack: "rgba(0, 0, 0, 0.8);"
+  transparentBlack: "rgba(0, 0, 0, 0.8);",
 };
+
 export const fonts = {
   regular: "SourceCodePro-Regular",
   semiBold: "SourceCodePro-SemiBold",
-  bold: "SourceCodePro-Bold"
+  bold: "SourceCodePro-Bold",
 };

@@ -1,1 +1,10 @@
-../../../../../node_modules/@unimodules/core/ios/UMCore/Protocols/UMJavaScriptContextProvider.h
+// Copyright © 2018 650 Industries. All rights reserved.
+
+#import <Foundation/Foundation.h>
+#import <JavaScriptCore/JavaScriptCore.h>
+
+@protocol UMJavaScriptContextProvider <NSObject>
+
+- (JSGlobalContextRef)javaScriptContextRef;
+
+@end

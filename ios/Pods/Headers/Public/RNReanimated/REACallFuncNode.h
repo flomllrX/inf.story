@@ -1,1 +1,7 @@
-../../../RNReanimated/ios/Nodes/REACallFuncNode.h
+
+#import "REANode.h"
+
+@interface REACallFuncNode : REANode
+
+@end
+

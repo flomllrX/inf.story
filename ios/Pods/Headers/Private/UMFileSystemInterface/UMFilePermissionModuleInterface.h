@@ -1,1 +1,7 @@
-../../../../../node_modules/unimodules-file-system-interface/ios/UMFileSystemInterface/UMFilePermissionModuleInterface.h
+// Copyright 2018-present 650 Industries. All rights reserved.
+@protocol UMFilePermissionModuleInterface
+
+- (UMFileSystemPermissionFlags)getPathPermissions:(NSString *)path;
+
+@end
+

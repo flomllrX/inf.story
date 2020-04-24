@@ -1,1 +1,11 @@
-../../../../../node_modules/expo-permissions/ios/EXPermissions/EXReactNativeUserNotificationCenterProxy.h
+// Copyright 2018-present 650 Industries. All rights reserved.
+
+#import <Foundation/Foundation.h>
+#import <UserNotifications/UserNotifications.h>
+
+#import <UMCore/UMInternalModule.h>
+#import <UMPermissionsInterface/UMUserNotificationCenterProxyInterface.h>
+
+@interface EXReactNativeUserNotificationCenterProxy : NSObject <UMInternalModule, UMUserNotificationCenterProxyInterface>
+
+@end

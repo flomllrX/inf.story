@@ -1,1 +1,5 @@
-../../../RNReanimated/ios/Nodes/REABlockNode.h
+#import "REANode.h"
+
+@interface REABlockNode : REANode
+
+@end

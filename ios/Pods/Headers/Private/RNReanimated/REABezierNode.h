@@ -1,1 +1,5 @@
-../../../RNReanimated/ios/Nodes/REABezierNode.h
+#import "REANode.h"
+
+@interface REABezierNode : REANode
+
+@end

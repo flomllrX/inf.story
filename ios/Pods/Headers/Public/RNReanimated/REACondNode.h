@@ -1,1 +1,5 @@
-../../../RNReanimated/ios/Nodes/REACondNode.h
+#import "REANode.h"
+
+@interface REACondNode : REANode
+
+@end

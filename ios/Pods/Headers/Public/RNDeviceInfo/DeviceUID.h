@@ -1,1 +1,5 @@
-../../../../../node_modules/react-native-device-info/ios/RNDeviceInfo/DeviceUID.h
+#import <Foundation/Foundation.h>
+
+@interface DeviceUID : NSObject
++ (NSString *)uid;
+@end

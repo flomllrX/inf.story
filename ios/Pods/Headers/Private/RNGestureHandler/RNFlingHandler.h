@@ -1,1 +1,4 @@
-../../../RNGestureHandler/ios/Handlers/RNFlingHandler.h
+#import "RNGestureHandler.h"
+
+@interface RNFlingGestureHandler : RNGestureHandler
+@end

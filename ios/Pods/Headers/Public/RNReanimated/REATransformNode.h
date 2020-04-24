@@ -1,1 +1,6 @@
-../../../RNReanimated/ios/Nodes/REATransformNode.h
+#import "REANode.h"
+
+@interface REATransformNode : REANode
+
+@end
+

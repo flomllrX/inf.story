@@ -1,1 +1,4 @@
-../../../RNReanimated/ios/Nodes/REAAlwaysNode.h
+#import "REANode.h"
+
+@interface REAAlwaysNode : REANode <REAFinalNode>
+@end

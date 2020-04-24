@@ -1,1 +1,5 @@
-../../../RNReanimated/ios/Nodes/READebugNode.h
+#import "REANode.h"
+
+@interface READebugNode : REANode
+
+@end
