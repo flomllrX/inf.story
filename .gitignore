@@ -95,4 +95,4 @@ buck-out/
 # @end @expo/next-adapter
 
 ios/GoogleService-Info.plist
-ios/Pods/FirebaseCore/Firebase/Core/Public/FIROptions.h
+ios/**/FIROptions.h
